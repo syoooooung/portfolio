@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>황세영 — AI Platform Engineer</title>
+<meta name="description" content="황세영 포트폴리오 — LLM 파이프라인과 검색 시스템을 만드는 AI 플랫폼 엔지니어">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&display=swap">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;overflow:hidden;background:#120211;color:#fff}
+  canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
+  .meta{position:fixed;font:11px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.14em;
+        text-transform:uppercase;z-index:3;color:#fff;opacity:.9;text-decoration:none}
+  .meta::after{content:"";display:block;width:3px;height:3px;background:#fff;border-radius:50%;margin-top:8px}
+  .tl{top:28px;left:28px} .tc{top:28px;left:50%;transform:translateX(-50%)}
+  .tr{top:28px;right:28px} .mid{top:42%;right:12%} .br{bottom:28px;right:28px;text-align:right}
+  .bl{bottom:28px;left:28px}
+  .bl a{color:#fff;text-decoration:none;display:block}
+  .br::after{margin-left:auto}
+  @media(max-width:700px){.mid{display:none}}
+  ul{position:fixed;inset:0;display:flex;flex-direction:column;justify-content:center;
+     list-style:none;z-index:2;padding-left:3vw}
+  li a{display:block;font-family:Anton,Impact,sans-serif;font-size:clamp(30px,6.2vw,92px);line-height:.96;
+       letter-spacing:-.01em;text-transform:uppercase;white-space:nowrap;color:#fff;text-decoration:none;
+       transition:opacity .25s,transform .25s}
+  ul:hover li a{opacity:.35}
+  ul li a:hover{opacity:1;transform:translateX(1.2vw)}
+  #thumb{position:fixed;width:190px;height:110px;border-radius:2px;pointer-events:none;z-index:4;
+         opacity:0;transition:opacity .2s;background-size:cover;transform:translate(-50%,-50%)}
+  @media(hover:none){#thumb{display:none}}
+</style>
+<canvas id="c"></canvas>
+<div class="meta tl">Seongnam<br>KST</div>
+<div class="meta tc">Portfolio of<br>Seyoung Hwang</div>
+<a class="meta tr" href="about.html">About /<br>Resume</a>
+<div class="meta mid">AI Platform<br>Engineer</div>
+<div class="meta bl">
+  <a href="mailto:tpdudabc@naver.com">tpdudabc@naver.com</a>
+  <a href="https://github.com/syoooooung">github.com/syoooooung</a>
+</div>
+<div class="meta br">Wisenut<br>AI Platform Team</div>
+<ul id="list"></ul>
+<div id="thumb"></div>
+<script>
+// ── 랜딩 리스트: [제목, 링크, 썸네일 색] ──────────────────────
+const WORKS = [
+  ["Carbon Footprint AI Platform",  "works/carbon-footprint.html", "assets/img/carbon-pipeline.svg"],
+  ["AI Legal Research Assistant",   "works/legal-assistant.html",  "assets/thumbs/ai-legal.png"],
+  ["Active Metadata Relations",     "works/data-relation.html",    "assets/thumbs/metadata.png"],
+  ["DS-RAG — SCIE Paper",           "works/ds-rag.html",           "assets/thumbs/ds-rag.png"],
+  ["About Me",                      "about.html",                  "#9c27b0"],
+];
+// ─────────────────────────────────────────────────────────────
+const list = document.getElementById('list'), thumb = document.getElementById('thumb');
+list.innerHTML = WORKS.map(([t,h],i)=>`<li><a href="${h}" data-i="${i}">${t}</a></li>`).join('');
+const mouse = [.5,.5];
+addEventListener('pointermove', e => {
+  thumb.style.left = e.clientX + 130 + 'px'; thumb.style.top = e.clientY + 'px';
+  mouse[0] = e.clientX / innerWidth; mouse[1] = 1 - e.clientY / innerHeight;
+});
+list.addEventListener('pointerover', e => {
+  const a = e.target.closest('a'); if(!a) return;
+  const t = WORKS[a.dataset.i][2];
+  thumb.style.background = t.startsWith('#')
+    ? `linear-gradient(135deg,${t},#120211)`
+    : `#120211 url(${t}) center/cover`;
+  thumb.style.opacity = 1;
+});
+list.addEventListener('pointerout', () => thumb.style.opacity = 0);
+
+const gl = document.getElementById('c').getContext('webgl'), start = performance.now();
+const sh = (t,s) => { const o = gl.createShader(t); gl.shaderSource(o,s); gl.compileShader(o);
+  if(!gl.getShaderParameter(o,gl.COMPILE_STATUS)) throw gl.getShaderInfoLog(o); return o; };
+const p = gl.createProgram();
+gl.attachShader(p, sh(gl.VERTEX_SHADER, 'attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}'));
+gl.attachShader(p, sh(gl.FRAGMENT_SHADER, `
+precision highp float;
+uniform vec2 r, m; uniform float t;
+float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+float n(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
+  return mix(mix(h(i),h(i+vec2(1,0)),f.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),f.x),f.y);}
+float fbm(vec2 p){float v=0.,a=.5;for(int k=0;k<6;k++){v+=a*n(p);p*=2.03;a*=.5;}return v;}
+void main(){
+  vec2 uv=gl_FragCoord.xy/r.y;
+  vec2 q=vec2(fbm(uv*1.8+t*.045), fbm(uv*1.8+vec2(5.2,1.3)-t*.035));
+  float f=pow(fbm(uv*2.6+q*1.9+vec2(t*.02,-t*.015)),1.35);
+  vec3 hot=mix(vec3(.99,.32,.03), vec3(.55,.12,.85), m.y);
+  vec3 c=mix(hot, vec3(.93,.06,.47), smoothstep(.22,.58,f));
+  c=mix(c, vec3(.42,.08,.72), smoothstep(.55,.88,f));
+  c=mix(c, vec3(.07,.01,.11), smoothstep(.82,1.15,f));
+  c+=.14*smoothstep(.55,.0,distance(uv, m*vec2(r.x/r.y,1.)));
+  c+=(h(gl_FragCoord.xy+t)-.5)*.045;
+  gl_FragColor=vec4(c,1.);
+}`));
+gl.linkProgram(p); gl.useProgram(p);
+gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,3,-1,-1,3]), gl.STATIC_DRAW);
+gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0,2,gl.FLOAT,false,0,0);
+const U = n => gl.getUniformLocation(p,n);
+const resize = () => { const d = Math.min(devicePixelRatio,1.5);
+  gl.canvas.width = innerWidth*d; gl.canvas.height = innerHeight*d;
+  gl.viewport(0,0,gl.canvas.width,gl.canvas.height);
+  gl.uniform2f(U('r'), gl.canvas.width, gl.canvas.height); };
+addEventListener('resize', resize); resize();
+let mx=.5,my=.5;
+(function loop(now){ mx+=(mouse[0]-mx)*.05; my+=(mouse[1]-my)*.05;
+  gl.uniform1f(U('t'), now/1000); gl.uniform2f(U('m'), mx, my);
+  gl.drawArrays(gl.TRIANGLES,0,3); requestAnimationFrame(loop); })(0);
+</script>
+</html>

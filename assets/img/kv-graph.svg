@@ -1,0 +1,45 @@
+<svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">
+  <style>
+    .lbl{fill:#f4eef5;font-size:12px}
+    .sub{fill:#b9a8bd;font-size:10px}
+    .edge{stroke:rgba(244,238,245,.3);stroke-width:1.2;fill:none}
+    .same{stroke:#7b2ff7;stroke-width:1.4;fill:none;stroke-dasharray:5 4}
+    .elbl{fill:#b9a8bd;font-size:9px;letter-spacing:.08em}
+  </style>
+  <rect width="880" height="340" fill="#120211"/>
+
+  <g><!-- Documents -->
+    <rect x="30" y="60" width="150" height="52" rx="3" fill="#1c0a1b" stroke="rgba(244,238,245,.28)"/>
+    <text class="lbl" x="44" y="83">Document A</text><text class="sub" x="44" y="99">"삼성전자 반도체 실적…"</text>
+    <rect x="30" y="220" width="150" height="52" rx="3" fill="#1c0a1b" stroke="rgba(244,238,245,.28)"/>
+    <text class="lbl" x="44" y="243">Document B</text><text class="sub" x="44" y="259">"Samsung Electronics Q3…"</text>
+  </g>
+  <g><!-- Keys -->
+    <circle cx="300" cy="86"  r="34" fill="none" stroke="#ff5a1f" stroke-width="1.4"/>
+    <text class="lbl" x="300" y="82" text-anchor="middle">Key</text><text class="sub" x="300" y="97" text-anchor="middle">회사명</text>
+    <circle cx="300" cy="246" r="34" fill="none" stroke="#ff5a1f" stroke-width="1.4"/>
+    <text class="lbl" x="300" y="242" text-anchor="middle">Key</text><text class="sub" x="300" y="257" text-anchor="middle">company</text>
+  </g>
+  <g><!-- Values -->
+    <circle cx="500" cy="86"  r="40" fill="none" stroke="#e0117a" stroke-width="1.4"/>
+    <text class="lbl" x="500" y="82" text-anchor="middle">Value</text><text class="sub" x="500" y="97" text-anchor="middle">삼성전자</text>
+    <circle cx="500" cy="246" r="40" fill="none" stroke="#e0117a" stroke-width="1.4"/>
+    <text class="lbl" x="500" y="238" text-anchor="middle">Value</text>
+    <text class="sub" x="500" y="252" text-anchor="middle">Samsung</text><text class="sub" x="500" y="264" text-anchor="middle">Electronics</text>
+  </g>
+  <g><!-- Normalized -->
+    <circle cx="740" cy="166" r="48" fill="rgba(123,47,247,.12)" stroke="#7b2ff7" stroke-width="1.6"/>
+    <text class="lbl" x="740" y="158" text-anchor="middle">Normalized</text>
+    <text class="lbl" x="740" y="172" text-anchor="middle">Value</text>
+    <text class="sub" x="740" y="188" text-anchor="middle">삼성전자(주)</text>
+  </g>
+  <g><!-- edges -->
+    <path class="edge" d="M180 86H266"/><text class="elbl" x="192" y="78">hasValue</text>
+    <path class="edge" d="M180 246H266"/><text class="elbl" x="192" y="238">hasValue</text>
+    <path class="edge" d="M334 86H460"/><text class="elbl" x="360" y="78">extractedFrom←</text>
+    <path class="edge" d="M334 246H460"/><text class="elbl" x="360" y="238">extractedFrom←</text>
+    <path class="same" d="M536 104 Q620 130 694 150"/><text class="elbl" x="596" y="118" fill="#7b2ff7">sameAs</text>
+    <path class="same" d="M536 228 Q620 202 694 182"/><text class="elbl" x="596" y="224" fill="#7b2ff7">sameAs</text>
+  </g>
+  <text class="sub" x="30" y="320">표기가 달라도 같은 개체는 정규화 노드로 자동 연결 — 문서 A·B가 관계를 갖게 됨. 모든 값은 원본 문서로 역추적 가능.</text>
+</svg>

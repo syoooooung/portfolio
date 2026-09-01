@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Active Metadata Relations — 황세영</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&display=swap">
+<link rel="stylesheet" href="../assets/style.css">
+
+<header class="hero">
+  <canvas data-hue="0.8"></canvas>
+  <nav class="overlay"><a href="../index.html">← Index</a><a href="../about.html">About</a></nav>
+  <div class="hero-inner">
+    <p class="kicker">써드파티 데이터 과제 · WiseNut · 2025.11 — 2026.04</p>
+    <h1 class="display">Active Metadata <br>Relations</h1>
+    <p class="sub">비정형 텍스트에서 메타데이터를 자동 추출하고, 데이터 간 의미적 연관성을 그래프로 구조화.
+    사람의 규칙 정의 없이 데이터가 스스로 연결되는 시스템.</p>
+  </div>
+</header>
+<div class="marquee"><div>FastAPI · LangChain · LangGraph · Neo4j · Neptune RDF · SPARQL · OpenSearch · Sentence Transformers · MCP · Langfuse · &nbsp;</div><div>FastAPI · LangChain · LangGraph · Neo4j · Neptune RDF · SPARQL · OpenSearch · Sentence Transformers · MCP · Langfuse · &nbsp;</div></div>
+
+<main>
+  <section class="impact">
+    <div><b>1</b><span>특허 출원 — 제1발명자</span></div>
+    <div><b>0</b><span>수작업 관계 매핑</span></div>
+    <div><b>2</b><span>관계 유형 병행 — 규칙 + 의미</span></div>
+    <div><b>100%</b><span>원본 문서 역추적 가능</span></div>
+  </section>
+
+  <h2><span class="no">S</span>배경 — 연결되지 않는 데이터</h2>
+  <p>서로 다른 카테고리로 쌓인 데이터 사이의 잠재적 연관성은 사람이 규칙을 정의해야만 발견할 수 있었고,
+  신규 데이터가 들어올 때마다 수작업 매핑이 반복됐습니다. 텍스트 본문에 담긴 의미 정보는
+  검색에 활용되지 못하고 <strong>단순 저장만 되는 상태</strong>였습니다.</p>
+
+  <h2><span class="no">T</span>역할 — 기획부터 구현까지 전담</h2>
+  <div class="facts">
+    <div><b>담당</b><span>기획 · 아키텍처 설계 · 전체 구현</span></div>
+    <div><b>기간</b><span>2025.11 — 2026.04</span></div>
+    <div><b>특허</b><span>출원 10-2026-0068848 (제1발명자)</span></div>
+    <div><b>데모</b><span><a href="https://syoooooung.github.io/3rd-party-active-metadata-demo/" style="color:var(--ink)">active-metadata-demo</a></span></div>
+  </div>
+
+  <h2><span class="no">A</span>설계와 구현</h2>
+
+  <h3><span class="no">01</span>LLM 메타데이터 추출 + 관계 자동 생성</h3>
+  <div class="flow">비정형 텍스트 → <em>LLM 메타데이터 추출</em> → 임베딩 → <em>유사도 기반 관계 생성</em> → 그래프 저장</div>
+  <ul class="plain">
+    <li>본문의 의미 정보를 <strong>LLM으로 추출해 액티브 메타데이터로 생성</strong> — 저장만 되던 본문이 검색·연결에 쓰이는 자산이 됨</li>
+    <li><strong>규칙 기반 관계와 임베딩 유사도 기반 의미 관계를 병행 생성</strong> — 신규 데이터가 추가되면 기존 데이터와의 관계가 자동 확장</li>
+    <li>LangGraph Agent 워크플로우로 추출 → 검증 → 저장 단계를 오케스트레이션</li>
+  </ul>
+
+  <h3><span class="no">02</span>도메인 독립적 그래프 모델</h3>
+  <figure class="figure"><img src="../assets/img/kv-graph.svg" alt="Key-Value 그래프 모델 다이어그램" loading="lazy"><figcaption class="figcap">Key-Value 그래프 모델 — 정규화(sameAs)로 이기종 문서가 연결되는 구조</figcaption></figure>
+  <ul class="plain">
+    <li>도메인 전용 스키마 없이 <strong>모든 데이터를 Key-Value 노드로 표현</strong> — 어떤 데이터셋이든 같은 구조로 수용, 온보딩 비용 최소화</li>
+    <li>표기가 다른 동일 개체를 <strong>정규화 노드로 묶어 자동 연결</strong>, 정규화 과정 자체도 명시적 관계로 기록해 모든 값을 원본 문서로 역추적 가능</li>
+  </ul>
+
+  <h3><span class="no">03</span>그래프 × 전문 검색 결합</h3>
+  <ul class="plain">
+    <li><strong>그래프 탐색(관계)과 OpenSearch 전문·벡터 검색(내용)을 결합</strong>한 하이브리드 조회 — 질의 유형에 따라 분기하고 결과를 재조합</li>
+    <li><strong>MCP 연동으로 자연어 질의에서 Neo4j Cypher 쿼리를 자동 생성</strong>해 그래프를 대화형으로 탐색</li>
+  </ul>
+  <figure class="figure"><img src="../assets/thumbs/metadata.png" alt="액티브 메타데이터 데모 화면" loading="lazy"><figcaption class="figcap">Demo — 관계 후보 발굴 화면</figcaption></figure>
+
+  <h2><span class="no">R</span>결과</h2>
+  <ul class="plain">
+    <li><strong>특허 출원</strong> — 「액티브 메타데이터와 그래프 데이터베이스를 활용한 신규 데이터의 잠재적 연관성 자동 탐색 및 관계 확장을 위한 장치」 (10-2026-0068848, 제1발명자)</li>
+    <li>공개 SW로 구현체 공개 — 데이터 카탈로그의 연관 데이터 추천·탐색 자동화 기반 확보</li>
+  </ul>
+
+  <h2><span class="no">W</span>기술 선정 이유</h2>
+  <div class="why">
+    <div><b>Neo4j</b><span>관계 표현과 벡터 검색을 하나의 DB에서 — 그래프 탐색과 의미 검색을 오가는 질의에 유리</span></div>
+    <div><b>LangGraph</b><span>추출→검증→저장의 상태 있는 Agent 워크플로우 — 분기·재시도를 그래프로 명시</span></div>
+    <div><b>Sentence Transformers</b><span>한국어 의미 임베딩 — 유사도 기반 관계 생성의 품질을 좌우</span></div>
+    <div><b>MCP</b><span>LLM이 Neo4j를 도구로 직접 다루게 하는 표준 인터페이스 — Cypher 자동 생성</span></div>
+    <div><b>FastAPI + uv</b><span>비동기 처리와 빠른 개발 사이클</span></div>
+  </div>
+
+  <h2><span class="no">+</span>회고 — 다시 한다면</h2>
+  <ul class="plain">
+    <li>관계 생성 품질을 데모로 보여주는 데서 나아가, <strong>정답 관계셋을 만들어 정밀도/재현율로 평가</strong>했을 것</li>
+    <li>임베딩 유사도 임계값을 고정하지 않고 <strong>데이터셋 특성에 따라 자동 튜닝</strong>되는 구조를 실험했을 것</li>
+  </ul>
+
+  <div class="links"><a href="https://syoooooung.github.io/3rd-party-active-metadata-demo/">Live Demo ↗</a></div>
+</main>
+<footer>
+  <span>© 2026 Seyoung Hwang · <a href="mailto:tpdudabc@naver.com">tpdudabc@naver.com</a></span>
+  <a class="next" href="ds-rag.html"><small>Next Project</small>DS-RAG →</a>
+</footer>
+<script src="../assets/case.js"></script>
+</html>
