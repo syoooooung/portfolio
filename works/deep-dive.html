@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>판례 5,000토큰을 500으로 — 황세영</title>
+<meta property="og:type" content="website">
+<meta property="og:title" content="판례 5,000토큰을 500으로 — 황세영">
+<meta property="og:description" content="장문 판례가 RAG를 망가뜨리는 3가지 방식과, 요약이 아닌 재설계로 푼 과정.">
+<meta property="og:url" content="https://syoooooung.github.io/portfolio/works/deep-dive.html">
+<meta property="og:image" content="https://syoooooung.github.io/portfolio/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="description" content="장문 판례가 RAG를 망가뜨리는 3가지 방식과, 요약이 아닌 재설계로 푼 과정.">
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&display=swap">
+<link rel="stylesheet" href="../assets/style.css">
+
+<header class="hero" style="min-height:60vh">
+  <canvas data-hue="0.3"></canvas>
+  <nav class="overlay"><a href="../index.html">← Index</a><a href="legal-assistant.html">Case Study</a></nav>
+  <div class="hero-inner">
+    <p class="kicker">Deep Dive · AI Legal Research Assistant</p>
+    <h1 class="display">5,000 Tokens <br>→ 500</h1>
+    <p class="sub">장문 판례가 RAG를 망가뜨리는 3가지 방식과, "요약"이 아니라 "재설계"로 푼 과정.</p>
+  </div>
+</header>
+<div class="marquee"><div>구조화 요약 · 하이브리드 검색 · 도메인 랭킹 · Structured Output · Few-shot + CoT · Airflow · &nbsp;</div><div>구조화 요약 · 하이브리드 검색 · 도메인 랭킹 · Structured Output · Few-shot + CoT · Airflow · &nbsp;</div></div>
+
+<main>
+  <h2><span class="no">01</span>문제 — 원문을 넣으면 다 나빠진다</h2>
+  <p>판례 원문은 평균 5,000토큰이 넘고, 사건마다 서술 방식의 편차가 큽니다. 원문을 그대로
+  청킹해서 RAG에 넣었을 때 세 가지가 동시에 무너졌습니다.</p>
+  <ul class="plain">
+    <li><strong>검색</strong> — 핵심 쟁점보다 주변 서술(절차 경과, 당사자 주장 나열)이 청크의 대부분을 차지해, 임베딩이 "이 판례가 무엇에 관한 것인가"를 반영하지 못함</li>
+    <li><strong>생성</strong> — 유사 판례 몇 건만 넣어도 컨텍스트가 차서, LLM이 정작 비교·분석에 쓸 여유가 없음</li>
+    <li><strong>비용</strong> — 질의당 입력 토큰이 판례 수에 비례해 폭증</li>
+  </ul>
+  <p>즉 이것은 "요약을 잘하면 되는" 문제가 아니라, <strong>판례라는 문서를 검색·생성이 소비할 수 있는
+  형태로 다시 설계해야 하는</strong> 문제였습니다.</p>
+
+  <h2><span class="no">02</span>왜 단순 요약으론 안 되나</h2>
+  <p>N줄 요약 같은 자유형 요약은 압축률은 좋지만 두 가지를 잃습니다. 첫째, <strong>어떤 정보가
+  살아남을지 통제할 수 없습니다.</strong> 검색에 필요한 건 쟁점·사건종류·판결결과인데, 요약마다
+  들어있기도 하고 빠져 있기도 합니다. 둘째, <strong>필드로 조회할 수 없습니다.</strong> "손해배상 사건 중
+  원고 승소"처럼 구조 조건으로 거르려면 요약이 아니라 스키마가 필요합니다.</p>
+  <div class="flow">판례 원문 → LLM 구조화 → <em>사건종류 · 전체 요약 · 판결정보 · 판결사유 · 사실관계 · 쟁점</em> (6개 섹션)</div>
+  <p>그래서 법률 실무자가 판례를 읽는 방식을 따라 <strong>6개 섹션 스키마</strong>를 정의하고, LLM이
+  원문을 이 스키마로 변환하게 했습니다. 각 필드는 용도가 다릅니다 — 사건종류·판결정보는
+  <strong>필터링용</strong>, 쟁점·사실관계는 <strong>유사도 검색용</strong>, 전체 요약·판결사유는 <strong>생성 컨텍스트용</strong>.
+  같은 500토큰이라도 "무엇을 남길지"가 설계된 500토큰입니다.</p>
+
+  <h2><span class="no">03</span>검색 — 문장 유사도는 법률 유사도가 아니다</h2>
+  <p>구조화만으로는 부족했습니다. 법률 문서는 같은 주제라도 표현이 다르고, 실제 유사성은
+  키워드보다 <strong>사건 유형·쟁점·판결 결과 같은 구조 정보</strong>에 좌우됩니다. 벡터 검색만 쓰면
+  문장이 비슷한 판례가, BM25만 쓰면 용어가 겹치는 판례가 올라올 뿐 "법률적으로 유사한"
+  판례가 아닙니다.</p>
+  <ul class="plain">
+    <li>OpenSearch에서 <strong>BM25 + 벡터(ko-sroberta, 768d) 하이브리드</strong>로 두 신호를 결합</li>
+    <li>그 위에 <strong>사건 유형·쟁점·판결 결과 필드 가중치 랭킹</strong>을 얹어, 구조가 일치하는 판례가 문장만 비슷한 판례를 이기도록 설계</li>
+  </ul>
+  <p>구조화 요약(02)이 없었으면 이 랭킹 자체가 불가능했습니다 — <strong>랭킹에 쓸 필드가
+  존재하지 않았을 테니까요.</strong> 데이터 설계와 검색 설계는 한 몸입니다.</p>
+
+  <h2><span class="no">04</span>출력 — LLM은 형식을 약속하지 않는다</h2>
+  <p>소송비용 산정 기능은 추출 항목이 하나만 누락돼도 후속 계산이 깨집니다. 그런데 LLM 응답은
+  실행마다 표현·누락 여부가 달랐습니다. 세 겹으로 잡았습니다.</p>
+  <ul class="plain">
+    <li><strong>Few-shot + CoT 프롬프트</strong> — 추출 기준 자체를 예시로 고정</li>
+    <li><strong>Pydantic Structured Output</strong> — 스키마 위반을 파싱 단계에서 차단</li>
+    <li><strong>후처리 검증</strong> — 값 범위·상호 일관성 체크</li>
+  </ul>
+  <p>결과적으로 정보 추출 신뢰도가 올라 <strong>할루시네이션이 약 15% 줄었습니다.</strong></p>
+
+  <h2><span class="no">05</span>운영 — 파이프라인은 한 번 돌고 끝나지 않는다</h2>
+  <p>판례는 계속 쌓입니다. 요약→임베딩→인덱싱을 수작업으로 돌리면 언젠가 반드시 빠뜨립니다.
+  <strong>Airflow DAG</strong>로 자동화하되, 단계별로 실패를 격리해 "어디서 왜 죽었는지"를 바로 찾을 수
+  있게 했고, <strong>Langfuse</strong>로 프롬프트 버전과 호출 흐름을 추적해 "왜 이 응답이 나왔지"를
+  재현 가능하게 만들었습니다.</p>
+
+  <h2><span class="no">R</span>결과와 배운 것</h2>
+  <section class="impact">
+    <div><b>10×</b><span>컨텍스트 입력 효율</span></div>
+    <div><b>−15%</b><span>할루시네이션</span></div>
+    <div><b>6</b><span>필드 — 용도별 설계</span></div>
+  </section>
+  <ul class="plain">
+    <li><strong>RAG 품질 문제는 대부분 데이터 설계 문제다.</strong> 검색기·모델을 바꾸기 전에, 문서가 검색·생성이 소비할 수 있는 형태인지부터 물어야 한다</li>
+    <li><strong>압축은 목표가 아니라 부산물이다.</strong> "무엇을 남길지"를 스키마로 설계하면 압축률과 품질이 같이 온다</li>
+    <li><strong>도메인 유사성은 임베딩 밖에 있다.</strong> 문장 유사도가 답하지 못하는 유사성은 구조 필드와 랭킹으로 주입해야 한다</li>
+  </ul>
+
+  <div class="links">
+    <a href="legal-assistant.html">Case Study — AI Legal Research ↗</a>
+    <a href="https://syoooooung.github.io/ai-legal-demo/">Live Demo ↗</a>
+  </div>
+</main>
+<footer>
+  <span>© 2026 Seyoung Hwang · <a href="mailto:tpdudabc@naver.com">tpdudabc@naver.com</a></span>
+  <a class="next" href="../about.html"><small>More</small>About Me →</a>
+</footer>
+<script src="../assets/case.js"></script>
+</html>
