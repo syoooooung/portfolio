@@ -1,51 +1,57 @@
-<svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">
+<svg viewBox="0 0 880 350" xmlns="http://www.w3.org/2000/svg" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">
   <style>
     .lbl{fill:#f4eef5;font-size:12px}
     .sub{fill:#b9a8bd;font-size:10px}
     .lane{fill:#b9a8bd;font-size:9px;letter-spacing:.18em}
-    .edge{stroke:rgba(244,238,245,.35);stroke-width:1.2;fill:none}
-    .arrow{stroke:#b9a8bd;stroke-width:1.2;fill:none;marker-end:url(#a2)}
-    .node{fill:#1c0a1b;stroke:rgba(244,238,245,.4)}
-    .core{fill:rgba(255,90,31,.15);stroke:#ff5a1f;stroke-width:1.6}
-    .dup{stroke:#e0117a;stroke-dasharray:4 3}
+    .arrow{stroke:#b9a8bd;stroke-width:1.2;fill:none;marker-end:url(#a3)}
+    .box{fill:#1c0a1b;stroke:rgba(244,238,245,.28)}
+    .mine{stroke:#ff5a1f;stroke-width:1.5}
+    .team{stroke:rgba(244,238,245,.28);stroke-dasharray:4 3}
   </style>
-  <defs><marker id="a2" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+  <defs><marker id="a3" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
     <path d="M0 0L7 3.5L0 7Z" fill="#b9a8bd"/></marker></defs>
-  <rect width="880" height="330" fill="#120211"/>
+  <rect width="880" height="350" fill="#120211"/>
 
-  <text class="lane" x="20" y="30">1 · 질문</text>
-  <rect x="20" y="45" width="200" height="70" rx="3" fill="#1c0a1b" stroke="rgba(244,238,245,.28)"/>
-  <text class="sub" x="34" y="72" fill="#f4eef5">"A가 설립한 회사가 인수한</text>
-  <text class="sub" x="34" y="88" fill="#f4eef5">스튜디오의 첫 작품은?"</text>
-  <text class="sub" x="34" y="106">멀티홉 질문</text>
+  <text class="lane" x="20" y="26" fill="#ff5a1f">EPQD — 내 담당 (의미 보존 질문 분해)</text>
+  <rect x="20" y="38" width="560" height="150" rx="4" fill="none" stroke="rgba(255,90,31,.35)"/>
 
-  <text class="lane" x="290" y="30">2 · 엔티티·관계 그래프</text>
-  <g>
-    <circle class="node" cx="330" cy="80" r="18"/><text class="lbl" x="330" y="84" text-anchor="middle">A</text>
-    <circle class="core" cx="420" cy="110" r="22"/><text class="lbl" x="420" y="114" text-anchor="middle">회사</text>
-    <circle class="node" cx="510" cy="80" r="24"/><text class="sub" x="510" y="84" text-anchor="middle" fill="#f4eef5">스튜디오</text>
-    <circle class="node" cx="560" cy="150" r="20"/><text class="sub" x="560" y="154" text-anchor="middle" fill="#f4eef5">작품</text>
-    <path class="edge" d="M346 88 L400 102"/><path class="edge" d="M441 100 L488 87"/><path class="edge" d="M524 98 L552 132"/>
-    <text class="sub" x="336" y="108">설립</text><text class="sub" x="446" y="76">인수</text><text class="sub" x="530" y="120">제작</text>
-    <text class="sub" x="330" y="166" fill="#ff5a1f">Core 노드 — 연결 중심도·루트 거리 기준</text>
-  </g>
+  <rect class="box" x="36" y="58" width="150" height="56" rx="3"/>
+  <text class="lbl" x="50" y="82">원 질문</text>
+  <text class="sub" x="50" y="99">멀티문서 · 복합 질문</text>
 
-  <text class="lane" x="20" y="215">3 · 의미 보존 서브쿼리 (Core 복제 포함)</text>
-  <g>
-    <rect x="20" y="230" width="260" height="56" rx="3" fill="#1c0a1b" stroke="rgba(244,238,245,.28)"/>
-    <circle class="core" cx="46" cy="258" r="12"/><text class="sub" x="68" y="255" fill="#f4eef5">SQ1 · A가 설립한 회사는?</text>
-    <text class="sub" x="68" y="271">→ 회사 = X</text>
-    <rect x="310" y="230" width="280" height="56" rx="3" fill="#1c0a1b" stroke="rgba(244,238,245,.28)"/>
-    <circle class="core dup" cx="336" cy="258" r="12" fill="rgba(255,90,31,.15)"/>
-    <text class="sub" x="358" y="255" fill="#f4eef5">SQ2 · X가 인수한 스튜디오의</text>
-    <text class="sub" x="358" y="271" fill="#f4eef5">첫 작품은? (Core 복제)</text>
-  </g>
-  <path class="arrow" d="M230 115 Q260 150 240 224"/>
-  <path class="arrow" d="M480 180 Q460 205 450 224"/>
+  <rect class="box mine" x="222" y="58" width="150" height="56" rx="3"/>
+  <text class="lbl" x="236" y="79">① 의미 분할</text>
+  <text class="sub" x="236" y="95">접속사·쉼표 기준</text>
+  <text class="sub" x="236" y="107">(따옴표 구간 예외)</text>
 
-  <text class="lane" x="660" y="215">4 · RETRIEVAL</text>
-  <rect x="660" y="230" width="190" height="56" rx="3" fill="#1c0a1b" stroke="rgba(244,238,245,.28)"/>
-  <text class="sub" x="674" y="255" fill="#f4eef5">서브쿼리별 병렬 검색</text>
-  <text class="sub" x="674" y="271">→ 멀티홉 연결 유지</text>
-  <path class="arrow" d="M590 258 H654"/>
+  <rect class="box mine" x="408" y="58" width="156" height="56" rx="3"/>
+  <text class="lbl" x="422" y="79">② 서브질문 생성</text>
+  <text class="sub" x="422" y="95">각 phrase + 원문 동반</text>
+  <text class="sub" x="422" y="107">phrase당 1개 · 용어 보존</text>
+
+  <path class="arrow" d="M186 86H216"/><path class="arrow" d="M372 86H402"/>
+  <text class="sub" x="36" y="146">→ 엔티티 누락률(EOR) <tspan fill="#ff5a1f">70.2% → 7.4%</tspan> (복잡 질문, LangChain QD 대비)</text>
+  <text class="sub" x="36" y="164">→ 불필요 엔티티 추가(EAR)도 47.3% → 14.4%로 감소 — 분해가 질문을 바꾸지 않게</text>
+
+  <text class="lane" x="20" y="230">DICS — 팀 설계 (동적 입력 컨텍스트 선택)</text>
+  <rect x="20" y="242" width="560" height="88" rx="4" fill="none" stroke="rgba(244,238,245,.18)"/>
+  <rect class="box team" x="36" y="258" width="160" height="56" rx="3"/>
+  <text class="sub" x="50" y="280" fill="#f4eef5">질문 그래프 → Core 노드</text>
+  <text class="sub" x="50" y="296">선택 기준(criteria) 도출</text>
+  <rect class="box team" x="232" y="258" width="170" height="56" rx="3"/>
+  <text class="sub" x="246" y="280" fill="#f4eef5">GS 모델 (GAT 그래프 임베딩)</text>
+  <text class="sub" x="246" y="296">기준당 청크 1개 선택</text>
+  <rect class="box team" x="438" y="258" width="126" height="56" rx="3"/>
+  <text class="sub" x="452" y="280" fill="#f4eef5">동적 입력 컨텍스트</text>
+  <text class="sub" x="452" y="296">top-K 고정 폐기</text>
+  <path class="arrow" d="M196 286H226"/><path class="arrow" d="M402 286H432"/>
+
+  <path class="arrow" d="M564 114 Q640 150 620 252 Q615 275 570 286"/>
+  <text class="sub" x="640" y="170">서브질문별 검색 →</text>
+
+  <rect class="box" x="700" y="120" width="160" height="90" rx="3"/>
+  <text class="lbl" x="714" y="148">LLM 답변 생성</text>
+  <text class="sub" x="714" y="168">입력 청크 8.6 → 4.0</text>
+  <text class="sub" x="714" y="184">F1 0.596 → 0.877</text>
+  <path class="arrow" d="M570 300 Q680 300 720 216"/>
 </svg>

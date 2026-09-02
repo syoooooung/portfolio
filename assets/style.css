@@ -79,3 +79,4 @@ h3 .no{font:var(--mono);color:var(--accent);margin-right:10px;letter-spacing:.1e
 .rv.in{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}}
 @media(max-width:640px){.hero h1.display br{display:none}}
+.marquee img{height:1em;vertical-align:-.12em;margin-right:.38em;opacity:.9}

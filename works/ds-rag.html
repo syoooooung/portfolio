@@ -5,12 +5,11 @@
 <title>DS-RAG — 황세영</title>
 <meta property="og:type" content="website">
 <meta property="og:title" content="DS-RAG — 황세영">
-<meta property="og:description" content="질문을 그래프로 구조화해 의미를 보존하며 분해하는 RAG 프레임워크. Retrieval F1 +28.1%p, SCIE 논문 출판.">
+<meta property="og:description" content="상용 멀티문서 QA를 위한 RAG 프레임워크. 의미 보존 질문 분해(EPQD)와 커스텀 데이터셋·실험을 담당, SCIE 논문 공동 1저자. F1 0.596→0.877, 입력 청크 절반.">
 <meta property="og:url" content="https://syoooooung.github.io/portfolio/works/ds-rag.html">
 <meta property="og:image" content="https://syoooooung.github.io/portfolio/assets/og.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="description" content="질문을 그래프로 구조화해 의미를 보존하며 분해하는 RAG 프레임워크. Retrieval F1 +28.1%p, SCIE 논문 출판.">
-
+<meta name="description" content="상용 멀티문서 QA를 위한 RAG 프레임워크. 의미 보존 질문 분해(EPQD)와 커스텀 데이터셋·실험을 담당, SCIE 논문 공동 1저자.">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&display=swap">
 <link rel="stylesheet" href="../assets/style.css">
@@ -19,89 +18,114 @@
   <canvas data-hue="0.55"></canvas>
   <nav class="overlay"><a href="../index.html">← Index</a><a href="../about.html">About</a></nav>
   <div class="hero-inner">
-    <p class="kicker">산학협력 캡스톤 (3인팀) · 2024.02 — 2025.01 · SCIE 논문 출판</p>
+    <p class="kicker">산학협력 캡스톤 (3인팀) · 2024.02 — 2025.01 · Electronics (SCIE) 공동 1저자</p>
     <h1 class="display">DS-RAG</h1>
-    <p class="sub">"질문을 어떻게 쪼개야 검색 성능이 실제로 개선되는가."
-    질문을 그래프로 구조화해 의미를 보존하며 분해하는 RAG 프레임워크 — 설계, 검증, 그리고 논문 출판까지.</p>
+    <p class="sub">상용 멀티문서 QA는 검색 성능·API 비용·운영 오버헤드를 동시에 요구합니다.
+    질문을 훼손하지 않는 분해(EPQD)와 동적 컨텍스트 선택(DICS)으로 셋을 함께 잡은 RAG 프레임워크 —
+    설계부터 데이터셋, 실험, 논문 출판까지.</p>
   </div>
 </header>
-<div class="marquee"><div>Python · GPT 계열 LLM · HotpotQA · Vector Store · Custom Graph Logic · Electronics (MDPI, SCIE) · &nbsp;</div><div>Python · GPT 계열 LLM · HotpotQA · Vector Store · Custom Graph Logic · Electronics (MDPI, SCIE) · &nbsp;</div></div>
+<div class="marquee"><div><img src="../assets/icons/python.svg" alt="">Python · GPT-4o · <img src="../assets/icons/langchain.svg" alt="">LangChain · FAISS · HotpotQA · Custom Multi-Doc QA Dataset · Electronics (MDPI · SCIE) · &nbsp;</div><div aria-hidden="true"><img src="../assets/icons/python.svg" alt="">Python · GPT-4o · <img src="../assets/icons/langchain.svg" alt="">LangChain · FAISS · HotpotQA · Custom Multi-Doc QA Dataset · Electronics (MDPI · SCIE) · &nbsp;</div></div>
 
 <main>
   <section class="impact">
-    <div><b>+28%p</b><span>Retrieval F1 — 0.596 → 0.877</span></div>
-    <div><b>1</b><span>SCIE 논문 — 공동 주저자</span></div>
-    <div><b>1</b><span>총장상 — 졸업작품 전시회</span></div>
+    <div><b>0.877</b><span>입력 컨텍스트 F1 — 리랭킹 0.596 대비</span></div>
+    <div><b>−54%</b><span>LLM 입력 청크 — 8.6 → 4.0개</span></div>
+    <div><b>7.4%</b><span>엔티티 누락률 — 기존 QD 70.2%</span></div>
+    <div><b>1</b><span>SCIE 논문 — 공동 1저자 · 총장상</span></div>
   </section>
 
-  <h2><span class="no">S</span>배경 — 분해할수록 잃어버리는 질문</h2>
-  <p>기존 RAG의 Query Decomposition은 분해 과정에서 질문의 핵심 엔티티와 관계 구조를 잃어버립니다.
-  멀티홉 QA에서는 이 연결 정보가 곧 정답 경로라서, <strong>분해가 오히려 검색을 망가뜨리는</strong> 역설이
-  생깁니다. 게다가 분해 품질을 정량 평가할 데이터셋조차 없었습니다.</p>
+  <h2><span class="no">S</span>배경 — 상용 멀티문서 QA의 3중 제약</h2>
+  <p>사내 문서로 QA 서비스를 만들면 정보가 여러 문서에 파편화돼 있어 대부분의 질문이
+  <strong>멀티문서 질문</strong>이 됩니다. 상용 서비스는 여기서 세 가지를 동시에 요구합니다 —
+  ① 답에 필요한 컨텍스트를 <strong>누락 없이 검색</strong>할 것, ② 상용 LLM API의 <strong>토큰 비용</strong>을
+  최소화할 것, ③ 소규모 인프라로 감당 가능하게 <strong>운영 오버헤드</strong>를 낮출 것.
+  청크를 많이 가져오면 ①은 풀리지만 ②가 무너지고, 무거운 그래프 인프라를 쓰면 ③이 무너집니다.</p>
+  <p>질문 분해(QD)가 표준 해법이지만, LLM 분해는 <strong>질문의 핵심 엔티티를 빠뜨리거나 없던 내용을
+  만들어</strong> 검색을 오히려 망가뜨립니다. DS-RAG는 이 지점을 두 모듈로 풉니다 —
+  질문을 훼손하지 않는 분해(<strong>EPQD</strong>)와, top-K 고정 대신 질문 구조에 맞춰 입력 컨텍스트를
+  동적으로 고르는 선택기(<strong>DICS</strong>).</p>
 
-  <h2><span class="no">T</span>역할 — 3인팀에서 데이터셋과 분해 모듈 담당</h2>
+  <h2><span class="no">T</span>역할 — 3인 공동 1저자, 논문에 명시된 기여</h2>
   <div class="facts">
-    <div><b>담당</b><span>Custom QA 데이터셋 구축 · EP-QD 모듈 설계/구현</span></div>
-    <div><b>기간</b><span>2024.02 — 2025.01 (1년)</span></div>
-    <div><b>논문</b><span>Electronics 14(4):659, 2025 — 공동 주저자</span></div>
+    <div><b>방법론</b><span>EPQD 모듈 설계 (지도교수와 공동)</span></div>
+    <div><b>데이터·실험</b><span>커스텀 데이터셋 구축 · 벤치마크 실험 수행</span></div>
+    <div><b>구현·집필</b><span>프레임워크 구현 · 논문 초고 집필</span></div>
     <div><b>데모</b><span><a href="https://syoooooung.github.io/ds-rag-demo/" style="color:var(--ink)">ds-rag-demo</a></span></div>
   </div>
 
   <h2><span class="no">A</span>설계와 구현</h2>
+  <figure class="figure"><img src="../assets/img/dsrag-decomp.svg" alt="DS-RAG 프레임워크 구조 — EPQD(담당)와 DICS" loading="lazy"><figcaption class="figcap">DS-RAG — EPQD(내 담당)가 분해를, DICS가 동적 컨텍스트 선택을 맡는다</figcaption></figure>
 
-  <h3><span class="no">01</span>EP-QD: 의미 보존형 질문 분해</h3>
-  <figure class="figure"><img src="../assets/img/dsrag-decomp.svg" alt="EP-QD 질문 분해 과정 다이어그램" loading="lazy"><figcaption class="figcap">EP-QD — 질문을 그래프로 구조화해 Core 중심으로 분해</figcaption></figure>
+  <h3><span class="no">01</span>기존 분해의 실패를 먼저 규명했다</h3>
   <ul class="plain">
-    <li>질문 내 엔티티·관계를 그래프로 표현하고, <strong>연결 중심도와 루트 거리 기준으로 Core 노드를 선정</strong> — Core 중심으로 의미가 보존된 서브쿼리 생성</li>
-    <li>동일 노드가 여러 경로에 등장하면 병합하지 않고 <strong>각 서브그래프에 복제 포함</strong>해 멀티홉 관계를 유지한 채 검색</li>
-    <li>엔티티·관계 보존을 유도하는 <strong>프롬프트 구조와 출력 포맷 설계</strong>로 분해 결과가 Retriever에서 바로 쓰이도록 제어</li>
+    <li>가장 널리 쓰이는 LangChain QD를 케이스 스터디로 분석해 <strong>세 가지 실패 유형을 규명</strong> — ① 불필요한 서브질문 과잉 생성, ② 핵심 정보 누락, ③ 원 질문에 없던 내용으로 변형</li>
+    <li>분해 품질을 잴 지표가 없어 <strong>EAR(엔티티 추가율)·EOR(엔티티 누락율)을 직접 정의</strong> — 검색 결과가 아니라 분해 자체를 측정</li>
   </ul>
 
-  <h3><span class="no">02</span>Custom Multi-document QA 데이터셋</h3>
+  <h3><span class="no">02</span>EPQD — 의미를 보존하는 분해</h3>
+  <div class="flow">원 질문 → <em>접속사·쉼표 기준 의미 분할</em> (따옴표 예외) → <em>각 phrase + 원문 동반 프롬프트</em> → phrase당 서브질문 1개</div>
   <ul class="plain">
-    <li>분해 품질을 정량 평가할 데이터셋이 없어 <strong>HotpotQA를 실험 목적에 맞게 재구성</strong> — 질문 유형 분류 기준 정의, Supporting Facts·Context 구조 정제</li>
-    <li>모델 학습·평가에 바로 쓰이는 <strong>전처리 파이프라인 구현</strong></li>
+    <li>멀티문서 질문은 비교 대상들이 접속사·쉼표로 나뉘는 언어적 특성이 있음 — <strong>LLM에게 분해를 통째로 맡기지 않고, 결정적 규칙으로 먼저 의미 단위를 분할</strong></li>
+    <li>각 분할 조각을 <strong>원문 전체와 함께</strong> LLM에 넣어 서브질문을 생성 — 조각만 보내면 맥락을 잃고, 원문만 보내면 변형되므로. 원문 용어 보존·문법적 완결성·조각당 1개 생성을 프롬프트 원칙으로 강제</li>
+    <li>결과: 복잡 질문에서 <strong>엔티티 누락률 70.2% → 7.4%</strong>, 불필요 엔티티 추가율 47.3% → 14.4% (LangChain QD 대비, 자체 정의 EAR/EOR 지표)</li>
+  </ul>
+
+  <h3><span class="no">03</span>기존 데이터셋으로는 실험이 성립하지 않았다</h3>
+  <ul class="plain">
+    <li>HotpotQA는 질문이 단순하고 정답 청크가 최대 2개뿐이며, 정답 청크 없이도 LLM이 답을 맞혀버리는 사례가 있어 <strong>프레임워크 검증 자체가 불가능</strong> — Multi-hop RAG도 중복 서술 문제로 부적합</li>
+    <li>그래서 <strong>정답 청크 2~4개가 반드시 필요하고, 정답이 문서에 명시돼 있지 않아 LLM이 추론해야만 하는</strong> 멀티문서 QA 데이터셋 4,000문항(ranking/comparison 유형)을 GPT-4o 기반으로 직접 구축 — <a href="https://github.com/Mulsanne2/DS-RAG" style="color:var(--ink)">GitHub에 공개</a></li>
+  </ul>
+
+  <h3><span class="no">04</span>벤치마크 실험 — 프레임워크 전체 검증</h3>
+  <ul class="plain">
+    <li>NonQD-리랭킹 / EPQD+리랭킹(서브질문·원질문 기준) 3종 벤치마크를 구축하고 Precision·Recall·F1, 평균 청크 수(비용), ANLS(답변 품질)로 평가</li>
+    <li>DICS(팀 설계: 질문 그래프 Core 노드 기반 선택 기준 + GAT 그래프 임베딩 선택 모델)와 결합한 DS-RAG가 <strong>입력 청크를 절반 이하로 줄이면서 F1을 0.596 → 0.877로</strong> 끌어올림을 검증 — 선택 모델은 상용 리랭커 대비 파라미터 30% 수준(운영 오버헤드 ↓)</li>
   </ul>
 
   <h2><span class="no">R</span>결과</h2>
   <figure class="figure">
-  <svg viewBox="0 0 860 190" xmlns="http://www.w3.org/2000/svg" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" role="img" aria-label="Retrieval F1 비교: LangChain 기반 QD 0.596, DS-RAG 0.877">
-    <text x="16" y="28" fill="#f4eef5" font-size="13">Retrieval F1 — 동일 Retriever·LLM 조건, HotpotQA 기반</text>
-    <g stroke="rgba(244,238,245,.12)"><line x1="140" y1="50" x2="140" y2="160"/><line x1="315" y1="50" x2="315" y2="160"/><line x1="490" y1="50" x2="490" y2="160"/><line x1="665" y1="50" x2="665" y2="160"/><line x1="840" y1="50" x2="840" y2="160"/></g>
-    <g fill="#b9a8bd" font-size="10"><text x="140" y="178" text-anchor="middle">0</text><text x="315" y="178" text-anchor="middle">0.25</text><text x="490" y="178" text-anchor="middle">0.5</text><text x="665" y="178" text-anchor="middle">0.75</text><text x="840" y="178" text-anchor="middle">1.0</text></g>
-    <text x="128" y="80" fill="#b9a8bd" font-size="12" text-anchor="end">LangChain QD</text>
-    <rect x="140" y="66" width="417" height="20" rx="4" fill="#b9a8bd"/>
-    <text x="565" y="81" fill="#f4eef5" font-size="12">0.596</text>
-    <text x="128" y="130" fill="#f4eef5" font-size="12" text-anchor="end">DS-RAG</text>
-    <rect x="140" y="116" width="614" height="20" rx="4" fill="#ff5a1f"/>
-    <text x="762" y="131" fill="#f4eef5" font-size="12">0.877</text>
-    <line x1="140" y1="50" x2="140" y2="160" stroke="rgba(244,238,245,.4)"/>
+  <svg viewBox="0 0 860 230" xmlns="http://www.w3.org/2000/svg" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" role="img" aria-label="입력 컨텍스트 F1 비교: 분해 없는 리랭킹 0.14, EPQD+리랭킹 0.596, DS-RAG 0.877">
+    <text x="16" y="28" fill="#f4eef5" font-size="13">입력 컨텍스트 F1 — 커스텀 멀티문서 QA 1,000문항 (ranking·comparison 평균)</text>
+    <g stroke="rgba(244,238,245,.12)"><line x1="190" y1="50" x2="190" y2="200"/><line x1="352" y1="50" x2="352" y2="200"/><line x1="514" y1="50" x2="514" y2="200"/><line x1="676" y1="50" x2="676" y2="200"/><line x1="838" y1="50" x2="838" y2="200"/></g>
+    <g fill="#b9a8bd" font-size="10"><text x="190" y="218" text-anchor="middle">0</text><text x="352" y="218" text-anchor="middle">0.25</text><text x="514" y="218" text-anchor="middle">0.5</text><text x="676" y="218" text-anchor="middle">0.75</text><text x="838" y="218" text-anchor="middle">1.0</text></g>
+    <text x="178" y="80" fill="#b9a8bd" font-size="12" text-anchor="end">분해 없음 + 리랭킹</text>
+    <rect x="190" y="66" width="93" height="20" rx="4" fill="#6e5f72"/>
+    <text x="291" y="81" fill="#f4eef5" font-size="12">0.144</text>
+    <text x="178" y="135" fill="#b9a8bd" font-size="12" text-anchor="end">EPQD + 리랭킹</text>
+    <rect x="190" y="121" width="386" height="20" rx="4" fill="#b9a8bd"/>
+    <text x="584" y="136" fill="#f4eef5" font-size="12">0.596</text>
+    <text x="178" y="190" fill="#f4eef5" font-size="12" text-anchor="end">DS-RAG (EPQD+DICS)</text>
+    <rect x="190" y="176" width="568" height="20" rx="4" fill="#ff5a1f"/>
+    <text x="766" y="191" fill="#f4eef5" font-size="12">0.877</text>
+    <line x1="190" y1="50" x2="190" y2="200" stroke="rgba(244,238,245,.4)"/>
   </svg>
-  <figcaption class="figcap">평균 F1 0.596 → 0.877 (+28.1%p)</figcaption>
+  <figcaption class="figcap">분해가 없으면 검색이 무너지고(0.14), 고정 top-K 리랭킹은 절반을 버리며(0.596), 동적 선택이 둘을 잡는다(0.877)</figcaption>
   </figure>
   <ul class="plain">
-    <li>동일 Retriever/LLM 조건에서 LangChain 기반 QD 대비 <strong>Retrieval F1 평균 0.596 → 0.877</strong>, Ground-truth 문서 Recall 안정적 증가, 불필요한 청크 선택 감소</li>
-    <li><strong>SCIE 등재 논문 출판 (공동 주저자)</strong>, 인공지능융합대학 졸업작품 전시회 <strong>총장상</strong></li>
+    <li>입력 컨텍스트 <strong>F1 0.877</strong> — EPQD+리랭킹(0.596) 대비 +28.1%p, 분해 없는 리랭킹(0.14)과는 비교 불가 수준</li>
+    <li>같은 정확도 구간에서 <strong>LLM 입력 청크 8.6 → 4.0개(절반 이하)</strong> — 상용 API 비용 제약을 직접 해소</li>
+    <li><strong><a href="https://www.mdpi.com/2079-9292/14/4/659" style="color:var(--ink)">Electronics (MDPI, SCIE) 14(4):659, 2025</a> 출판 — 공동 1저자</strong> (기여 명시: EPQD 방법론·데이터셋·실험·초고), 캡스톤 전시회 <strong>총장상</strong></li>
   </ul>
 
-  <h2><span class="no">W</span>기술 선정 이유</h2>
+  <h2><span class="no">W</span>설계 선택의 이유</h2>
   <div class="why">
-    <div><b>HotpotQA</b><span>멀티홉 QA의 표준 벤치마크 — Supporting Facts가 있어 Retrieval 품질을 직접 채점 가능</span></div>
-    <div><b>Custom Graph Logic</b><span>기성 그래프 라이브러리 대신 직접 구현 — 분해 규칙을 실험 목적대로 완전히 통제</span></div>
-    <div><b>GPT 계열</b><span>동일 모델 고정으로 분해 방식 간 비교의 재현성 확보</span></div>
+    <div><b>규칙 분할 + LLM 생성</b><span>분해를 LLM에 통째로 맡기면 질문이 변형됨 — 결정적 규칙(접속사·쉼표)이 구조를 잡고, LLM은 조각을 완성하는 역할로 좁힘</span></div>
+    <div><b>EAR·EOR 자체 지표</b><span>검색 F1로는 "분해가 무엇을 훼손했는지"를 못 잼 — 원 질문과 서브질문의 엔티티 집합을 직접 비교하는 지표를 정의</span></div>
+    <div><b>데이터셋 자체 구축</b><span>기존 셋은 정답 청크가 적고 유출이 있어 프레임워크의 차이가 지표에 안 드러남 — 검증이 성립하는 조건을 데이터부터 설계</span></div>
+    <div><b>GPT-4o 고정</b><span>분해 방식 간 비교에서 모델 변수를 제거해 재현성 확보</span></div>
   </div>
 
-  <h2><span class="no">+</span>회고 — 다시 한다면</h2>
+  <h2><span class="no">+</span>회고 — 논문에 남긴 한계와 다음</h2>
   <ul class="plain">
-    <li>분해에 드는 <strong>추가 LLM 호출 비용 대비 성능 이득</strong>을 함께 보고했을 것 — 상용 적용 관점의 트레이드오프 분석</li>
-    <li>GPT 계열 외 <strong>오픈소스 모델에서도 재검증</strong>해 프레임워크의 모델 독립성을 입증했을 것</li>
+    <li>상용 API 의존이 남긴 비용·지연은 미해결 — <strong>도메인 파인튜닝한 sLLM으로 대체하는 방향</strong>을 후속 과제로 명시</li>
+    <li>데이터셋이 위키 기반이라 실사용 질문의 다양성을 다 담지 못함 — LLM 기반 생성 방식을 확장해 <strong>도메인 특화 QA 데이터셋 자동 생성</strong>으로 잇는 것이 다음 단계</li>
   </ul>
 
   <div class="links">
     <a href="https://www.mdpi.com/2079-9292/14/4/659">Paper — Electronics 14(4):659 ↗</a>
+    <a href="https://github.com/Mulsanne2/DS-RAG">Code · Dataset ↗</a>
     <a href="https://syoooooung.github.io/ds-rag-demo/">Live Demo ↗</a>
-    <a href="https://github.com/syoooooung/capstone_design">Research Code ↗</a>
-    <a href="https://github.com/syoooooung/ds-rag-demo">Demo Code ↗</a>
   </div>
 </main>
 <footer>
