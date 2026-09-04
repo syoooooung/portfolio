@@ -52,7 +52,7 @@
 <script>
 // ── 랜딩 리스트: [제목, 링크, 썸네일 색] ──────────────────────
 const WORKS = [
-  ["Carbon Footprint AI Platform",  "works/carbon-footprint.html", "assets/img/carbon-pipeline.svg"],
+  ["Carbon Footprint AI Platform",  "works/carbon-footprint.html", "assets/img/carbon-arch.png"],
   ["AI Legal Research Assistant",   "works/legal-assistant.html",  "assets/thumbs/ai-legal.png"],
   ["Active Metadata Relations",     "works/data-relation.html",    "assets/thumbs/metadata.png"],
   ["DS-RAG — SCIE Paper",           "works/ds-rag.html",           "assets/thumbs/ds-rag.png"],
@@ -71,7 +71,7 @@ list.addEventListener('pointerover', e => {
   const t = WORKS[a.dataset.i][2];
   thumb.style.background = t.startsWith('#')
     ? `linear-gradient(135deg,${t},#120211)`
-    : `#120211 url(${t}) center/cover`;
+    : `#ffffff url(${t}) center/contain no-repeat`;
   thumb.style.opacity = 1;
 });
 list.addEventListener('pointerout', () => thumb.style.opacity = 0);

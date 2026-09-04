@@ -39,8 +39,9 @@
   <p>EU CBAM(탄소국경조정제도) 등 글로벌 탄소규제가 본격화되면서, 제조기업은 제품 단위의 탄소발자국을
   실측 데이터로 산정·보고·검증(MRV)해야 하는 상황이 됐습니다. 그런데 제품 하나의 탄소발자국을 산정하려면 수십~수백 페이지의 LCA 보고서를 읽고, 배출 기여가 큰 공정을 찾고,
   감축 시나리오를 세우고, ISO 14040/14044/14067 요구사항에 맞는지 검토해야 합니다. 전 과정이
-  소수 전문가의 수작업이라 <strong>느리고, 비싸고, 사람마다 결과가 다릅니다.</strong> 이 병목을 LLM 파이프라인으로
-  푸는 것이 과제의 목표입니다.</p>
+  소수 전문가의 수작업이라 <strong>느리고, 비싸고, 사람마다 결과가 다릅니다.</strong> 이 전문가의 분석·검토
+  과정을 <strong>AI 에이전트로 자동화</strong>하는 것 — 보고서를 읽고, 핫스팟을 찾고, 시나리오를 검증하고,
+  표준 준수까지 검토하는 — 이 과제의 목표입니다.</p>
 
   <h2><span class="no">T</span>역할 — 백엔드와 AI 파이프라인 전담</h2>
   <div class="facts">
@@ -51,7 +52,7 @@
   </div>
 
   <h2><span class="no">A</span>설계와 구현</h2>
-  <figure class="figure"><img src="../assets/img/carbon-pipeline.svg" alt="탄소발자국 AI 파이프라인 아키텍처" loading="lazy"><figcaption class="figcap">Architecture — PDF에서 ISO 검토까지 / LLM 서빙 전환 구조</figcaption></figure>
+  <figure class="figure" style="background:#fff"><img src="../assets/img/carbon-arch.png" alt="탄소발자국 AI 플랫폼 시스템 아키텍처 — Agent 중심 백엔드, GitOps 배포, 자사 LLM 서빙" loading="lazy"><figcaption class="figcap" style="color:#666">System Architecture — GitOps 배포 · Agent 중심 백엔드(MCP 도구) · 자사 LLM 서빙</figcaption></figure>
 
   <h3><span class="no">01</span>LCA 개선 시나리오 AI</h3>
   <ul class="plain">
