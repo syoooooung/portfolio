@@ -1,0 +1,136 @@
+<svg viewBox="0 0 880 1010" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'Apple SD Gothic Neo',sans-serif">
+  <style>
+    .h1{fill:#141a33;font-size:22px;font-weight:800}
+    .h2{fill:#141a33;font-size:16px;font-weight:700}
+    .num{fill:#3b6ef6;font-size:13px;font-weight:800}
+    .body{fill:#3f4664;font-size:11px}
+    .lbl{fill:#fff;font-size:11px;font-weight:600}
+    .dk{fill:#141a33;font-size:11px;font-weight:600}
+    .sub{fill:#7a819c;font-size:9.5px}
+    .card{fill:#ffffff;stroke:#e4e7f0}
+    .panel{fill:#f7f8fc;stroke:#e9ecf4}
+    .tok{fill:#ffffff;stroke:#3b6ef6;stroke-width:1.3}
+    .ghost{fill:#fff;stroke:#c4cadd;stroke-dasharray:3 3}
+    .model{fill:#3b6ef6;stroke:#2c5ae0}
+    .draft{fill:#8b3ff6;stroke:#7a2fe4}
+    .mtp{fill:#10a56b;stroke:#0d8f5c}
+    .mtok{fill:#ffffff;stroke:#10a56b;stroke-width:1.3}
+    .arrow{stroke:#5a6483;stroke-width:1.3;fill:none;marker-end:url(#a6)}
+    .loop{stroke:#8a92ad;stroke-width:1;fill:none;stroke-dasharray:4 3;marker-end:url(#a6)}
+    .pt{fill:#141a33;font-size:10px;font-weight:700}
+    .bar{rx:2.5}
+    .track{fill:#e9ecf4;rx:2.5}
+    .pill{font-size:10px;font-weight:600}
+  </style>
+  <defs><marker id="a6" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+    <path d="M0 0L7 3.5L0 7Z" fill="#5a6483"/></marker></defs>
+  <rect width="880" height="1010" fill="#ffffff"/>
+
+  <text class="h1" x="440" y="40" text-anchor="middle">LLM 추론 가속 — 무엇을, 왜 선택했나</text>
+  <text class="body" x="440" y="62" text-anchor="middle" fill="#5a6483">대역폭 병목(토큰마다 가중치 62.5GB 읽기)을 푸는 세 가지 방식</text>
+
+  <!-- ── 카드 1 ── -->
+  <g>
+    <rect class="card" x="20" y="90" width="840" height="270" rx="12"/>
+    <rect x="36" y="112" width="22" height="22" rx="5" fill="#e8efff"/><text class="num" x="47" y="128" text-anchor="middle">1</text>
+    <text class="h2" x="68" y="128">일반 디코딩 (기존)</text>
+    <text class="body" x="38" y="158">토큰을 하나 만들 때마다</text>
+    <text class="body" x="38" y="176">가중치 전체를 다시 읽는 자기회귀 루프.</text>
+    <text class="body" x="38" y="194">GPU 연산은 놀고,</text>
+    <text class="body" x="38" y="212">메모리 대역폭이 속도를 결정.</text>
+    <rect x="38" y="310" width="182" height="24" rx="12" fill="#fdeaea"/>
+    <text class="pill" x="129" y="326" text-anchor="middle" fill="#c0392b">● 실측 3.7 tok/s — 병목 확인</text>
+
+    <rect class="panel" x="270" y="112" width="380" height="226" rx="10"/>
+    <rect class="model" x="292" y="160" width="130" height="62" rx="8"/>
+    <text class="lbl" x="357" y="186" text-anchor="middle">메인 모델</text>
+    <text x="357" y="203" text-anchor="middle" fill="#cfe0ff" font-size="9.5">62.5GB 매번 읽기</text>
+    <rect class="tok" x="452" y="172" width="44" height="38" rx="7"/><text class="dk" x="474" y="196" text-anchor="middle" fill="#3b6ef6">T1</text>
+    <rect class="ghost" x="506" y="172" width="44" height="38" rx="7"/><text class="sub" x="528" y="196" text-anchor="middle">T2</text>
+    <rect class="ghost" x="560" y="172" width="44" height="38" rx="7"/><text class="sub" x="582" y="196" text-anchor="middle">T3</text>
+    <path class="arrow" d="M422 191H446"/>
+    <path class="loop" d="M474 212 Q460 274 410 252 Q378 238 370 226"/>
+    <text class="sub" x="410" y="284">느린 순차 피드백 루프 — 한 번에 1토큰</text>
+
+    <text class="pt" x="690" y="140">성능</text>
+    <text class="sub" x="690" y="166">병렬성</text><rect class="track" x="690" y="172" width="150" height="6"/><rect class="bar" x="690" y="172" width="30" height="6" fill="#e74c3c"/>
+    <text class="sub" x="690" y="200">메모리 부담</text><rect class="track" x="690" y="206" width="150" height="6"/><rect class="bar" x="690" y="206" width="70" height="6" fill="#3b6ef6"/>
+    <text class="sub" x="690" y="234">처리량</text><rect class="track" x="690" y="240" width="150" height="6"/><rect class="bar" x="690" y="240" width="35" height="6" fill="#f0a92e"/>
+  </g>
+
+  <!-- ── 카드 2 ── -->
+  <g>
+    <rect class="card" x="20" y="380" width="840" height="270" rx="12"/>
+    <rect x="36" y="402" width="22" height="22" rx="5" fill="#f1e8ff"/><text class="num" x="47" y="418" text-anchor="middle" fill="#8b3ff6">2</text>
+    <text class="h2" x="68" y="418">추측 디코딩 (별도 draft)</text>
+    <text class="body" x="38" y="448">작고 빠른 draft 모델이</text>
+    <text class="body" x="38" y="466">다음 토큰 여러 개를 추측하면,</text>
+    <text class="body" x="38" y="484">메인 모델이 가중치 한 번 읽기로 일괄 검증.</text>
+    <text class="body" x="38" y="502">단, 별도 모델만큼</text>
+    <text class="body" x="38" y="520">메모리·KV 캐시를 추가로 소모.</text>
+    <rect x="38" y="600" width="182" height="24" rx="12" fill="#fdf3dc"/>
+    <text class="pill" x="129" y="616" text-anchor="middle" fill="#a97b0f">● 추가 메모리 오버헤드</text>
+
+    <rect class="panel" x="270" y="402" width="380" height="226" rx="10"/>
+    <rect class="draft" x="288" y="424" width="110" height="52" rx="8"/>
+    <text class="lbl" x="343" y="446" text-anchor="middle">Draft 모델</text>
+    <text x="343" y="462" text-anchor="middle" fill="#e3d1ff" font-size="9.5">작고 빠름 · 별도</text>
+    <rect class="ghost" x="424" y="432" width="42" height="36" rx="7" stroke="#8b3ff6"/><text class="dk" x="445" y="455" text-anchor="middle" fill="#8b3ff6">?T1</text>
+    <rect class="ghost" x="474" y="432" width="42" height="36" rx="7" stroke="#8b3ff6"/><text class="dk" x="495" y="455" text-anchor="middle" fill="#8b3ff6">?T2</text>
+    <rect class="ghost" x="524" y="432" width="42" height="36" rx="7" stroke="#8b3ff6"/><text class="dk" x="545" y="455" text-anchor="middle" fill="#8b3ff6">?T3</text>
+    <path class="arrow" d="M398 450H418"/>
+    <text class="sub" x="424" y="486" fill="#8b3ff6">추측된 후보</text>
+    <rect class="model" x="424" y="500" width="130" height="52" rx="8"/>
+    <text class="lbl" x="489" y="522" text-anchor="middle">메인 모델</text>
+    <text x="489" y="538" text-anchor="middle" fill="#cfe0ff" font-size="9.5">한 번 읽고 일괄 검증</text>
+    <path class="arrow" d="M495 468 V494"/>
+    <rect class="tok" x="288" y="560" width="40" height="36" rx="7"/><text class="dk" x="308" y="583" text-anchor="middle" fill="#3b6ef6">T1</text>
+    <rect class="tok" x="336" y="560" width="40" height="36" rx="7"/><text class="dk" x="356" y="583" text-anchor="middle" fill="#3b6ef6">T2</text>
+    <rect class="tok" x="384" y="560" width="40" height="36" rx="7"/><text class="dk" x="404" y="583" text-anchor="middle" fill="#3b6ef6">T3</text>
+    <path class="arrow" d="M424 552 Q400 552 380 558" />
+    <text class="sub" x="434" y="584">검증된 출력 — 품질은 타깃 분포 그대로</text>
+
+    <text class="pt" x="690" y="430">성능</text>
+    <text class="sub" x="690" y="456">병렬성</text><rect class="track" x="690" y="462" width="150" height="6"/><rect class="bar" x="690" y="462" width="90" height="6" fill="#27ae60"/>
+    <text class="sub" x="690" y="490">메모리 부담</text><rect class="track" x="690" y="496" width="150" height="6"/><rect class="bar" x="690" y="496" width="100" height="6" fill="#e74c3c"/>
+    <text class="sub" x="690" y="524">처리량</text><rect class="track" x="690" y="530" width="150" height="6"/><rect class="bar" x="690" y="530" width="65" height="6" fill="#f0a92e"/>
+  </g>
+
+  <!-- ── 카드 3 (채택) ── -->
+  <g>
+    <rect class="card" x="20" y="670" width="840" height="300" rx="12" stroke="#10a56b" stroke-width="1.6"/>
+    <rect x="36" y="692" width="22" height="22" rx="5" fill="#e3f6ee"/><text class="num" x="47" y="708" text-anchor="middle" fill="#10a56b">3</text>
+    <text class="h2" x="68" y="708">MTP — 우리가 채택한 방식</text>
+    <text class="body" x="38" y="738">모델에 내장된 예측 레이어가</text>
+    <text class="body" x="38" y="756">스스로 다음 토큰들을 추측.</text>
+    <text class="body" x="38" y="774">별도 draft 모델이 없고,</text>
+    <text class="body" x="38" y="792">타깃과 KV 캐시를 공유해</text>
+    <text class="body" x="38" y="810">추가 캐시 소모가 없음.</text>
+    <rect x="38" y="884" width="206" height="24" rx="12" fill="#e3f6ee"/>
+    <text class="pill" x="141" y="900" text-anchor="middle" fill="#0d8f5c">● 3.7 → 10.4 tok/s (2.8배)</text>
+    <rect x="38" y="916" width="206" height="24" rx="12" fill="#e3f6ee"/>
+    <text class="pill" x="141" y="932" text-anchor="middle" fill="#0d8f5c">⚡ k=3 — 수용률 실측으로 고정</text>
+
+    <rect class="panel" x="270" y="692" width="380" height="256" rx="10"/>
+    <rect x="284" y="706" width="352" height="180" rx="8" fill="#f0fbf6" stroke="#10a56b" stroke-dasharray="5 4"/>
+    <text class="sub" x="298" y="726" fill="#0d8f5c" font-weight="700">자기 추측 구조 — 트렁크·KV 캐시 공유</text>
+    <rect class="mtp" x="300" y="738" width="100" height="130" rx="8"/>
+    <text class="lbl" x="350" y="796" text-anchor="middle">MTP 코어</text>
+    <text x="350" y="813" text-anchor="middle" fill="#d2f2e3" font-size="9.5">타깃 모델</text>
+    <rect x="424" y="738" width="112" height="32" rx="6" fill="#0f9663"/><text x="480" y="759" text-anchor="middle" fill="#fff" font-size="10" font-weight="600">예측 레이어 1</text>
+    <rect x="424" y="787" width="112" height="32" rx="6" fill="#12a06c"/><text x="480" y="808" text-anchor="middle" fill="#fff" font-size="10" font-weight="600">예측 레이어 2</text>
+    <rect x="424" y="836" width="112" height="32" rx="6" fill="#15ab75"/><text x="480" y="857" text-anchor="middle" fill="#fff" font-size="10" font-weight="600">예측 레이어 3</text>
+    <path class="arrow" d="M400 754 H418"/><path class="arrow" d="M400 803 H418"/><path class="arrow" d="M400 852 H418"/>
+    <rect class="mtok" x="562" y="738" width="44" height="32" rx="7"/><text class="dk" x="584" y="759" text-anchor="middle" fill="#0d8f5c">T1</text>
+    <rect class="mtok" x="562" y="787" width="44" height="32" rx="7"/><text class="dk" x="584" y="808" text-anchor="middle" fill="#0d8f5c">T2</text>
+    <rect class="mtok" x="562" y="836" width="44" height="32" rx="7"/><text class="dk" x="584" y="857" text-anchor="middle" fill="#0d8f5c">T3</text>
+    <path class="arrow" d="M536 754 H556"/><path class="arrow" d="M536 803 H556"/><path class="arrow" d="M536 852 H556"/>
+    <text class="sub" x="284" y="912">위치별 수용률 79.8 / 65.1 / 51.6% · 평균 수용 2.96토큰 — 가중치 1회 읽기당 약 3배</text>
+    <text class="sub" x="284" y="930">동시 8건 1.5~1.8배 · 첫 토큰 지연(TTFT)은 불변 — 디코드 구간만 가속</text>
+
+    <text class="pt" x="690" y="720">성능</text>
+    <text class="sub" x="690" y="746">병렬성</text><rect class="track" x="690" y="752" width="150" height="6"/><rect class="bar" x="690" y="752" width="95" height="6" fill="#27ae60"/>
+    <text class="sub" x="690" y="780">메모리 부담</text><rect class="track" x="690" y="786" width="150" height="6"/><rect class="bar" x="690" y="786" width="45" height="6" fill="#3b6ef6"/>
+    <text class="sub" x="690" y="814">처리량</text><rect class="track" x="690" y="820" width="150" height="6"/><rect class="bar" x="690" y="820" width="150" height="6" fill="#27ae60"/>
+  </g>
+</svg>

@@ -90,12 +90,60 @@
     <li>Langfuse로 <strong>프롬프트 버전과 폴백을 관리</strong> — 프롬프트 서버 장애 시에도 서비스가 멈추지 않게</li>
   </ul>
 
-  <h2><span class="no">!</span>부딪힌 문제들 — 그리고 어떻게 뚫었나</h2>
-  <ul class="plain">
-    <li><strong>빈 입력인데 수임료 정보가 나왔다.</strong> 빈 문자열이나 부실한 사건 설명에도 LLM이 그럴듯한 사건 유형·금액 특징을 지어내던 문제. 추출에 앞서 <strong>판단 가능 여부를 먼저 평가하는 단계를 프롬프트에 강제</strong>하고, 불가 판정 시 추출을 중단하도록 수정 — 후속 수임료 계산의 오염을 차단</li>
-    <li><strong>LLM 응답 형식이 계속 흔들렸다.</strong> 문자열 파싱 기반 호출은 필드 누락·표현 변형이 잦아 후속 처리가 불안정 — <strong>JSON Schema 기반 구조화 출력으로 호출 방식을 전면 리팩터링</strong>하고, 스키마 위반을 파싱 단계에서 잡게 함</li>
-    <li><strong>유사 판례를 조회 시점에 계산하면 안 됐다.</strong> 매 요청마다 kNN을 돌리는 대신 <strong>색인 시점 사전 계산으로 옮기고</strong>, 이미 임베딩이 있는 검색 인덱스에서 벡터를 가져와 이중 저장·이중 계산을 제거</li>
-  </ul>
+  <h2><span class="no">!</span>트러블 슈팅</h2>
+
+  <section class="ts">
+    <header><span class="no2">01</span><h3>LLM 출력을 "부탁"에서 "계약"으로 — 빈 입력 할루시네이션과 형식 요동</h3><span class="tag">신뢰성</span></header>
+    <div class="cols">
+      <div>
+        <h4>상황</h4>
+        <p>수임료 추출은 항목 하나만 빠져도 후속 계산이 깨지는 기능인데, LLM 응답이 두 방식으로 배신했습니다.
+        빈 문자열이나 부실한 의뢰 내용에도 <strong>그럴듯한 사건 유형·금액 특징을 지어냈고</strong>(할루시네이션),
+        정상 입력에서도 응답의 필드 구성과 표현이 <strong>실행마다 달라져</strong> 후속 처리가 불안정했습니다.</p>
+        <h4>해결</h4>
+        <p>추출에 앞서 <strong>판단 가능 여부를 먼저 평가하는 2단계 프롬프트</strong>를 강제해, 정보가 부족하면
+        지어내는 대신 판단 불가로 중단하게 했습니다. Pydantic 모델로 도구 정의를 자동 생성하고
+        <strong>function call을 강제</strong>해 자유 텍스트 응답을 원천 차단했고, 문자열 파싱에 의존하던 호출은
+        <strong>JSON Schema 기반 구조화 출력으로 전면 리팩터링</strong> — 형식 위반이 파싱 단계에서 잡히게
+        했습니다. 프롬프트는 Langfuse로 버전·폴백을 관리했습니다.</p>
+        <h4>알게 된 점</h4>
+        <p>LLM 출력은 잘 부탁하는 게 아니라 <strong>계약으로 만들어야</strong> 합니다 — 판단 가능성 선평가,
+        스키마 강제, 후처리 검증의 3중 장치. 이 구조는 이후 제가 만드는 모든 추출 기능의 기본 패턴이 됐습니다.</p>
+      </div>
+      <div class="nums">
+        <div><b>−15%</b><span>할루시네이션<br>구조화 출력 + 검증 종합 효과</span></div>
+        <div><b>2단계</b><span>판단 가능 여부 선평가 → 추출<br>불가 판정 시 지어내지 않고 중단</span></div>
+        <div><b>0건</b><span>자유 텍스트 응답<br>function call 강제로 원천 차단</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ts">
+    <header><span class="no2">02</span><h3>유사 판례를 조회 때마다 계산할 순 없다 — 색인 시점 사전 계산</h3><span class="tag">성능 설계</span></header>
+    <div class="cols">
+      <div>
+        <h4>상황</h4>
+        <p>판례 상세마다 유사 판례 Top-5를 보여줘야 하는데, 조회 시점에 kNN 검색을 돌리면 모든 상세 조회가
+        벡터 연산을 물게 됩니다. 판례가 쌓일수록 조회 비용이 따라 늘고, <strong>같은 판례에 대한 같은 계산이
+        무한히 반복</strong>되는 구조였습니다.</p>
+        <h4>해결</h4>
+        <p>유사도를 <strong>색인 시점에 계산하는 Airflow DAG를 설계·소유</strong>했습니다 — 사실관계·쟁점
+        필드별로 kNN을 배치 실행해 similar_by_* 필드로 문서에 저장하고, 조회는 읽기만 하게. 임베딩은 이미
+        존재하는 검색 인덱스에서 가져와 <strong>이중 저장·이중 계산을 제거</strong>했고, 대상/벡터 인덱스·k·배치
+        크기는 파라미터로 빼서 운영 중 조정할 수 있게 했습니다.</p>
+        <h4>알게 된 점</h4>
+        <p>"조회 때 계산할 것인가, 색인 때 계산할 것인가"는 결국 <strong>비용을 어디에 둘 것인가</strong>의
+        결정입니다. 읽기가 압도적으로 많은 기능은 쓰기 시점으로 비용을 옮기는 것이 맞고, 파이프라인의
+        파라미터화가 운영의 유연성을 만든다는 것을 배웠습니다.</p>
+      </div>
+      <div class="nums">
+        <div><b>Top-5</b><span>색인 시점 사전 계산<br>조회는 저장된 필드를 읽기만</span></div>
+        <div><b>0회</b><span>조회 시점 kNN 연산<br>실시간 벡터 검색 제거</span></div>
+        <div><b>1벌</b><span>임베딩 — 검색 인덱스 재사용<br>이중 저장·이중 계산 제거</span></div>
+      </div>
+    </div>
+  </section>
+
 
   <h2><span class="no">R</span>결과</h2>
   <ul class="plain">

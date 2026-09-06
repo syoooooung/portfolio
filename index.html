@@ -17,7 +17,7 @@
   *{margin:0;padding:0;box-sizing:border-box}
   html,body{height:100%;overflow:hidden;background:#120211;color:#fff}
   canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
-  .meta{position:fixed;font:11px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.14em;
+  .meta{position:fixed;font:13px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.16em;
         text-transform:uppercase;z-index:3;color:#fff;opacity:.9;text-decoration:none}
   .meta::after{content:"";display:block;width:3px;height:3px;background:#fff;border-radius:50%;margin-top:8px}
   .tl{top:28px;left:28px} .tc{top:28px;left:50%;transform:translateX(-50%)}
@@ -33,45 +33,52 @@
        transition:opacity .25s,transform .25s}
   ul:hover li a{opacity:.35}
   ul li a:hover{opacity:1;transform:translateX(1.2vw)}
-  #thumb{position:fixed;width:190px;height:110px;border-radius:2px;pointer-events:none;z-index:4;
-         opacity:0;transition:opacity .2s;background-size:cover;transform:translate(-50%,-50%)}
+  li.lead{margin-bottom:5vh}
+  #thumb{position:fixed;width:250px;border-radius:2px;pointer-events:none;z-index:4;overflow:hidden;
+         opacity:0;transition:opacity .2s;transform:translate(-50%,-50%)}
+  #thumb .im{height:140px;background-size:cover;background-position:center;background-color:#120211}
+  #thumb .cap{font:11.5px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace;color:#f4eef5;
+         background:#120211;padding:9px 12px;word-break:keep-all}
   @media(hover:none){#thumb{display:none}}
 </style>
 <canvas id="c"></canvas>
-<div class="meta tl">Seongnam<br>KST</div>
 <div class="meta tc">Portfolio of<br>Seyoung Hwang</div>
-<a class="meta tr" href="about.html">About /<br>Resume</a>
-<div class="meta mid">AI Platform<br>Engineer</div>
 <div class="meta bl">
   <a href="mailto:tpdudabc@naver.com">tpdudabc@naver.com</a>
   <a href="https://github.com/syoooooung">github.com/syoooooung</a>
 </div>
-<div class="meta br">Open to<br>Opportunities</div>
 <ul id="list"></ul>
-<div id="thumb"></div>
+<div id="thumb"><div class="im"></div><div class="cap"></div></div>
 <script>
 // ── 랜딩 리스트: [제목, 링크, 썸네일 색] ──────────────────────
 const WORKS = [
-  ["Carbon Footprint AI Platform",  "works/carbon-footprint.html", "assets/img/carbon-arch.png"],
-  ["AI Legal Research Assistant",   "works/legal-assistant.html",  "assets/thumbs/ai-legal.png"],
-  ["Active Metadata Relations",     "works/data-relation.html",    "assets/thumbs/metadata.png"],
-  ["DS-RAG — SCIE Paper",           "works/ds-rag.html",           "assets/thumbs/ds-rag.png"],
-  ["About Me",                      "about.html",                  "#9c27b0"],
+  ["About Me",                      "about.html",                  "#9c27b0",
+   "경력 · 논문 · 특허 · 기술 스택"],
+  ["Carbon Footprint AI Platform",  "works/carbon-footprint.html", "assets/img/carbon-arch.png",
+   "LCA 보고서를 읽고 감축 시나리오 생성과 ISO 준수 검토까지 자동화하는 AI 에이전트"],
+  ["AI Legal Research Assistant",   "works/legal-assistant.html",  "assets/thumbs/ai-legal.png",
+   "판례를 구조화해 유사 판례 검색·소장 생성·수임료 추정을 보조하는 법률 AI"],
+  ["Active Metadata Relations",     "works/data-relation.html",    "assets/thumbs/metadata.png",
+   "데이터 간 관계를 AI가 자동 생성하는 액티브 메타데이터 카탈로그"],
+  ["DS-RAG — SCIE Paper",           "works/ds-rag.html",           "assets/thumbs/ds-rag.png",
+   "질문을 훼손하지 않는 분해로 멀티문서 검색을 살린 RAG 프레임워크 — 논문 출판"],
 ];
 // ─────────────────────────────────────────────────────────────
 const list = document.getElementById('list'), thumb = document.getElementById('thumb');
-list.innerHTML = WORKS.map(([t,h],i)=>`<li><a href="${h}" data-i="${i}">${t}</a></li>`).join('');
+list.innerHTML = WORKS.map(([t,h],i)=>`<li${i===0?' class="lead"':''}><a href="${h}" data-i="${i}">${t}</a></li>`).join('');
 const mouse = [.5,.5];
 addEventListener('pointermove', e => {
   thumb.style.left = e.clientX + 130 + 'px'; thumb.style.top = e.clientY + 'px';
   mouse[0] = e.clientX / innerWidth; mouse[1] = 1 - e.clientY / innerHeight;
 });
+const thumbIm = thumb.querySelector('.im'), thumbCap = thumb.querySelector('.cap');
 list.addEventListener('pointerover', e => {
   const a = e.target.closest('a'); if(!a) return;
-  const t = WORKS[a.dataset.i][2];
-  thumb.style.background = t.startsWith('#')
+  const [,,t,desc] = WORKS[a.dataset.i];
+  thumbIm.style.background = t.startsWith('#')
     ? `linear-gradient(135deg,${t},#120211)`
     : `#ffffff url(${t}) center/contain no-repeat`;
+  thumbCap.textContent = desc;
   thumb.style.opacity = 1;
 });
 list.addEventListener('pointerout', () => thumb.style.opacity = 0);
