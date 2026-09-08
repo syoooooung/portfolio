@@ -5,11 +5,11 @@
 <title>Active Metadata Relations — 황세영</title>
 <meta property="og:type" content="website">
 <meta property="og:title" content="Active Metadata Relations — 황세영">
-<meta property="og:description" content="이기종 메타데이터를 수집·통합하고 AI가 컬럼 간 유사 속성을 탐지해 관계를 자동 생성하는 통합 데이터 카탈로그. 유사 속성 탐지 F1 0.87, 특허 출원(제1발명자).">
+<meta property="og:description" content="조직 밖 데이터셋과 우리 데이터의 관계를 AI가 자동으로 찾아 그래프로 쌓는 관계 생성 서비스. 백엔드·AI 파이프라인 개발, 성능지표 F1 0.87 달성, 관계 유형 11종 정의, 특허 출원(제1발명자).">
 <meta property="og:url" content="https://syoooooung.github.io/portfolio/works/data-relation.html">
 <meta property="og:image" content="https://syoooooung.github.io/portfolio/assets/og.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="description" content="이기종 메타데이터를 수집·통합하고 AI가 컬럼 간 유사 속성을 탐지해 관계를 자동 생성하는 통합 데이터 카탈로그. 유사 속성 탐지 F1 0.87, 특허 출원(제1발명자).">
+<meta name="description" content="조직 밖 데이터셋과 우리 데이터의 관계를 AI가 자동으로 찾아 그래프로 쌓는 관계 생성 서비스. 백엔드·AI 파이프라인 개발, 성능지표 F1 0.87 달성, 관계 유형 11종 정의, 특허 출원(제1발명자).">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&display=swap">
 <link rel="stylesheet" href="../assets/style.css">
@@ -20,176 +20,209 @@
   <div class="hero-inner">
     <p class="kicker">공개 SW 국가 R&amp;D · 재직 중 수행 · 2025.11 — 진행 중 · 특허 출원 (제1발명자)</p>
     <h1 class="display">Active Metadata <br>Relations</h1>
-    <p class="sub">조직 밖의 데이터(써드파티)를 조직의 자산으로 — 데이터의 특성과 맥락을 스스로
-    담아내는 액티브 메타데이터를 만들고, 그 위에서 데이터 간 관계를 자동 생성·확장하는 시스템.</p>
+    <p class="sub">공공·통계·의료 등 조직 밖 데이터셋을 가져오면, "우리 데이터와 어떻게 연결되는지"를 AI가 자동으로
+    찾아 그래프로 쌓는 관계 생성 서비스. 백엔드와 AI 파이프라인 개발, 성능 검증, 표준화 대응을 맡았습니다.</p>
+    <a class="hero-cta" href="https://syoooooung.github.io/3rd-party-active-metadata-demo/">▶ Live Demo ↗</a>
   </div>
 </header>
-<div class="marquee"><div><img src="../assets/icons/fastapi.svg" alt="">FastAPI · <img src="../assets/icons/postgresql.svg" alt="">PostgreSQL · DCAT 3.0 · <img src="../assets/icons/apacheairflow.svg" alt="">Apache Airflow · <img src="../assets/icons/minio.svg" alt="">MinIO · XGBoost · <img src="../assets/icons/huggingface.svg" alt="">Transformers · <img src="../assets/icons/pytorch.svg" alt="">GraphSAGE · <img src="../assets/icons/neo4j.svg" alt="">Neo4j · <img src="../assets/icons/react.svg" alt="">React · &nbsp;</div><div aria-hidden="true"><img src="../assets/icons/fastapi.svg" alt="">FastAPI · <img src="../assets/icons/postgresql.svg" alt="">PostgreSQL · DCAT 3.0 · <img src="../assets/icons/apacheairflow.svg" alt="">Apache Airflow · <img src="../assets/icons/minio.svg" alt="">MinIO · XGBoost · <img src="../assets/icons/huggingface.svg" alt="">Transformers · <img src="../assets/icons/pytorch.svg" alt="">GraphSAGE · <img src="../assets/icons/neo4j.svg" alt="">Neo4j · <img src="../assets/icons/react.svg" alt="">React · &nbsp;</div></div>
+<div class="marquee"><div><img src="../assets/icons/fastapi.svg" alt="">FastAPI · AWS Neptune (RDF · SPARQL) · <img src="../assets/icons/opensearch.svg" alt="">OpenSearch · <img src="../assets/icons/langchain.svg" alt="">LangGraph · <img src="../assets/icons/anthropic.svg" alt="">Claude (Bedrock) · Langfuse · <img src="../assets/icons/postgresql.svg" alt="">PostgreSQL · DCAT 3.0 · <img src="../assets/icons/pytest.svg" alt="">pytest · &nbsp;</div><div aria-hidden="true"><img src="../assets/icons/fastapi.svg" alt="">FastAPI · AWS Neptune (RDF · SPARQL) · <img src="../assets/icons/opensearch.svg" alt="">OpenSearch · <img src="../assets/icons/langchain.svg" alt="">LangGraph · <img src="../assets/icons/anthropic.svg" alt="">Claude (Bedrock) · Langfuse · <img src="../assets/icons/postgresql.svg" alt="">PostgreSQL · DCAT 3.0 · <img src="../assets/icons/pytest.svg" alt="">pytest · &nbsp;</div></div>
 
 <main>
   <section class="impact">
-    <div><b>0.87</b><span>유사 속성 탐지 F1 — 벤치마크 12종, KPI 85% 달성</span></div>
-    <div><b>+30%p</b><span>Baseline 대비 최대 개선 (0.72 → 0.94)</span></div>
+    <div><b>0.87</b><span>유사 속성 탐지 F1 — 3차년도 성능지표 85% 달성</span></div>
+    <div><b>96,110</b><span>공공데이터 목록 전수 분석 — 관계 유형 11종 정의</span></div>
+    <div><b>16→2</b><span>관계 오탐 — 근거 기반 판정으로 억제 (시뮬레이션)</span></div>
     <div><b>1</b><span>특허 출원 — 제1발명자</span></div>
-    <div><b>4+</b><span>이기종 소스 통합 — 공공·통계·의료·미디어</span></div>
   </section>
 
-  <h2><span class="no">S</span>배경 — 데이터는 밖에 넘치는데, 쓸 수가 없다</h2>
-  <p>쓸만한 데이터는 조직 밖에 넘칩니다 — 공공데이터, 통계, 의료, 상용 데이터. 문제는 이 써드파티
-  데이터를 가져와도 <strong>"이게 무슨 데이터고, 우리 데이터와 어떻게 연관되는지"를 파악하는 일부터가
-  전부 수작업</strong>이라는 것. 기존의 정적 메타데이터(스키마·필드명·명세)는 데이터의 특성, 사용 맥락,
-  시간에 따른 변화를 담지 못해서, 탐색도 연결도 사람의 도메인 지식에 의존합니다.</p>
-  <p>연결을 자동화하려면, 사람이 연결할 때 쓰던 판단 근거 — <strong>이 필드가 무엇을 의미하는지, 값이
-  어떤 특성인지</strong> — 가 기계가 읽을 수 있는 형태로 있어야 합니다. 그 정보는 명세서에 없고 데이터
-  안에 있습니다. 그래서 이 연구는 <strong>시스템이 데이터를 분석해 그런 정보를 만들어내는 메타데이터,
-  즉 액티브 메타데이터</strong>를 쌓고, 그걸 근거로 데이터 간 관계 생성을 자동화하는 것을 목표로 합니다.</p>
-  <p>저는 그중 <strong>데이터 의미 이해와 관계 생성, 그리고 통합 카탈로그</strong> 축을 맡았습니다.</p>
+  <h2><span class="no">S</span>배경</h2>
+  <p>쓸만한 데이터는 조직 밖에 넘칩니다. 문제는 가져와도 <strong>"이게 무슨 데이터고 우리 데이터와 어떻게
+  연관되는지"를 파악하는 일이 전부 수작업</strong>이라는 것. 스키마와 명세만으로는 데이터의 의미와 쓰임을 알 수 없어
+  탐색도 연결도 사람의 도메인 지식에 의존합니다.</p>
+  <p>이 서비스는 시스템이 데이터를 읽어 의미 정보(액티브 메타데이터)를 만들고, 그 위에서 데이터셋 간 관계를
+  자동으로 판정해 그래프로 쌓습니다. 새 데이터셋이 등록되면 <strong>사람이 손대지 않아도 연결 가능한 데이터셋이
+  검색되는 것</strong>이 목표입니다.</p>
 
   <h2><span class="no">T</span>역할</h2>
   <div class="facts">
-    <div><b>담당</b><span>AI 연관성 분석 · 통합 카탈로그 · 수집 파이프라인 · 성능지표 시험</span></div>
+    <div><b>담당</b><span>백엔드 · AI 파이프라인 개발 · 성능지표 시험 · 표준화 대응 · 컨소시엄 연동 설계</span></div>
     <div><b>기간</b><span>2025.11 — 진행 중</span></div>
-    <div><b>특허</b><span>출원 10-2026-0068848 (제1발명자)</span></div>
+    <div><b>특허</b><span>출원 10-2026-0068848 (제1발명자, 2026.04)</span></div>
     <div><b>데모</b><span><a href="https://syoooooung.github.io/3rd-party-active-metadata-demo/" style="color:var(--ink)">active-metadata-demo</a></span></div>
   </div>
 
-  <h2><span class="no">A</span>설계와 구현 — 수집 → 통합 → 분석 → 관계 생성</h2>
-  <div class="flow">Airflow 수집 (4+ 소스) → <em>DCAT 3.0 통합 카탈로그</em> → <em>AI 컬럼 연관성 분석</em> → 자동 매핑 · 관계 생성</div>
+  <h2><span class="no">A</span>수행 업무</h2>
+  <figure class="figure"><img src="../assets/img/relation-highlevel.png" alt="관계 생성 서비스 구성 — FastAPI, 메타데이터 분석·그래프 생성·정규화 모듈, LangGraph 에이전트, AWS Neptune·OpenSearch" loading="lazy"><figcaption class="figcap">서비스 구성 — FastAPI → 메타데이터 분석 · 그래프 생성 · 정규화 → LangGraph 에이전트 → Neptune(그래프) · OpenSearch(검색)</figcaption></figure>
 
-  <h3><span class="no">01</span>이기종 메타데이터 수집 파이프라인</h3>
+  <h3><span class="no">01</span>관계 생성 서비스 백엔드 · AI 파이프라인</h3>
+  <div class="split">
+    <div>
+    <ul class="plain">
+      <li>데이터셋 등록 시 <strong>LLM이 설명·키워드·컬럼 의미·도메인을 추출</strong>해 그래프(Neptune RDF)와 검색 인덱스(OpenSearch)에 적재하는 메타데이터 자동 생성 파이프라인 구축</li>
+      <li><strong>규칙 → 통계 → LLM 검증 3단계로 데이터셋 간 관계</strong>(결합 가능 · 의미 연관 · 보완)를 판정하고, 근거와 신뢰도를 함께 그래프에 저장하는 관계 생성 파이프라인 구현</li>
+      <li>통합 카탈로그 <strong>변경 감지 → 신규·변경분만 증분 관계 생성 → 결과 환류</strong> 자동화, 사용자 데이터셋 기준 연계 가능 데이터셋 검색 API 제공</li>
+      <li>Neo4j → <strong>AWS Neptune(RDF/SPARQL) 마이그레이션</strong>, 표준 분류체계 기반 도메인 자동 분류, Langfuse 프롬프트·트레이스 관리, pytest 회귀 테스트</li>
+    </ul>
+    </div>
+    <figure class="shot">
+      <span class="frame">
+        <img src="../assets/shots/meta-path.png" alt="관계 지도 화면 — 어린이집 데이터와 주민등록인구가 법정동 코드를 거쳐 연결되는 경로" loading="lazy">
+        <span class="mark" style="--x:63%;--y:22%;--w:35.5%;--h:26%"><b>판정 근거 + 경유 경로</b></span>
+      </span>
+      <figcaption class="figcap">관계 지도 — 바로 붙는 관계와 한 단계 거치는 관계</figcaption>
+    </figure>
+  </div>
+  <h3><span class="no">02</span>성능 검증 · 공인시험</h3>
   <ul class="plain">
-    <li><strong>Airflow DAG 기반 ETL</strong> — 공공데이터포털(Schema.org/DCAT), 국가통계포털, 의료기관 정보, 영화 DB 등 이기종 소스에서 메타데이터를 비동기 수집해 S3(MinIO)에 원본 보존</li>
-    <li>JSON-LD · Schema.org · DCAT · RDF 등 <strong>서로 다른 포맷을 수집 단계에서 정규화</strong></li>
+    <li>3차년도 성능지표 <strong>"유사 속성 탐지율" 시험 설계·수행</strong> — 공개 벤치마크(Valentine) 실세계 쌍을 편입해 12종으로 확장, F1 0.87로 목표 85% 달성</li>
+    <li>LLM 관계 판정 품질을 <strong>트레이스 기반 정밀도·재현율로 정량 평가</strong>하고 근거 기반 판정 규칙으로 개선</li>
+    <li>공인시험(KGcT) 시험항목 3건의 규격서·시험 구성 설계</li>
   </ul>
 
-  <h3><span class="no">02</span>DCAT 3.0 기반 통합 카탈로그</h3>
-  <ul class="plain">
-    <li>수집된 메타데이터를 <strong>국제 표준(DCAT 3.0) 스키마로 통합</strong> — 원본은 JSONB 불변 스냅샷으로 전부 보존해 언제든 역추적 가능</li>
-    <li><strong>Store → Draft → Publish 워크플로우</strong> — AI가 자동 매핑한 결과를 Draft로 만들어 사람이 검토·승인 후 게시, 전 과정을 계보(lineage) 이벤트로 기록</li>
-    <li>복잡한 중첩 메타데이터를 Key-Value로 평면화해 분석 가능한 형태로 저장, React 기반 워크플로우 UI 제공</li>
-  </ul>
-
-  <h3><span class="no">03</span>AI 컬럼 연관성 분석 — 시스템의 심장</h3>
-  <ul class="plain">
-    <li>서로 다른 테이블의 컬럼 간 유사 속성을 <strong>Transformer 임베딩(컬럼명·값) + XGBoost 타입 분류 + 코사인 유사도</strong>를 결합해 탐지</li>
-    <li>매칭 전략(다대다 / 1:1 / 유사도순 Greedy)과 임계값 전략을 분리 설계해 <strong>정밀도-재현율 트레이드오프를 데이터셋 특성에 맞게 조절</strong></li>
-    <li>공개 벤치마크 12종으로 성능지표 시험을 설계·수행 — <strong>F1 평균 0.87로 과제 KPI(85%) 달성</strong>, baseline 대비 최대 +30%p(0.72→0.94) 개선</li>
-    <li>매칭 결과는 카탈로그의 <strong>자동 매핑(Draft 생성)에 직접 연결</strong> — 분석이 분석으로 끝나지 않고 운영 워크플로우를 움직임</li>
-  </ul>
-
-  <h3><span class="no">04</span>관계 생성 연구 확장</h3>
-  <ul class="plain">
-    <li><strong>GraphSAGE(GNN) 기반 링크 예측</strong> — Schema.org ↔ DCAT처럼 어휘 체계가 다른 메타데이터 간 속성 정렬을 그래프 신경망으로 예측 (실제 공공데이터 50종으로 학습·검증)</li>
-    <li><strong>LLM 기반 관계 생성과 그래프 정규화 POC</strong> — 표기가 다른 동일 개체("삼성전자"/"Samsung Electronics")를 정규화 노드로 자동 연결하는 Key-Value 그래프 모델, MCP 연동 Neo4j Cypher 자동 생성</li>
-    <li>DCAT 기반 <strong>표준 스키마 매핑 규칙을 문서화·검증</strong>해 표준화 작업에 기여</li>
-  </ul>
-  <figure class="figure"><img src="../assets/thumbs/metadata.png" alt="액티브 메타데이터 데모 화면" loading="lazy"><figcaption class="figcap">Demo — 관계 후보 발굴 화면</figcaption></figure>
-
+  <div class="split rev">
+    <div>
+    <h3><span class="no">03</span>표준 · 설계 문서</h3>
+    <ul class="plain">
+      <li>공공데이터포털 목록 <strong>96,110건 전수 분석과 사용자 시나리오로 데이터셋 관계 유형 11종 정의</strong> (DCAT 3 · PROV-O 표준 어휘 매핑)</li>
+      <li>액티브 메타데이터 <strong>DCAT 응용 프로파일 표준 초안 검토</strong> — 검증 결과 · 매핑 규칙 · 도메인 특화 방향 회신</li>
+      <li>3사 컨소시엄 연동 <strong>백엔드 설계</strong> — 용어 정의 대조 · 갭 분석, ERD · 테이블/인터페이스 정의서</li>
+    </ul>
+    </div>
+    <figure class="shot">
+      <span class="frame">
+        <img src="../assets/shots/meta-table.png" alt="관계 목록 표 — 데이터셋별 성격, 연결 단계, 연결 근거" loading="lazy">
+        <span class="mark" style="--x:36%;--y:8%;--w:21%;--h:88%"><b>관계 유형 · 연결 단계</b></span>
+      </span>
+      <figcaption class="figcap">관계 목록 — 유형·거리·근거를 표로 (데모는 유형을 단순화)</figcaption>
+    </figure>
+  </div>
   <h2><span class="no">!</span>트러블 슈팅</h2>
 
   <section class="ts">
-    <header><span class="no2">01</span><h3>같은 요청인데 결과가 매번 달랐다 — 비결정성 추적</h3><span class="tag">재현성</span></header>
+    <header><span class="no2">01</span><h3>관계가 거의 완전 그래프가 됐다 — LLM 판정에 근거를 요구하다</h3><span class="tag">정확도</span></header>
     <div class="cols">
       <div>
         <h4>상황</h4>
-        <p>성능지표 시험을 준비하는데, 같은 데이터셋에 같은 요청을 보내도 매칭 결과가 실행마다 조금씩
-        달라졌습니다. 공식 시험은 <strong>누가 언제 돌려도 같은 수치가 나와야</strong> 하는데, 결과가 흔들리면
-        측정값 자체를 신뢰할 수 없는 상황이었습니다.</p>
+        <p>병원 도메인 9개 데이터셋, 36쌍을 전수 판정했습니다. 정답 10개 중 8개를 잡았지만(재현율 80%)
+        <strong>24쌍을 관계로 판정해 정밀도 33%</strong> — 그래프가 거의 완전 그래프에 가까워졌습니다.
+        시각화만 봐서는 원인이 보이지 않았습니다.</p>
         <h4>해결</h4>
-        <p>호출 경로를 따라 원인을 추적한 결과 — 임베딩용 값 샘플링(테이블당 20행)이 <strong>전역 random
-        상태에 의존</strong>해, 앞선 요청이 몇 번 있었는지에 따라 샘플이 달라지는 것을 찾았습니다.
-        <strong>고정 시드의 로컬 RNG로 격리</strong>해 요청 순서와 무관하게 동일 요청 = 동일 결과를 보장하고,
-        동일 요청 반복 실행으로 완전 일치를 확인한 뒤에야 공식 측정을 진행했습니다.</p>
+        <p>Langfuse에 남은 판정 트레이스 150건을 <strong>정답과 쌍 단위로 대조</strong>했습니다. 오탐 16건의 판단 이유가
+        전부 "실제 서비스에서 함께 쓸 수 있다"는 <strong>가상 시나리오</strong>였고, 확신도 0.85 미만 18건 중 16건이 오탐이었습니다.
+        임베딩 유사도는 36쌍 전부 게이트를 통과해 변별력이 없었습니다. 프롬프트의 질문을 "함께 쓸 수 있는가"에서
+        <strong>"근거가 데이터 안에 있는가"</strong>로 바꾸고, 근거 유형(공유 키 · 값 중첩 · 동일 개체 · 병렬 스키마)을
+        열거형으로 강제해 시나리오만 있는 판정은 저장에서 제외했습니다. 확신도 임계값 0.7→0.8, 2회 판정 다수결을 더했고,
+        임계값만으로도 오탐 16→2(시뮬레이션), 정답 보정 시 정밀도 1.00 / 재현율 0.73이었습니다.</p>
         <h4>알게 된 점</h4>
-        <p>전역 상태에 기대는 무작위성은 시한폭탄입니다. 그리고 ML 서비스에서 "결과가 이상하다"의 원인이
-        모델이 아니라 <strong>파이프라인의 사소한 비결정성</strong>일 수 있다는 것 — 재현성은 성능보다 먼저
-        확보해야 하는 시험의 전제 조건이라는 것을 배웠습니다.</p>
+        <p>LLM에게 가능성을 물으면 항상 예라고 합니다. <strong>근거를 고르게 해야 판정이 재현됩니다.</strong>
+        그리고 지표는 그림이 아니라 트레이스로 재야 합니다.</p>
+      </div>
+      <div class="nums">
+        <div><b>33%</b><span>정밀도 (재현율 80%) — 36쌍 중 24쌍 판정<br>트레이스 150건 전수 대조</span></div>
+        <div><b>16→2</b><span>오탐 — 임계값 0.7→0.8 시뮬레이션<br>정답 보정 시 정밀도 1.00 / 재현율 0.73</span></div>
+        <div><b>4종</b><span>데이터 안의 근거 유형 열거형 강제<br>시나리오만 있는 판정은 저장 제외</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ts">
+    <header><span class="no2">02</span><h3>AI가 제안한 관계 유형을 데이터로 기각했다</h3><span class="tag">설계 검증</span></header>
+    <div class="cols">
+      <div>
+        <h4>상황</h4>
+        <p>관계 유형 정의서를 쓸 때 AI가 먼저 후보를 제안했습니다 — 시점 계열, 공간·시간 중첩, 동일 제공기관, 동일 분류.
+        그럴듯했지만 근거는 <strong>"그럴 것 같다"</strong>였고, 컨소시엄 합의는 "기능에서 역산하지 말고 사용자 시나리오부터"였습니다.</p>
+        <h4>해결</h4>
+        <p>채택을 보류하고, 두 포털 사용자가 실제로 밟는 경로 6개를 먼저 세운 뒤 목록개방현황 <strong>96,110건 전수 통계로
+        후보를 하나씩 검증</strong>했습니다. 목록명에 연도가 든 건 0.7%인데 파일명 날짜 접미는 85.9% — 시점 계열은 데이터셋
+        관계가 아니라 파일 버전이라 격하. 공간·시간범위 채움률 6.2% / 4.8% — 94%가 진입조차 못 하니 기각. 분류체계 동일은
+        3.37% — 관계가 아닌 필터. 대신 데이터가 보여준 지배 구조(표준 주제의 기관별 인스턴스 11.8%, 파일·API 중복 598쌍)에서
+        <strong>새 유형 3종을 신설</strong>해 데이터셋 8종 + 파일·컬럼 3종을 확정했습니다.</p>
+        <h4>알게 된 점</h4>
+        <p>AI가 몇 초에 내놓은 답은 출발점이지 결론이 아닙니다. <strong>검증 데이터와 출처를 붙이지 못하는 유형은
+        정의서에 넣지 않았습니다.</strong></p>
+      </div>
+      <div class="nums">
+        <div><b>96,110</b><span>목록개방현황 전수 통계<br>AI 제안 후보 전부 기각·격하</span></div>
+        <div><b>0.7%</b><span>목록명 연도 포함 vs 파일명 날짜 접미 85.9%<br>시점 계열 → 파일 버전으로 격하</span></div>
+        <div><b>11종</b><span>확정 관계 유형 — 데이터셋 8 · 파일/컬럼 3<br>전 유형 표준 어휘(DCAT 3 · PROV-O) 매핑</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ts">
+    <header><span class="no2">03</span><h3>같은 요청인데 결과가 매번 달랐다 — 비결정성 추적</h3><span class="tag">재현성</span></header>
+    <div class="cols">
+      <div>
+        <h4>상황</h4>
+        <p>성능지표 시험을 준비하는데 같은 데이터셋에 같은 요청을 보내도 매칭 결과가 실행마다 조금씩 달라졌습니다.
+        공식 시험은 <strong>누가 언제 돌려도 같은 수치가 나와야</strong> 하는데, 결과가 흔들리면 측정값 자체를 신뢰할 수 없었습니다.</p>
+        <h4>해결</h4>
+        <p>호출 경로를 따라 추적한 결과, 임베딩용 값 샘플링(테이블당 20행)이 <strong>전역 random 상태에 의존</strong>해
+        앞선 요청 횟수에 따라 샘플이 달라지는 것을 찾았습니다. <strong>고정 시드의 로컬 RNG로 격리</strong>해 동일 요청 =
+        동일 결과를 보장하고, 반복 실행 완전 일치를 확인한 뒤에야 공식 측정을 진행했습니다.</p>
+        <h4>알게 된 점</h4>
+        <p>ML 서비스에서 "결과가 이상하다"의 원인이 모델이 아니라 <strong>파이프라인의 사소한 비결정성</strong>일 수 있다는 것.
+        재현성은 성능보다 먼저 확보해야 하는 시험의 전제 조건입니다.</p>
       </div>
       <div class="nums">
         <div><b>100%</b><span>재현성 — 동일 요청 = 동일 결과<br>반복 실행 완전 일치 확인</span></div>
         <div><b>20행</b><span>문제의 샘플링 — 전역 RNG 의존으로<br>요청 순서에 따라 결과 변동</span></div>
-        <div><b>SEED</b><span>고정 시드 로컬 RNG로 격리<br>공식 성능 측정의 전제 조건</span></div>
+        <div><b>SEED</b><span>고정 시드 로컬 RNG로 격리<br>공식 측정의 전제 조건</span></div>
       </div>
     </div>
   </section>
 
   <section class="ts">
-    <header><span class="no2">02</span><h3>과탐(FP)이 지표를 갉아먹었다 — 임계값을 데이터로 방어</h3><span class="tag">정확도</span></header>
+    <header><span class="no2">04</span><h3>시험을 쉽게 만들지 않았다 — 벤치마크 12종 확장 설계</h3><span class="tag">평가 설계</span></header>
     <div class="cols">
       <div>
         <h4>상황</h4>
-        <p>유사 속성 탐지에서 틀린 매칭(과탐)이 정밀도를 깎았습니다 — movies2에서 FP 5건, restaurants3에서
-        9건. 게다가 기존에는 점수 0.8 이상만 남기는 <strong>수동 후처리에 의존</strong>하고 있어서, 시험 절차도
-        번거롭고 기준도 코드 밖에 있었습니다.</p>
+        <p>3차년도 성능지표는 벤치마크를 12종으로 확장해 측정해야 했습니다. 후보 쌍 상당수는 두 테이블의
+        <strong>컬럼명이 동일하게 정렬돼 있어 전부 만점</strong> — 시험으로서 변별력이 없었습니다. 쉬운 쌍으로 채우면
+        숫자는 좋아지지만 그 숫자는 아무것도 증명하지 못합니다.</p>
         <h4>해결</h4>
-        <p>후처리를 <strong>서버측 임계값 파라미터로 승격</strong>하고 0.90을 채택했습니다. 채택 전에 0.70~0.90
-        구간을 스윕해 — 모델 점수가 확신/비확신으로 <strong>양극화돼 있어 임계값에 둔감함</strong>을 확인했습니다.
-        특정 값에 과적합된 선택이 아니라는 것을 검증한 뒤 고정한 겁니다. 결과는 FP 5→1, 9→2,
-        동일 5종 F1 0.784 → 0.926.</p>
+        <p>스키마 매칭 평가의 준거 논문(Valentine, ICDE 2021)이 지적한 "비공개 구현 · 통일된 정답 없음 · 재현 불가"를 피하기 위해
+        <strong>공개 정답이 있는 벤치마크를 편입</strong>했습니다. 만점 나오는 4종은 부록 참고치로 내리고, 컬럼명이 서로 달라
+        의미 기반 매칭이 필요한 <strong>실세계 쌍 6종</strong>을 넣어 12종을 구성했습니다. 수동 후처리로 남아 있던 점수 임계값은
+        서버 파라미터로 승격하고 0.70~0.90 스윕으로 둔감함을 확인한 뒤 0.90을 채택해(movies2 오탐 5→1) F1 평균 0.8698로
+        목표를 달성했습니다.</p>
         <h4>알게 된 점</h4>
-        <p>하이퍼파라미터 하나도 "왜 그 값인가"를 데이터로 말할 수 있어야 합니다. 민감도 분석(스윕)이
-        선택의 방어력을 만들고, 기준을 코드 밖 수작업이 아니라 <strong>시스템 파라미터로 명시</strong>해야
-        시험이 재현 가능해진다는 것을 배웠습니다.</p>
+        <p>지표의 목적은 통과가 아니라 방어입니다. <strong>제3자가 재현할 수 있는 어려운 시험을 스스로 설계하는 것</strong>이
+        결국 그 결과를 지키는 일입니다.</p>
       </div>
       <div class="nums">
-        <div><b>−80%</b><span>movies2 과탐 — FP 5 → 1</span></div>
-        <div><b>−78%</b><span>restaurants3 과탐 — FP 9 → 2</span></div>
-        <div><b>0.93</b><span>동일 5종 F1 — 0.784 → 0.926<br>임계값 스윕으로 둔감함 검증 후 채택</span></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="ts">
-    <header><span class="no2">03</span><h3>시험을 쉽게 만들지 않았다 — 벤치마크 12종 확장 설계</h3><span class="tag">평가 설계</span></header>
-    <div class="cols">
-      <div>
-        <h4>상황</h4>
-        <p>3차년도 성능지표는 벤치마크를 12종으로 확장해 측정해야 했습니다. 그런데 후보 벤치마크 쌍 중
-        상당수는 두 테이블의 <strong>컬럼명이 동일하게 정렬돼 있어 전부 만점</strong> — 시험으로서 변별력이
-        없었습니다. 쉬운 쌍으로 채우면 숫자는 좋아지지만, 그 숫자는 아무것도 증명하지 못합니다.</p>
-        <h4>해결</h4>
-        <p>만점이 나오는 쌍(컬럼 동일명·도메인 중복) 4종은 공식 셋에서 <strong>제외하고 부록의 참고 측정치로만</strong>
-        남겼습니다. 대신 컬럼명이 서로 다르게 명명돼 의미 기반 매칭이 필요한(hard) <strong>Wikidata 실세계 쌍
-        4종과 신규 도메인 쌍 2종을 편입</strong>해 12종을 구성했고, 그 위에서 F1 평균 0.8698로 목표(85%)를
-        달성했습니다.</p>
-        <h4>알게 된 점</h4>
-        <p>지표의 목적은 통과가 아니라 방어입니다. 시험 셋의 난이도 구성이 숫자의 신뢰도를 결정하고,
-        <strong>스스로 어려운 시험을 설계하는 것</strong>이 결국 그 결과를 지키는 일이라는 것을 배웠습니다.</p>
-      </div>
-      <div class="nums">
-        <div><b>12종</b><span>벤치마크 5 → 12종 확장<br>hard 실세계 쌍(컬럼명 이질) 편입</span></div>
+        <div><b>12종</b><span>벤치마크 5 → 12종 확장<br>컬럼명 이질 실세계 쌍 6종 편입</span></div>
         <div><b>−4종</b><span>만점 나오는 변별력 없는 쌍 제외<br>부록 참고 측정치로만 수록</span></div>
-        <div><b>0.87</b><span>확장 12종 F1 평균 — 목표 0.85 달성<br>공식 시험 결과 (재현성 확보 후 측정)</span></div>
+        <div><b>0.87</b><span>확장 12종 F1 평균 — 목표 0.85 달성<br>재현성 확보 후 공식 측정</span></div>
       </div>
     </div>
   </section>
-
 
   <h2><span class="no">R</span>결과</h2>
   <ul class="plain">
-    <li>유사 속성 탐지율 <strong>F1 0.87 — 과제 성능지표(85%) 공식 달성</strong> (벤치마크 12종, 연차별 5종 → 12종으로 시험 확장 설계 포함)</li>
-    <li><strong>특허 출원</strong> — 「액티브 메타데이터와 그래프 데이터베이스를 활용한 신규 데이터의 잠재적 연관성 자동 탐색 및 관계 확장을 위한 장치」 (10-2026-0068848, 제1발명자)</li>
-    <li>공개 SW로 구현체 공개 — 새 데이터 소스 온보딩 시 수작업 매핑을 AI 추천 + 사람 승인 구조로 전환</li>
+    <li><strong>관계 생성 서비스 백엔드·AI 파이프라인 구현</strong> — 데이터셋 등록부터 관계 생성·연계 검색까지 자동화, 공개 SW로 공개</li>
+    <li>유사 속성 탐지율 <strong>F1 0.87 — 3차년도 성능지표(85%) 공식 달성</strong></li>
+    <li><strong>관계 유형 정의서 11종</strong>, 컨소시엄 연동 설계서(ERD · 테이블/인터페이스 정의서), 표준 초안 검토 회신</li>
+    <li><strong>특허 출원 (제1발명자)</strong> — 「액티브 메타데이터와 그래프 데이터베이스를 활용한 신규 데이터의 잠재적 연관성 자동 탐색 및 관계 확장을 위한 장치」 (10-2026-0068848, 2026.04)</li>
   </ul>
 
   <h2><span class="no">W</span>기술 선정 이유</h2>
   <div class="why">
-    <div><b>Transformer + XGBoost</b><span>컬럼명·값의 의미(임베딩)와 데이터 타입(분류)은 다른 신호 — 하나로 합치면 놓치는 매칭을 하이브리드로 포착</span></div>
-    <div><b>DCAT 3.0</b><span>카탈로그 상호운용의 국제 표준 — 자체 스키마 대신 표준을 택해 외부 시스템과의 연계 비용 제거</span></div>
-    <div><b>PostgreSQL JSONB</b><span>원본 메타데이터를 무손실 보존하면서 표준화 컬럼과 공존 — 매핑이 틀려도 원본에서 재생성 가능</span></div>
-    <div><b>Apache Airflow</b><span>소스별 수집 주기·실패 격리·재시도를 DAG로 관리</span></div>
-    <div><b>GraphSAGE</b><span>속성 정렬을 텍스트 유사도만으로 못 푸는 경우(구조적 맥락) 대비 — 그래프 구조 신호를 학습에 결합</span></div>
+    <div><b>AWS Neptune (RDF/SPARQL)</b><span>관계를 근거·점수와 함께 저장하고 DCAT·PROV 표준 어휘로 외부와 교환 — 관리형이라 그래프 운영 부담 제거</span></div>
+    <div><b>Key-Value 그래프 모델</b><span>도메인 전용 스키마 없이 새 소스를 수용하고, 모든 값이 원본 데이터로 추적됨</span></div>
+    <div><b>규칙 → 통계 → LLM 3단계</b><span>LLM은 마지막 검증자 — 규칙과 통계가 후보를 만들고, LLM은 근거 유형을 고르게 해 판정을 재현 가능하게</span></div>
+    <div><b>OpenSearch · Langfuse</b><span>검색(k-NN · 전문)은 OpenSearch, 프롬프트 버전과 판정 트레이스는 Langfuse — 트레이스가 그대로 평가 데이터가 됨</span></div>
   </div>
 
   <h2><span class="no">+</span>회고 — 다시 한다면</h2>
   <ul class="plain">
-    <li>영어 중심 공개 벤치마크로 시험했는데, <strong>한국어·한영 혼합 컬럼명 데이터셋을 초기부터 구축</strong>해 실사용 도메인 성능을 함께 추적했을 것</li>
-    <li>임베딩 유사도·XGBoost·GNN·LLM 등 관계 생성 접근이 늘어난 만큼, <strong>공통 평가 하네스를 먼저 만들어 접근 간 비교를 자동화</strong>했을 것</li>
+    <li>관계 정답셋을 처음부터 <strong>데이터 안의 근거(공유 키 · 값 중첩)로 정의</strong>했을 것 — 상식 기반 정답이 판정 기준까지 흐리게 만들었다</li>
+    <li>영어 중심 공개 벤치마크로 시험했는데, <strong>한국어 컬럼명 데이터셋을 초기부터 구축</strong>해 실사용 도메인 성능을 함께 추적했을 것</li>
   </ul>
 
   <div class="links">
     <a href="https://syoooooung.github.io/3rd-party-active-metadata-demo/">Live Demo ↗</a>
-    <a href="https://github.com/syoooooung/3rd-party-active-metadata-demo">Demo Code ↗</a>
   </div>
   <p style="font:11px/1.6 ui-monospace,Menlo,monospace;color:var(--dim);letter-spacing:.06em">* 실제 시스템 코드는 과제 절차에 따라 공개SW로 공개되며, 위 데모는 UI/기능 재현입니다.</p>
 </main>

@@ -46,7 +46,8 @@
   <ul class="plain">
     <li>클라우드·온프레미스 환경의 <strong>AI 플랫폼 아키텍처 설계 및 구축</strong></li>
     <li><strong>RAG 시스템 설계·개발</strong> — 청킹 전략, 벡터 인덱싱, 검색 품질 개선</li>
-    <li>LLM 기반 <strong>데이터 처리·분석 파이프라인</strong> 개발</li>
+    <li>LLM 기반 <strong>데이터 처리·분석 파이프라인</strong> 개발 — 그래프 DB 기반 데이터 관계 생성 엔진 설계·구현</li>
+    <li>국가 R&amp;D <strong>성능지표 시험·공인시험 대응, 표준화 검토 회신, 컨소시엄 연동 설계 문서</strong> 작성</li>
     <li>기술 문서화 및 팀 내 지식 공유</li>
   </ul>
 
@@ -54,25 +55,26 @@
   <ul class="plain">
     <li><strong>LLM 기반 비정형 텍스트 처리</strong> — 대규모 문서에서 정보 추출, Structured Output 기반 메타데이터 자동 생성, 문서/청크 단위 처리 파이프라인</li>
     <li><strong>RAG 설계·구현</strong> — 임베딩 검색 + LLM 응답 결합, 질의 유형별 검색 분기와 결과 재조합</li>
-    <li><strong>검색·저장소 시스템</strong> — OpenSearch 하이브리드(BM25+벡터) 검색, 그래프 DB(Neo4j·RDF/SPARQL) 기반 관계 중심 저장·조회</li>
-    <li><strong>ML 모델링·평가</strong> — Transformer 임베딩 + XGBoost 결합 스키마 매칭, GNN(GraphSAGE) 링크 예측, 공개 벤치마크 기반 성능지표 시험 설계·수행 (유사 속성 탐지 F1 0.87로 과제 KPI 달성)</li>
-    <li><strong>데이터 엔지니어링·표준</strong> — Airflow 수집·인덱싱 파이프라인, DCAT 3.0 기반 카탈로그 통합과 표준 매핑 규칙 문서화</li>
-    <li><strong>백엔드 API</strong> — FastAPI 기반 LLM 호출·데이터 처리 API, 외부 AI API 및 오픈소스 연동</li>
+    <li><strong>지식그래프·관계 생성</strong> — 그래프 DB(AWS Neptune) 기반 데이터셋 관계 자동 생성 파이프라인(규칙·통계·LLM 검증), 표준 어휘(DCAT 3 · PROV-O) 매핑 관계 유형 정의</li>
+    <li><strong>검색·저장소 시스템</strong> — OpenSearch 하이브리드(BM25+벡터) 검색, 그래프 DB(AWS Neptune RDF/SPARQL, Neo4j → Neptune 마이그레이션) 기반 관계 중심 저장·조회</li>
+    <li><strong>평가·검증</strong> — 공개 벤치마크 기반 성능지표 시험 설계·수행(F1 0.87, 과제 KPI 달성), LLM 판정 결과의 정밀도·재현율 정량 평가와 재현성 확보</li>
+    <li><strong>데이터 표준·설계</strong> — DCAT 3.0 카탈로그 연동, DCAT 응용 프로파일 표준 초안 검토 회신, 공공데이터 96,110건 전수 분석 기반 관계 유형 정의, 다기관 연동 ERD·인터페이스 정의서</li>
+    <li><strong>백엔드 API</strong> — FastAPI 기반 LLM 호출·데이터 처리 API, 카탈로그 변경 감지 증분 파이프라인, 외부 AI API 및 오픈소스 연동</li>
   </ul>
 
   <h2><span class="no">03</span>논문 · 특허 · 수상</h2>
   <ul class="plain">
     <li><strong>SCIE 논문 (공동 주저자)</strong> — <a href="https://www.mdpi.com/2079-9292/14/4/659" style="color:var(--ink)">A Dynamic-Selection-Based, Retrieval-Augmented Generation Framework</a>, Electronics 14(4):659, 2025</li>
     <li><strong>특허 출원 (제1발명자)</strong> — 탄소감축 시나리오 간 상호작용 자동 판정 및 표준 동등성 검증을 이용한 전과정평가 보고서 자동 저작 장치 (10-2026-0139153)</li>
-    <li><strong>특허 출원 (제1발명자)</strong> — 액티브 메타데이터와 그래프 DB를 활용한 신규 데이터의 잠재적 연관성 자동 탐색·관계 확장 장치 (10-2026-0068848)</li>
+    <li><strong>특허 출원 (제1발명자)</strong> — 액티브 메타데이터와 그래프 DB를 활용한 신규 데이터의 잠재적 연관성 자동 탐색·관계 확장 장치 (10-2026-0068848, 2026.04)</li>
     <li><strong>캡스톤 졸업작품 전시회 총장상</strong> — DS-RAG (2025)</li>
   </ul>
 
   <h2><span class="no">04</span>기술 스택</h2>
   <div class="tags">
     <i>Python</i><i>FastAPI</i><i>PostgreSQL · SQLModel</i><i>OpenSearch</i>
-    <i>Neptune · Neo4j</i><i>LangChain · LangGraph</i><i>LiteLLM · vLLM</i>
-    <i>XGBoost · Transformers</i><i>GraphSAGE</i><i>DCAT 3.0</i><i>MinIO</i>
+    <i>AWS Neptune · Neo4j</i><i>RDF · SPARQL</i><i>LangChain · LangGraph</i><i>LiteLLM · vLLM</i>
+    <i>XGBoost · Transformers</i><i>scikit-learn</i><i>DCAT 3.0 · PROV-O</i><i>MinIO</i>
     <i>Apache Airflow</i><i>Langfuse</i><i>Docker</i><i>GitLab CI</i><i>uv · pytest</i>
   </div>
 

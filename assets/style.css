@@ -44,6 +44,31 @@ footer a{color:var(--ink);text-decoration:none}
 .figure img,.figure svg{width:100%;height:auto;display:block;border-radius:2px}
 .figcap{font:var(--mono);color:var(--dim);letter-spacing:.12em;text-transform:uppercase;margin:10px 2px 2px}
 
+/* ── 기능 설명 + 데모 화면 2단 (좌: 글, 우: 캡처) ── */
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(20px,2.4vw,40px);
+  align-items:start;margin:18px 0 46px;margin-right:min(0px,calc(50% - 50vw + 28px))}
+.split>div>:first-child{margin-top:0}
+/* 지그재그: 짝수 블록은 캡처가 왼쪽, 글이 오른쪽 — 왼쪽 여백으로 삐져나간다 */
+.split.rev{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);margin-top:42px;
+  margin-right:0;margin-left:min(0px,calc(50% - 50vw + 28px))}
+.split.rev>div{order:2}
+.split.rev>figure{order:1}
+.split ul.plain li{font-size:15px}
+.split .flow{white-space:normal;font-size:11px}
+.shot{margin:0;border:1px solid var(--line);padding:8px;background:rgba(255,255,255,.03)}
+.shot .frame{position:relative;display:block}
+.shot img{display:block;width:100%;height:auto}
+.shot .mark{position:absolute;left:var(--x);top:var(--y);width:var(--w);height:var(--h);
+  border:2px solid #ff2d2d;box-shadow:0 0 0 3px rgba(255,45,45,.16)}
+.shot .mark b{position:absolute;left:-2px;top:-2px;transform:translateY(-100%);background:#ff2d2d;color:#fff;
+  font:var(--mono);letter-spacing:.1em;padding:2px 7px;white-space:nowrap;font-weight:600}
+.shot .mark.lb-below b{top:auto;bottom:-2px;transform:translateY(100%)}
+@media(max-width:1020px){
+  .split,.split.rev{grid-template-columns:1fr;margin-right:0;margin-left:0}
+  .split.rev>div,.split.rev>figure{order:0}
+  .shot .mark b{font-size:9px;padding:1px 5px}
+}
+
 /* ── 케이스 스터디 v2: 히어로/임팩트/마퀴/STAR ── */
 nav.overlay{position:absolute;top:0;left:0;right:0;z-index:5}
 .hero{position:relative;min-height:74vh;display:flex;align-items:flex-end;overflow:hidden;background:var(--bg)}
@@ -53,6 +78,10 @@ nav.overlay{position:absolute;top:0;left:0;right:0;z-index:5}
 .hero .kicker::before{background:#fff}
 .hero h1.display{font-size:clamp(34px,10vw,150px);margin:0;-webkit-text-fill-color:#fff;background:none;color:#fff}
 .hero .sub{position:relative;z-index:2;color:#fff;opacity:.9;max-width:640px;margin-top:18px;font-size:15px}
+.hero-cta{position:relative;z-index:2;display:inline-flex;align-items:center;gap:8px;margin-top:24px;
+  font:var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#fff;text-decoration:none;
+  border:1px solid rgba(255,255,255,.55);padding:12px 18px;transition:background .2s,color .2s,border-color .2s}
+.hero-cta:hover{background:#fff;border-color:#fff;color:#120211}
 .marquee{overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:13px 0;white-space:nowrap}
 .marquee>div{display:inline-block;animation:mq 36s linear infinite;font-family:Anton,Impact,sans-serif;font-size:19px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
 @keyframes mq{to{transform:translateX(-50%)}}

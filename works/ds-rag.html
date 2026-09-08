@@ -23,6 +23,7 @@
     <p class="sub">상용 멀티문서 QA는 검색 성능·API 비용·운영 오버헤드를 동시에 요구합니다.
     질문을 훼손하지 않는 분해(EPQD)와 동적 컨텍스트 선택(DICS)으로 셋을 함께 잡은 RAG 프레임워크 —
     설계부터 데이터셋, 실험, 논문 출판까지.</p>
+    <a class="hero-cta" href="https://syoooooung.github.io/ds-rag-demo/">▶ Live Demo ↗</a>
   </div>
 </header>
 <div class="marquee"><div><img src="../assets/icons/python.svg" alt="">Python · GPT-4o · <img src="../assets/icons/langchain.svg" alt="">LangChain · FAISS · HotpotQA · Custom Multi-Doc QA Dataset · Electronics (MDPI · SCIE) · &nbsp;</div><div aria-hidden="true"><img src="../assets/icons/python.svg" alt="">Python · GPT-4o · <img src="../assets/icons/langchain.svg" alt="">LangChain · FAISS · HotpotQA · Custom Multi-Doc QA Dataset · Electronics (MDPI · SCIE) · &nbsp;</div></div>
@@ -64,25 +65,45 @@
   </ul>
 
   <h3><span class="no">02</span>EPQD — 의미를 보존하는 분해</h3>
-  <div class="flow">원 질문 → <em>접속사·쉼표 기준 의미 분할</em> (따옴표 예외) → <em>각 phrase + 원문 동반 프롬프트</em> → phrase당 서브질문 1개</div>
-  <ul class="plain">
-    <li>멀티문서 질문은 비교 대상들이 접속사·쉼표로 나뉘는 언어적 특성이 있음 — <strong>LLM에게 분해를 통째로 맡기지 않고, 결정적 규칙으로 먼저 의미 단위를 분할</strong></li>
-    <li>각 분할 조각을 <strong>원문 전체와 함께</strong> LLM에 넣어 서브질문을 생성 — 조각만 보내면 맥락을 잃고, 원문만 보내면 변형되므로. 원문 용어 보존·문법적 완결성·조각당 1개 생성을 프롬프트 원칙으로 강제</li>
-    <li>결과: 복잡 질문에서 <strong>엔티티 누락률 70.2% → 7.4%</strong>, 불필요 엔티티 추가율 47.3% → 14.4% (LangChain QD 대비, 자체 정의 EAR/EOR 지표)</li>
-  </ul>
-
+  <div class="split">
+    <div>
+    <div class="flow">원 질문 → <em>접속사·쉼표 기준 의미 분할</em> (따옴표 예외) → <em>각 phrase + 원문 동반 프롬프트</em> → phrase당 서브질문 1개</div>
+    <ul class="plain">
+      <li>멀티문서 질문은 비교 대상들이 접속사·쉼표로 나뉘는 언어적 특성이 있음 — <strong>LLM에게 분해를 통째로 맡기지 않고, 결정적 규칙으로 먼저 의미 단위를 분할</strong></li>
+      <li>각 분할 조각을 <strong>원문 전체와 함께</strong> LLM에 넣어 서브질문을 생성 — 조각만 보내면 맥락을 잃고, 원문만 보내면 변형되므로. 원문 용어 보존·문법적 완결성·조각당 1개 생성을 프롬프트 원칙으로 강제</li>
+      <li>결과: 복잡 질문에서 <strong>엔티티 누락률 70.2% → 7.4%</strong>, 불필요 엔티티 추가율 47.3% → 14.4% (LangChain QD 대비, 자체 정의 EAR/EOR 지표)</li>
+    </ul>
+    </div>
+    <figure class="shot">
+      <span class="frame">
+        <img src="../assets/shots/ds-epqd.png" alt="EPQD 단계 상세 — 원 질문이 비교 대상·비교 속성으로 분절되고 조각별 서브질문 3개가 생성된 화면" loading="lazy">
+        <span class="mark" style="--x:16%;--y:59%;--w:68%;--h:38%"><b>조각당 서브질문 1개 · 엔티티 보존</b></span>
+      </span>
+      <figcaption class="figcap">EPQD — 규칙으로 분절하고, 조각마다 서브질문 하나</figcaption>
+    </figure>
+  </div>
   <h3><span class="no">03</span>기존 데이터셋으로는 실험이 성립하지 않았다</h3>
   <ul class="plain">
     <li>HotpotQA는 질문이 단순하고 정답 청크가 최대 2개뿐이며, 정답 청크 없이도 LLM이 답을 맞혀버리는 사례가 있어 <strong>프레임워크 검증 자체가 불가능</strong> — Multi-hop RAG도 중복 서술 문제로 부적합</li>
     <li>그래서 <strong>정답 청크 2~4개가 반드시 필요하고, 정답이 문서에 명시돼 있지 않아 LLM이 추론해야만 하는</strong> 멀티문서 QA 데이터셋 4,000문항(ranking/comparison 유형)을 GPT-4o 기반으로 직접 구축 — <a href="https://github.com/Mulsanne2/DS-RAG" style="color:var(--ink)">GitHub에 공개</a></li>
   </ul>
 
-  <h3><span class="no">04</span>벤치마크 실험 — 프레임워크 전체 검증</h3>
-  <ul class="plain">
-    <li>NonQD-리랭킹 / EPQD+리랭킹(서브질문·원질문 기준) 3종 벤치마크를 구축하고 Precision·Recall·F1, 평균 청크 수(비용), ANLS(답변 품질)로 평가</li>
-    <li>DICS(팀 설계: 질문 그래프 Core 노드 기반 선택 기준 + GAT 그래프 임베딩 선택 모델)와 결합한 DS-RAG가 <strong>입력 청크를 절반 이하로 줄이면서 F1을 0.596 → 0.877로</strong> 끌어올림을 검증 — 선택 모델은 상용 리랭커 대비 파라미터 30% 수준(운영 오버헤드 ↓)</li>
-  </ul>
-
+  <div class="split rev">
+    <div>
+    <h3><span class="no">04</span>벤치마크 실험 — 프레임워크 전체 검증</h3>
+    <ul class="plain">
+      <li>NonQD-리랭킹 / EPQD+리랭킹(서브질문·원질문 기준) 3종 벤치마크를 구축하고 Precision·Recall·F1, 평균 청크 수(비용), ANLS(답변 품질)로 평가</li>
+      <li>DICS(팀 설계: 질문 그래프 Core 노드 기반 선택 기준 + GAT 그래프 임베딩 선택 모델)와 결합한 DS-RAG가 <strong>입력 청크를 절반 이하로 줄이면서 F1을 0.596 → 0.877로</strong> 끌어올림을 검증 — 선택 모델은 상용 리랭커 대비 파라미터 30% 수준(운영 오버헤드 ↓)</li>
+    </ul>
+    </div>
+    <figure class="shot">
+      <span class="frame">
+        <img src="../assets/shots/ds-dics.png" alt="DICS 단계 상세 — 질문 그래프에서 진입 차수가 가장 높은 노드가 코어 노드로 선택된 화면" loading="lazy">
+        <span class="mark" style="--x:66%;--y:55.5%;--w:15.5%;--h:19%"><b>코어 노드 = 진입 차수 최대</b></span>
+      </span>
+      <figcaption class="figcap">DICS(팀 설계) — 질문 그래프의 코어 노드로 컨텍스트 선택</figcaption>
+    </figure>
+  </div>
   <h2><span class="no">R</span>결과</h2>
   <figure class="figure">
   <svg viewBox="0 0 860 230" xmlns="http://www.w3.org/2000/svg" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" role="img" aria-label="입력 컨텍스트 F1 비교: 분해 없는 리랭킹 0.14, EPQD+리랭킹 0.596, DS-RAG 0.877">

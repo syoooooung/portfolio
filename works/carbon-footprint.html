@@ -23,6 +23,7 @@
     <h1 class="display">Carbon Footprint <br>AI Platform</h1>
     <p class="sub">전과정평가(LCA) 보고서를 읽고 → 탄소 배출 핫스팟을 찾고 → 개선 시나리오를 제안하고 →
     ISO 표준 준수까지 검토하는 AI 플랫폼. 전문가 수작업에 의존하던 LCA 컨설팅의 핵심 단계를 자동화합니다.</p>
+    <a class="hero-cta" href="https://syoooooung.github.io/lca-copilot-demo/">▶ Live Demo ↗</a>
   </div>
 </header>
 <div class="marquee"><div><img src="../assets/icons/fastapi.svg" alt="">FastAPI · <img src="../assets/icons/postgresql.svg" alt="">PostgreSQL · SQLModel · LiteLLM · <img src="../assets/icons/vllm.svg" alt="">vLLM · <img src="../assets/icons/docker.svg" alt="">Docker · <img src="../assets/icons/gitlab.svg" alt="">GitLab CI · <img src="../assets/icons/pytest.svg" alt="">pytest · ISO 14040 · 14044 · 14067 · &nbsp;</div><div aria-hidden="true"><img src="../assets/icons/fastapi.svg" alt="">FastAPI · <img src="../assets/icons/postgresql.svg" alt="">PostgreSQL · SQLModel · LiteLLM · <img src="../assets/icons/vllm.svg" alt="">vLLM · <img src="../assets/icons/docker.svg" alt="">Docker · <img src="../assets/icons/gitlab.svg" alt="">GitLab CI · <img src="../assets/icons/pytest.svg" alt="">pytest · ISO 14040 · 14044 · 14067 · &nbsp;</div></div>
@@ -49,6 +50,7 @@
     <div><b>형태</b><span>제조·AI·연구기관 컨소시엄 과제</span></div>
     <div><b>기간</b><span>2025.05 ~ 진행 중</span></div>
     <div><b>특허</b><span>출원 10-2026-0139153 (제1발명자)</span></div>
+    <div><b>데모</b><span><a href="https://syoooooung.github.io/lca-copilot-demo/" style="color:var(--ink)">lca-copilot-demo</a></span></div>
   </div>
   <ul class="plain">
     <li><strong>플랫폼 백엔드를 분담한 공동 개발사</strong>와 모듈 경계·API 명세를 정기적으로 협의 — 서로의 시스템이 맞물리는 인터페이스를 문서로 계약하고 변경을 조율</li>
@@ -60,34 +62,74 @@
   <figure class="figure" style="background:#fff"><img src="../assets/img/carbon-arch.png" alt="탄소발자국 AI 플랫폼 시스템 아키텍처 — Agent 중심 백엔드, GitOps 배포, 자사 LLM 서빙" loading="lazy"><figcaption class="figcap" style="color:#666">System Architecture — GitOps 배포 · Agent 중심 백엔드(MCP 도구) · 자사 LLM 서빙</figcaption></figure>
 
   <h3><span class="no">01</span>LCA 개선 시나리오 AI</h3>
-  <ul class="plain">
-    <li>LCA 보고서 <strong>PDF를 업로드하면 탄소 배출 기여도가 큰 공정(핫스팟)을 자동 추출</strong>하는 파이프라인 구현</li>
-    <li>추출된 핫스팟을 근거로 <strong>LLM이 감축 개선 시나리오를 생성</strong> — Structured Output으로 스키마를 강제해 후속 단계에서 바로 소비 가능한 형태로 반환</li>
-    <li>비정형 PDF의 표·수치 파싱 오류에 대비한 <strong>단계별 검증과 예외 처리</strong>로 파이프라인 신뢰성 확보</li>
-    <li>생성된 시나리오를 <strong>외부 LCA 시뮬레이터와 연동해 적용 전/후 배출량을 동일 평가법(GWP100)으로 정량 비교</strong> — 시나리오가 "그럴듯한 제안"이 아니라 수치로 검증된 감축안이 되도록</li>
-    <li><strong>LLM의 수치는 코드가 검증</strong> — 추출된 배출량 합계를 보고서 명시 총량과 자동 대조(실측 0.03% 오차 통과), 대응 불가 질의에는 수치 창작을 차단. 판정 주체가 코드라서 모델을 바꿔도 신뢰성 장치는 그대로 작동</li>
-  </ul>
-
-  <h3><span class="no">02</span>ISO 표준 준수 검토 에이전트</h3>
-  <ul class="plain">
-    <li>생성된 시나리오와 보고서를 <strong>ISO 14040 / 14044 / 14067</strong> 요구사항에 대조해 준수 여부를 검토하는 에이전트 설계·구현</li>
-    <li>ISO 원문 3종을 판독해 <strong>검증 가능한 요구사항 트리(약 115개 노드, shall/should 층위·조건부 발동)를 컴파일 타임에 구축</strong> — 표준 원문을 런타임 컨텍스트에 넣지 않음</li>
-    <li>트리 순회·적용성 게이트·판정 검증은 <strong>코드가 소유</strong>하고, LLM의 재량은 "보고서 어디에 근거가 있는가"의 탐색 하나로 좁힘 — 프롬프트로 부탁하는 규칙은 어겨지지만 기계 검증은 못 어기므로</li>
-  </ul>
-
+  <div class="split">
+    <div>
+    <ul class="plain">
+      <li>LCA 보고서 <strong>PDF를 업로드하면 탄소 배출 기여도가 큰 공정(핫스팟)을 자동 추출</strong>하는 파이프라인 구현</li>
+      <li>추출된 핫스팟을 근거로 <strong>LLM이 감축 개선 시나리오를 생성</strong> — Structured Output으로 스키마를 강제해 후속 단계에서 바로 소비 가능한 형태로 반환</li>
+      <li>비정형 PDF의 표·수치 파싱 오류에 대비한 <strong>단계별 검증과 예외 처리</strong>로 파이프라인 신뢰성 확보</li>
+      <li>생성된 시나리오를 <strong>외부 LCA 시뮬레이터와 연동해 적용 전/후 배출량을 동일 평가법(GWP100)으로 정량 비교</strong> — 시나리오가 "그럴듯한 제안"이 아니라 수치로 검증된 감축안이 되도록</li>
+      <li><strong>LLM의 수치는 코드가 검증</strong> — 추출된 배출량 합계를 보고서 명시 총량과 자동 대조(실측 0.03% 오차 통과), 대응 불가 질의에는 수치 창작을 차단. 판정 주체가 코드라서 모델을 바꿔도 신뢰성 장치는 그대로 작동</li>
+    </ul>
+    </div>
+    <figure class="shot">
+      <span class="frame">
+        <img src="../assets/shots/lca-scenario.png" alt="개선 시나리오 제안 화면 — S1 에너지효율 시나리오의 감축량과 산정 근거, 정량 보류 표기" loading="lazy">
+        <span class="mark" style="--x:11%;--y:29.5%;--w:85%;--h:18.5%"><b>산정 근거 있는 시나리오만 수치 제시</b></span>
+      </span>
+      <figcaption class="figcap">개선 시나리오 — 감축량·근거 페이지·정량 보류까지</figcaption>
+    </figure>
+  </div>
+  <div class="split rev">
+    <div>
+    <h3><span class="no">02</span>ISO 표준 준수 검토 에이전트</h3>
+    <ul class="plain">
+      <li>생성된 시나리오와 보고서를 <strong>ISO 14040 / 14044 / 14067</strong> 요구사항에 대조해 준수 여부를 검토하는 에이전트 설계·구현</li>
+      <li>ISO 원문 3종을 판독해 <strong>검증 가능한 요구사항 트리(약 115개 노드, shall/should 층위·조건부 발동)를 컴파일 타임에 구축</strong> — 표준 원문을 런타임 컨텍스트에 넣지 않음</li>
+      <li>트리 순회·적용성 게이트·판정 검증은 <strong>코드가 소유</strong>하고, LLM의 재량은 "보고서 어디에 근거가 있는가"의 탐색 하나로 좁힘 — 프롬프트로 부탁하는 규칙은 어겨지지만 기계 검증은 못 어기므로</li>
+    </ul>
+    </div>
+    <figure class="shot">
+      <span class="frame">
+        <img src="../assets/shots/lca-iso.png" alt="판정 근거를 되묻는 질문에 ISO 14044 조항과 파레토 컷 기준으로 답하는 화면" loading="lazy">
+        <span class="mark" style="--x:10%;--y:20%;--w:87%;--h:19%"><b>ISO 14044 §4.5.2 준거</b></span>
+      </span>
+      <figcaption class="figcap">판정 근거 — 판정은 LLM이 아니라 코드가 수행</figcaption>
+    </figure>
+  </div>
   <h3><span class="no">03</span>LCA 보고서 자동 저작</h3>
-  <div class="flow">분석 결과·원문 → <em>섹션 구조 요약 재구성</em> → 문서 빌드·부분 편집 → <em>PDF 렌더링</em></div>
-  <ul class="plain">
-    <li>분석 결과와 원문을 <strong>고정 섹션 구조의 보고서로 자동 재구성</strong>하고, 빌드 후에도 <strong>섹션 단위 편집 API</strong>로 수정 가능한 문서 파이프라인 구현 — 최종 산출물은 PDF로 렌더링</li>
-    <li>특허 「탄소감축 시나리오 간 상호작용 자동 판정 및 표준 동등성 검증을 이용한 전과정평가 보고서 자동 저작」의 <strong>핵심 아이디어가 그대로 구현된 모듈</strong></li>
-  </ul>
-
-  <h3><span class="no">04</span>대화형 분석 에이전트</h3>
-  <ul class="plain">
-    <li>PDF를 올리고 자연어로 대화하면 <strong>11개 도구(핫스팟 분석·시나리오 생성·준수 검토·LCA 시뮬레이션·대체 검증·공급망 그래프·데이터 조회(NL2SQL)·보고서 읽기/편집 등)를 LLM이 스스로 선택·호출</strong>하는 tool-use 에이전트 구현</li>
-    <li>한 질문에 여러 도구를 연쇄 호출하는 <strong>멀티라운드 루프</strong>(왕복 상한 제어)와 <strong>진행 상황 스트리밍</strong>으로 긴 분석도 대화 흐름 안에서 처리</li>
-  </ul>
-
+  <div class="split">
+    <div>
+    <div class="flow">분석 결과·원문 → <em>섹션 구조 요약 재구성</em> → 문서 빌드·부분 편집 → <em>PDF 렌더링</em></div>
+    <ul class="plain">
+      <li>분석 결과와 원문을 <strong>고정 섹션 구조의 보고서로 자동 재구성</strong>하고, 빌드 후에도 <strong>섹션 단위 편집 API</strong>로 수정 가능한 문서 파이프라인 구현 — 최종 산출물은 PDF로 렌더링</li>
+      <li>특허 「탄소감축 시나리오 간 상호작용 자동 판정 및 표준 동등성 검증을 이용한 전과정평가 보고서 자동 저작」의 <strong>핵심 아이디어가 그대로 구현된 모듈</strong></li>
+    </ul>
+    </div>
+    <figure class="shot">
+      <span class="frame">
+        <img src="../assets/shots/lca-doc.png" alt="보고서 문서 탭 — 해석·결론 절이 시나리오 반영으로 추가·수정된 상태" loading="lazy">
+        <span class="mark" style="--x:10%;--y:68%;--w:79%;--h:20%"><b>본문 직접 수정 (되돌리기 가능)</b></span>
+      </span>
+      <figcaption class="figcap">보고서 저작 — 추가·수정·신설이 절 단위로 반영</figcaption>
+    </figure>
+  </div>
+  <div class="split rev">
+    <div>
+    <h3><span class="no">04</span>대화형 분석 에이전트</h3>
+    <ul class="plain">
+      <li>PDF를 올리고 자연어로 대화하면 <strong>11개 도구(핫스팟 분석·시나리오 생성·준수 검토·LCA 시뮬레이션·대체 검증·공급망 그래프·데이터 조회(NL2SQL)·보고서 읽기/편집 등)를 LLM이 스스로 선택·호출</strong>하는 tool-use 에이전트 구현</li>
+      <li>한 질문에 여러 도구를 연쇄 호출하는 <strong>멀티라운드 루프</strong>(왕복 상한 제어)와 <strong>진행 상황 스트리밍</strong>으로 긴 분석도 대화 흐름 안에서 처리</li>
+    </ul>
+    </div>
+    <figure class="shot">
+      <span class="frame">
+        <img src="../assets/shots/lca-parse.png" alt="PDF 파싱 결과 응답 — 총 배출량과 기능단위에 p.13·p.2 원문 근거가 붙은 화면" loading="lazy">
+        <span class="mark" style="--x:10%;--y:28%;--w:87%;--h:14%"><b>모든 수치에 p.○ 원문 근거</b></span>
+      </span>
+      <figcaption class="figcap">대화형 분석 — 도구 호출 결과를 근거와 함께 반환</figcaption>
+    </figure>
+  </div>
   <h3><span class="no">05</span>LLM 서빙 인프라</h3>
   <ul class="plain">
     <li><strong>LiteLLM 프록시(OpenAI 호환)로 LLM 벤더를 추상화</strong> — 클라우드 API와 온프레미스 모델을 코드 변경 없이 전환</li>
@@ -176,7 +218,10 @@
     <li>PDF 파싱 실패 케이스를 그때그때 고치는 대신, <strong>실패 사례를 평가셋으로 축적해 파서 개선을 정량화</strong>했을 것</li>
     <li>ISO 요구사항 트리의 <strong>커버리지(전체 요구사항 대비 검증 가능 항목 비율)를 지표로 관리</strong>해 검토 신뢰도를 수치로 말할 수 있게 했을 것</li>
   </ul>
-  <p style="font:11px/1.6 ui-monospace,Menlo,monospace;color:var(--dim);letter-spacing:.06em">* 국가 R&D 과제 수행 중인 사내 프로젝트로 코드·데모는 비공개입니다.</p>
+  <div class="links">
+    <a href="https://syoooooung.github.io/lca-copilot-demo/">Live Demo ↗</a>
+  </div>
+  <p style="font:11px/1.6 ui-monospace,Menlo,monospace;color:var(--dim);letter-spacing:.06em">* 실제 서비스 코드는 국가 R&D 과제 특성상 비공개입니다. 데모는 UI/기능 재현입니다.</p>
 </main>
 <footer>
   <span>© 2026 Seyoung Hwang · <a href="mailto:tpdudabc@naver.com">tpdudabc@naver.com</a></span>
