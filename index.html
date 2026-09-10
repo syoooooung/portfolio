@@ -38,11 +38,43 @@
   ul:hover li a{opacity:.35}
   ul li a:hover{opacity:1;transform:translateX(1.2vw)}
   li.lead{margin-bottom:5vh}
-  #thumb{position:fixed;width:250px;border-radius:2px;pointer-events:none;z-index:4;overflow:hidden;
-         opacity:0;transition:opacity .2s;transform:translate(-50%,-50%)}
-  #thumb .im{height:140px;background-size:cover;background-position:center;background-color:#120211}
-  #thumb .cap{font:11.5px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace;color:#f4eef5;
-         background:#120211;padding:9px 12px;word-break:keep-all}
+
+  /* ── 호버 카드: 위치·기울기는 JS(rAF lerp), 등장 모션은 .card 클래스 ── */
+  #thumb{position:fixed;left:0;top:0;width:290px;pointer-events:none;z-index:4;will-change:transform}
+  .card{--e:cubic-bezier(.2,.8,.2,1);background:#150314;border:1px solid rgba(244,238,245,.14);border-radius:6px;
+        overflow:hidden;box-shadow:0 30px 60px -20px rgba(0,0,0,.7);
+        clip-path:inset(46% 0 46% 0 round 6px);opacity:0;transform:translateY(10px) scale(.96);
+        transition:clip-path .5s var(--e),opacity .25s,transform .5s var(--e)}
+  .card.on{clip-path:inset(0 0 0 0 round 6px);opacity:1;transform:none}
+  .im{aspect-ratio:260/160;background:radial-gradient(120% 100% at 50% 0,#2a0b2a,#150314)}
+  .im svg{width:100%;height:100%;display:block}
+  .cap{padding:11px 13px 12px;border-top:1px solid rgba(244,238,245,.1)}
+  .line{font:12.5px/1.5 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Noto Sans KR",sans-serif;
+        color:#f4eef5;word-break:keep-all;opacity:0;transform:translateY(6px);transition:.4s var(--e) .08s}
+  .chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+  .chips i{font:9.5px/1 ui-monospace,SFMono-Regular,Menlo,monospace;font-style:normal;letter-spacing:.1em;
+           text-transform:uppercase;color:#b9a8bd;border:1px solid rgba(244,238,245,.16);border-radius:999px;padding:5px 8px;
+           opacity:0;transform:translateY(6px);transition:.4s var(--e)}
+  .chips i:nth-child(1){transition-delay:.14s}.chips i:nth-child(2){transition-delay:.2s}.chips i:nth-child(3){transition-delay:.26s}
+  .card.on .line,.card.on .chips i{opacity:1;transform:none}
+
+  /* SVG 픽토그램 모션 — pathLength=1 트릭으로 길이 계산 없이 그리기 */
+  #thumb svg{--ink:#f4eef5;--dim:#b9a8bd;--acc:#ff5a1f;--acc2:#e0117a;--vio:#7b2ff7}
+  #thumb svg text{font:9px ui-monospace,SFMono-Regular,Menlo,monospace;fill:var(--dim);letter-spacing:.1em;text-anchor:middle}
+  #thumb svg [class]{animation-fill-mode:forwards;animation-timing-function:cubic-bezier(.65,0,.35,1)}
+  .draw{fill:none;stroke-dasharray:1;stroke-dashoffset:1;animation:draw .9s}
+  .pop{transform-box:fill-box;transform-origin:center;transform:scale(0);animation:pop .55s cubic-bezier(.34,1.56,.64,1)}
+  .fade{opacity:0;animation:fade .5s}
+  .lift{animation:lift .8s cubic-bezier(.2,.8,.2,1)}
+  .pulse{animation:pulse 1.8s ease-in-out infinite}
+  @keyframes draw{to{stroke-dashoffset:0}}
+  @keyframes pop{to{transform:scale(1)}}
+  @keyframes fade{to{opacity:1}}
+  @keyframes lift{from{transform:translateY(16px);opacity:0}to{transform:none;opacity:1}}
+  @keyframes pulse{50%{opacity:.35}}
+  @media(prefers-reduced-motion:reduce){
+    #thumb *{animation:none!important;transition:none!important}
+    .draw{stroke-dashoffset:0}.pop{transform:none}.fade{opacity:1}}
   @media(hover:none){#thumb{display:none}}
 </style>
 <canvas id="c"></canvas>
@@ -52,40 +84,87 @@
   <a href="https://github.com/syoooooung">github.com/syoooooung</a>
 </div>
 <ul id="list"></ul>
-<div id="thumb"><div class="im"></div><div class="cap"></div></div>
+<div id="thumb"><div class="card"><div class="im"></div><div class="cap"><div class="line"></div><div class="chips"></div></div></div></div>
 <script>
-// ── 랜딩 리스트: [제목, 링크, 썸네일 색] ──────────────────────
+// ── 프로젝트 픽토그램 (260×160) ─────────────────────────────
+const D = (d,c,w=1.5,dl=0) => `<path class="draw" pathLength="1" d="${d}" stroke="${c}" stroke-width="${w}" stroke-linecap="round" style="animation-delay:${dl}s"/>`;
+const P = (inner,dl) => `<g class="pop" style="animation-delay:${dl}s">${inner}</g>`;
+const SVG = s => `<svg viewBox="0 0 260 160" xmlns="http://www.w3.org/2000/svg">${s}</svg>`;
+const PIC = {
+  // About — 타임라인
+  about: SVG(
+    D('M24 84H236','rgba(244,238,245,.28)',1.2) +
+    [['SCIE',56,'var(--acc)'],['총장상',112,'var(--ink)'],['특허 ×2',168,'var(--acc2)'],['국가 R&D',224,'var(--vio)']]
+      .map(([t,x,c],i)=>P(`<circle cx="${x}" cy="84" r="5" fill="${c}"/><text x="${x}" y="${i%2?68:110}">${t}</text>`,.35+i*.14)).join('')),
+  // Carbon — 배출량 하강 곡선 + ISO 검증 배지
+  carbon: SVG(
+    `<text x="40" y="30" style="text-anchor:start">tCO₂e</text>` +
+    D('M28 46H232','rgba(244,238,245,.12)',1) + D('M28 88H232','rgba(244,238,245,.12)',1) + D('M28 130H232','rgba(244,238,245,.12)',1) +
+    `<path class="fade" style="animation-delay:.6s" d="M28 46C70 50 92 76 122 84S182 112 232 126V130H28Z" fill="url(#g)"/>
+     <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--acc)" stop-opacity=".35"/><stop offset="1" stop-color="var(--acc)" stop-opacity="0"/></linearGradient></defs>` +
+    D('M28 46C70 50 92 76 122 84S182 112 232 126','var(--acc)',2.2,.15) +
+    P(`<rect x="152" y="26" width="84" height="22" rx="11" fill="#150314" stroke="var(--ink)" stroke-opacity=".5"/><text x="194" y="41" fill="var(--ink)" style="fill:var(--ink)">ISO 14067 ✓</text>`,1) +
+    P(`<circle cx="232" cy="126" r="4" fill="var(--acc)"/>`,.95)),
+  // Legal — 판례 스택에서 유사 판례 하나가 떠오름
+  legal: SVG(
+    `<g transform="rotate(-8 75 90)"><rect x="40" y="42" width="70" height="94" rx="3" fill="#1c0a1b" stroke="rgba(244,238,245,.22)"/>
+       ${[62,74,86,98].map(y=>`<path d="M52 ${y}H98" stroke="rgba(244,238,245,.14)"/>`).join('')}</g>
+     <g transform="rotate(8 185 90)"><rect x="150" y="42" width="70" height="94" rx="3" fill="#1c0a1b" stroke="rgba(244,238,245,.22)"/>
+       ${[62,74,86,98].map(y=>`<path d="M162 ${y}H208" stroke="rgba(244,238,245,.14)"/>`).join('')}</g>
+     <g class="lift" style="animation-delay:.2s"><rect x="94" y="30" width="72" height="100" rx="3" fill="#1c0a1b" stroke="var(--acc)" stroke-width="1.4"/>
+       <text x="106" y="48" style="text-anchor:start;fill:var(--acc);font-size:12px">§</text>
+       ${D('M106 62H154','rgba(244,238,245,.35)',1.2,.6)}${D('M106 74H150','var(--acc2)',2,.75)}${D('M106 86H154','rgba(244,238,245,.35)',1.2,.9)}${D('M106 98H140','rgba(244,238,245,.35)',1.2,1.05)}</g>` +
+    P(`<rect x="98" y="136" width="64" height="16" rx="8" fill="var(--acc)"/><text x="130" y="147" style="fill:#120211">유사 판례</text>`,1.2)),
+  // Metadata — 관계 그래프가 그려짐, sameAs 엣지는 마지막
+  graph: (()=>{ const N=[[46,48],[46,118],[130,83],[214,48],[214,118]];
+    return SVG(
+      D('M46 48L130 83','rgba(244,238,245,.32)',1.2,.3)+D('M46 118L130 83','rgba(244,238,245,.32)',1.2,.4)+
+      D('M130 83L214 48','rgba(244,238,245,.32)',1.2,.55)+D('M130 83L214 118','rgba(244,238,245,.32)',1.2,.65)+
+      `<path class="draw" pathLength="1" d="M214 48V118" stroke="var(--vio)" stroke-width="1.6" stroke-dasharray="1" style="animation-delay:1s"/>` +
+      `<text class="fade" x="232" y="87" style="fill:var(--vio);animation-delay:1.4s">sameAs</text>` +
+      N.map(([x,y],i)=>P(`<circle cx="${x}" cy="${y}" r="${i===2?10:7}" fill="${i===2?'var(--acc)':'#1c0a1b'}" stroke="${i===2?'var(--acc)':'var(--ink)'}" stroke-width="1.4"/>`,i*.12)).join('') +
+      `<text x="46" y="36">Dataset A</text><text x="46" y="140">Dataset B</text><text x="130" y="110" style="fill:var(--ink)">AI</text>`)})(),
+  // DS-RAG — 질문 분해 → 멀티문서 검색 → 병합
+  dsrag: SVG(
+    P(`<circle cx="36" cy="80" r="15" fill="#1c0a1b" stroke="var(--ink)" stroke-width="1.4"/><text x="36" y="84" style="fill:var(--ink);font-size:11px">Q</text>`,0) +
+    D('M52 78C80 78 92 42 122 42','var(--acc)',1.6,.25)+D('M52 80H122','var(--acc)',1.6,.3)+D('M52 82C80 82 92 118 122 118','var(--acc)',1.6,.35) +
+    [42,80,118].map((y,i)=>P(`<rect x="122" y="${y-11}" width="36" height="22" rx="3" fill="#1c0a1b" stroke="var(--acc)" stroke-width="1.2"/><text x="140" y="${y+4}" style="fill:var(--ink)">q${i+1}</text>`,.8+i*.1)).join('') +
+    D('M158 42C190 42 200 78 210 78','var(--acc2)',1.6,1.1)+D('M158 80H210','var(--acc2)',1.6,1.15)+D('M158 118C190 118 200 82 210 82','var(--acc2)',1.6,1.2) +
+    P(`<circle cx="226" cy="80" r="15" fill="var(--acc2)"/><text x="226" y="84" style="fill:#120211;font-size:11px">A</text>`,1.6) +
+    `<text class="fade" x="140" y="150" style="animation-delay:1.2s">의미 보존 분해 · 누락 7.4%</text>`),
+};
+// ── 랜딩 리스트: [제목, 링크, 픽토그램, 한 줄, 키워드] ─────────
 const WORKS = [
-  ["About Me",                      "about.html",                  "#9c27b0",
-   "경력 · 논문 · 특허 · 기술 스택"],
-  ["Carbon Footprint AI Platform",  "works/carbon-footprint.html", "assets/img/carbon-arch.png",
-   "LCA 보고서를 읽고 감축 시나리오 생성과 ISO 준수 검토까지 자동화하는 AI 에이전트"],
-  ["AI Legal Research Assistant",   "works/legal-assistant.html",  "assets/thumbs/ai-legal.png",
-   "판례를 구조화해 유사 판례 검색·소장 생성·수임료 추정을 보조하는 법률 AI"],
-  ["Active Metadata Relations",     "works/data-relation.html",    "assets/thumbs/metadata.png",
-   "조직 밖 데이터셋과 우리 데이터의 관계를 AI가 자동으로 찾아 그래프로 쌓는 관계 생성 서비스 — 특허 출원"],
-  ["DS-RAG — SCIE Paper",           "works/ds-rag.html",           "assets/thumbs/ds-rag.png",
-   "질문을 훼손하지 않는 분해로 멀티문서 검색을 살린 RAG 프레임워크 — 논문 출판"],
+  ["About Me",                      "about.html",                  PIC.about,
+   "AI Platform Engineer", ["SCIE ×1","특허 ×2","총장상"]],
+  ["Carbon Footprint AI Platform",  "works/carbon-footprint.html", PIC.carbon,
+   "LCA 보고서 → 감축 시나리오 자동 생성", ["LLM Agent","ISO 14067","FastAPI"]],
+  ["AI Legal Research Assistant",   "works/legal-assistant.html",  PIC.legal,
+   "판례를 구조화해 유사 판례 검색·소장 생성", ["Hybrid Search","Airflow","Multi-LLM"]],
+  ["Active Metadata Relations",     "works/data-relation.html",    PIC.graph,
+   "데이터셋 사이 숨은 관계를 AI가 그래프로", ["Knowledge Graph","SPARQL","특허 출원"]],
+  ["DS-RAG — SCIE Paper",           "works/ds-rag.html",           PIC.dsrag,
+   "질문을 훼손하지 않는 분해로 멀티문서 검색", ["RAG","F1 0.877","SCIE"]],
 ];
 // ─────────────────────────────────────────────────────────────
-const list = document.getElementById('list'), thumb = document.getElementById('thumb');
+const list = document.getElementById('list'), thumb = document.getElementById('thumb'), card = thumb.firstElementChild;
 list.innerHTML = WORKS.map(([t,h],i)=>`<li${i===0?' class="lead"':''}><a href="${h}" data-i="${i}">${t}</a></li>`).join('');
-const mouse = [.5,.5];
+const mouse = [.5,.5]; let tx=-999,ty=-999,cx=-999,cy=-999;   // 커서 타깃 / 카드 현재 위치 (lerp)
 addEventListener('pointermove', e => {
-  thumb.style.left = e.clientX + 130 + 'px'; thumb.style.top = e.clientY + 'px';
+  tx = e.clientX + 150; ty = e.clientY;
+  if(cx<-900){cx=tx;cy=ty}
   mouse[0] = e.clientX / innerWidth; mouse[1] = 1 - e.clientY / innerHeight;
 });
-const thumbIm = thumb.querySelector('.im'), thumbCap = thumb.querySelector('.cap');
+const im = card.querySelector('.im'), line = card.querySelector('.line'), chips = card.querySelector('.chips');
+let cur = -1;
 list.addEventListener('pointerover', e => {
-  const a = e.target.closest('a'); if(!a) return;
-  const [,,t,desc] = WORKS[a.dataset.i];
-  thumbIm.style.background = t.startsWith('#')
-    ? `linear-gradient(135deg,${t},#120211)`
-    : `#ffffff url(${t}) center/contain no-repeat`;
-  thumbCap.textContent = desc;
-  thumb.style.opacity = 1;
+  const a = e.target.closest('a'); if(!a || +a.dataset.i===cur) return;
+  cur = +a.dataset.i; const [,,svg,l,ks] = WORKS[cur];
+  im.innerHTML = svg;                                       // 재삽입 → SVG 애니메이션 재시작
+  line.textContent = l; chips.innerHTML = ks.map(k=>`<i>${k}</i>`).join('');
+  card.classList.add('on');
 });
-list.addEventListener('pointerout', () => thumb.style.opacity = 0);
+list.addEventListener('pointerout', e => { if(!list.contains(e.relatedTarget)){ card.classList.remove('on'); cur=-1; } });
 // 클릭한 링크만 히어로 제목으로 morph — 이름은 문서당 유일해야 하므로 클릭 시점에 부여
 list.addEventListener('click', e => {
   const a = e.target.closest('a'); if(a) a.style.viewTransitionName = 'hero-title';
@@ -127,6 +206,9 @@ const resize = () => { const d = Math.min(devicePixelRatio,1.5);
 addEventListener('resize', resize); resize();
 let mx=.5,my=.5;
 (function loop(now){ mx+=(mouse[0]-mx)*.05; my+=(mouse[1]-my)*.05;
+  // 카드: 커서를 살짝 늦게 따라오고, 이동 속도만큼 기울어짐
+  const dx = tx-cx; cx += dx*.16; cy += (ty-cy)*.16;
+  thumb.style.transform = `translate(${cx}px,${cy}px) translate(-50%,-50%) rotate(${Math.max(-6,Math.min(6,dx*.05))}deg)`;
   gl.uniform1f(U('t'), now/1000); gl.uniform2f(U('m'), mx, my);
   gl.drawArrays(gl.TRIANGLES,0,3); requestAnimationFrame(loop); })(0);
 </script>
