@@ -31,21 +31,16 @@
 <main>
   <section class="impact">
     <div><b>0.877</b><span>입력 컨텍스트 F1 — 리랭킹 0.596 대비</span></div>
-    <div><b>−54%</b><span>LLM 입력 청크 — 8.6 → 4.0개</span></div>
+    <div><b>−57%</b><span>LLM 입력 청크 — 평균 8.0 → 3.5개</span></div>
     <div><b>7.4%</b><span>엔티티 누락률 — 기존 QD 70.2%</span></div>
     <div><b>1</b><span>SCIE 논문 — 공동 1저자 · 총장상</span></div>
   </section>
 
   <h2><span class="no">S</span>배경 — 상용 멀티문서 QA의 3중 제약</h2>
-  <p>사내 문서로 QA 서비스를 만들면 정보가 여러 문서에 파편화돼 있어 대부분의 질문이
-  <strong>멀티문서 질문</strong>이 됩니다. 상용 서비스는 여기서 세 가지를 동시에 요구합니다 —
-  ① 답에 필요한 컨텍스트를 <strong>누락 없이 검색</strong>할 것, ② 상용 LLM API의 <strong>토큰 비용</strong>을
-  최소화할 것, ③ 소규모 인프라로 감당 가능하게 <strong>운영 오버헤드</strong>를 낮출 것.
-  청크를 많이 가져오면 ①은 풀리지만 ②가 무너지고, 무거운 그래프 인프라를 쓰면 ③이 무너집니다.</p>
-  <p>질문 분해(QD)가 표준 해법이지만, LLM 분해는 <strong>질문의 핵심 엔티티를 빠뜨리거나 없던 내용을
-  만들어</strong> 검색을 오히려 망가뜨립니다. DS-RAG는 이 지점을 두 모듈로 풉니다 —
-  질문을 훼손하지 않는 분해(<strong>EPQD</strong>)와, top-K 고정 대신 질문 구조에 맞춰 입력 컨텍스트를
-  동적으로 고르는 선택기(<strong>DICS</strong>).</p>
+  <p>사내 문서는 정보가 파편화돼 있어 대부분의 질문이 <strong>멀티문서 질문</strong>이 됩니다. 상용 서비스는
+  ① 누락 없는 검색, ② 낮은 LLM API 토큰 비용, ③ 낮은 운영 오버헤드를 <strong>동시에</strong> 요구합니다 —
+  청크를 많이 가져오면 ②가 무너지고, 문서를 그래프로 만들면 ③이 무너집니다. 표준 해법인 질문 분해(QD)도
+  <strong>LLM이 질문의 엔티티를 빠뜨리거나 없던 내용을 만들어</strong> 검색을 오히려 망가뜨립니다.</p>
 
   <h2><span class="no">T</span>역할 — 3인 공동 1저자, 논문에 명시된 기여</h2>
   <div class="facts">
@@ -56,54 +51,78 @@
   </div>
 
   <h2><span class="no">A</span>설계와 구현</h2>
-  <figure class="figure"><img src="../assets/img/dsrag-decomp.svg" alt="DS-RAG 프레임워크 구조 — EPQD(담당)와 DICS" loading="lazy"><figcaption class="figcap">DS-RAG — EPQD(내 담당)가 분해를, DICS가 동적 컨텍스트 선택을 맡는다</figcaption></figure>
-
-  <h3><span class="no">01</span>기존 분해의 실패를 먼저 규명했다</h3>
-  <ul class="plain">
-    <li>가장 널리 쓰이는 LangChain QD를 케이스 스터디로 분석해 <strong>세 가지 실패 유형을 규명</strong> — ① 불필요한 서브질문 과잉 생성, ② 핵심 정보 누락, ③ 원 질문에 없던 내용으로 변형</li>
-    <li>분해 품질을 잴 지표가 없어 <strong>EAR(엔티티 추가율)·EOR(엔티티 누락율)을 직접 정의</strong> — 검색 결과가 아니라 분해 자체를 측정</li>
-  </ul>
-
-  <h3><span class="no">02</span>EPQD — 의미를 보존하는 분해</h3>
-  <div class="split">
+  <div class="split figwide">
     <div>
-    <div class="flow">원 질문 → <em>접속사·쉼표 기준 의미 분할</em> (따옴표 예외) → <em>각 phrase + 원문 동반 프롬프트</em> → phrase당 서브질문 1개</div>
-    <ul class="plain">
-      <li>멀티문서 질문은 비교 대상들이 접속사·쉼표로 나뉘는 언어적 특성이 있음 — <strong>LLM에게 분해를 통째로 맡기지 않고, 결정적 규칙으로 먼저 의미 단위를 분할</strong></li>
-      <li>각 분할 조각을 <strong>원문 전체와 함께</strong> LLM에 넣어 서브질문을 생성 — 조각만 보내면 맥락을 잃고, 원문만 보내면 변형되므로. 원문 용어 보존·문법적 완결성·조각당 1개 생성을 프롬프트 원칙으로 강제</li>
-      <li>결과: 복잡 질문에서 <strong>엔티티 누락률 70.2% → 7.4%</strong>, 불필요 엔티티 추가율 47.3% → 14.4% (LangChain QD 대비, 자체 정의 EAR/EOR 지표)</li>
-    </ul>
+    <p>EPQD가 질문을 나눠 <strong>검색 누락을 막고</strong>(①), 그때 늘어난 청크를 DICS가 <strong>걷어냅니다</strong>(②).
+    문서가 아니라 <strong>질문만 그래프로 다루므로</strong> 운영 부담도 늘지 않습니다(③).
+    LangChain 확장 · GPT-4o · FAISS.</p>
     </div>
-    <figure class="shot">
-      <span class="frame">
-        <img src="../assets/shots/ds-epqd.png" alt="EPQD 단계 상세 — 원 질문이 비교 대상·비교 속성으로 분절되고 조각별 서브질문 3개가 생성된 화면" loading="lazy">
-        <span class="mark" style="--x:16%;--y:59%;--w:68%;--h:38%"><b>조각당 서브질문 1개 · 엔티티 보존</b></span>
-      </span>
-      <figcaption class="figcap">EPQD — 규칙으로 분절하고, 조각마다 서브질문 하나</figcaption>
+    <figure class="figure" style="background:#fff">
+      <a href="../assets/img/dsrag-paper-fig1.png" target="_blank" rel="noopener"><img src="../assets/img/dsrag-paper-fig1.png" alt="논문 Figure 1 — DS-RAG 프레임워크 구조: EPQD module, LLM, Retriever, DICS module, Vector Database" loading="lazy"></a>
+      <figcaption class="figcap" style="color:#666">논문 Figure 1 — EPQD의 서브질문이 <b>검색기와 DICS 양쪽</b>으로 간다</figcaption>
     </figure>
   </div>
-  <h3><span class="no">03</span>기존 데이터셋으로는 실험이 성립하지 않았다</h3>
+
+  <h3><span class="no">01</span>기존 분해가 무엇을 망가뜨리는가</h3>
   <ul class="plain">
-    <li>HotpotQA는 질문이 단순하고 정답 청크가 최대 2개뿐이며, 정답 청크 없이도 LLM이 답을 맞혀버리는 사례가 있어 <strong>프레임워크 검증 자체가 불가능</strong> — Multi-hop RAG도 중복 서술 문제로 부적합</li>
-    <li>그래서 <strong>정답 청크 2~4개가 반드시 필요하고, 정답이 문서에 명시돼 있지 않아 LLM이 추론해야만 하는</strong> 멀티문서 QA 데이터셋 4,000문항(ranking/comparison 유형)을 GPT-4o 기반으로 직접 구축 — <a href="https://github.com/Mulsanne2/DS-RAG" style="color:var(--ink)">GitHub에 공개</a></li>
+    <li><strong>과잉</strong> — 답에 필요 없는 서브질문까지 생성해 검색 범위와 청크 수만 늘림</li>
+    <li><strong>누락</strong> — "몇 개인지" 같은 핵심 조건이 사라져 근거 자체가 빠짐 (가장 치명적)</li>
+    <li><strong>변형</strong> — 원 질문에 없던 질문이 생성돼 엉뚱한 청크가 들어옴</li>
+    <li>이를 재는 지표가 없어 <strong>EAR(엔티티 추가율)·EOR(엔티티 누락율)을 직접 정의</strong> — 검색 결과가 아니라 분해 자체를 측정</li>
   </ul>
 
-  <div class="split rev">
+  <h3><span class="no">02</span>EPQD — 규칙이 구조를 잡고, LLM은 조각만 완성한다</h3>
+  <div class="flow">원 질문 → <em>접속사·쉼표로 분절</em> (따옴표 예외) → <em>조각 + 원 질문 전체를 함께 프롬프트</em> → 조각당 서브질문 1개</div>
+  <ul class="plain">
+    <li>멀티문서 질문은 비교 대상이 접속사·쉼표로 나뉘므로, <strong>결정적 규칙으로 먼저 자르고</strong> LLM에는 조각을 완성시키는 일만 맡김</li>
+    <li>프롬프트 원칙 3개가 실패 유형을 각각 봉쇄 — <strong>원 질문 동반</strong>(변형·누락), <strong>원문 용어 보존</strong>(누락), <strong>서브질문 수 = 조각 수</strong>(과잉)</li>
+  </ul>
+  <div class="facts">
+    <div><b>EOR · 복잡 질문 500문항</b><span>LangChain 70.2% → <strong>EPQD 7.4%</strong></span></div>
+    <div><b>EAR · 복잡 질문 500문항</b><span>47.3% → <strong>14.4%</strong></span></div>
+  </div>
+
+  <div class="split figwide rev">
     <div>
-    <h3><span class="no">04</span>벤치마크 실험 — 프레임워크 전체 검증</h3>
+    <h3><span class="no">03</span>DICS(팀 설계) — 질문을 가르는 &quot;공통 원소&quot;</h3>
+    <p>"Taylor Swift와, Wapakoneta에서 자란 Neil Armstrong 중 누가 먼저 태어났나?"에 필요한 정보는
+    두 사람의 <strong>출생일</strong>이고, 둘의 공통 원소가 "출생일"입니다. 이 원소를 질문 그래프에서
+    <strong>코어 노드</strong>(진입 차수가 몰리는 노드)로 찾아, 그 노드를 지나는 경로를 <strong>선택 기준</strong>으로 삼습니다.
+    <strong>기준 수 = 입력 청크 수</strong>이므로 top-K 고정이 사라집니다.</p>
     <ul class="plain">
-      <li>NonQD-리랭킹 / EPQD+리랭킹(서브질문·원질문 기준) 3종 벤치마크를 구축하고 Precision·Recall·F1, 평균 청크 수(비용), ANLS(답변 품질)로 평가</li>
-      <li>DICS(팀 설계: 질문 그래프 Core 노드 기반 선택 기준 + GAT 그래프 임베딩 선택 모델)와 결합한 DS-RAG가 <strong>입력 청크를 절반 이하로 줄이면서 F1을 0.596 → 0.877로</strong> 끌어올림을 검증 — 선택 모델은 상용 리랭커 대비 파라미터 30% 수준(운영 오버헤드 ↓)</li>
+      <li>원 질문 대신 <strong>EPQD의 서브질문으로 그래프를 만듦</strong> — 짧은 문장일수록 그래프 생성 오류가 적어서</li>
+      <li>관계는 <strong>타입 없이 방향만 사용</strong> — LLM이 없던 관계를 만들어 그래프를 부풀리는 위험을 설계로 제거</li>
     </ul>
     </div>
-    <figure class="shot">
-      <span class="frame">
-        <img src="../assets/shots/ds-dics.png" alt="DICS 단계 상세 — 질문 그래프에서 진입 차수가 가장 높은 노드가 코어 노드로 선택된 화면" loading="lazy">
-        <span class="mark" style="--x:66%;--y:55.5%;--w:15.5%;--h:19%"><b>코어 노드 = 진입 차수 최대</b></span>
-      </span>
-      <figcaption class="figcap">DICS(팀 설계) — 질문 그래프의 코어 노드로 컨텍스트 선택</figcaption>
+    <figure class="figure" style="background:#fff">
+      <a href="../assets/img/dsrag-paper-fig2.png" target="_blank" rel="noopener"><img src="../assets/img/dsrag-paper-fig2.png" alt="논문 Figure 2 — 선택 기준 도출 4단계: 엔티티 식별, 서브질문 그래프 생성, 질문 그래프 생성, 코어 노드 기반 선택 기준 추출" loading="lazy"></a>
+      <figcaption class="figcap" style="color:#666">논문 Figure 2 — 서브질문 → 트리플 → 질문 그래프. <b>earliest birth date</b>가 코어 노드가 되고 기준 2개로 갈라진다</figcaption>
     </figure>
   </div>
+
+  <div class="split figwide">
+    <div>
+    <h3><span class="no">04</span>GS 모델(팀 설계) — 기준은 그래프로, 청크는 텍스트로</h3>
+    <p>기준을 텍스트로 되돌리면 정보가 손실되므로 <strong>그래프째 임베딩(GAT)</strong>하고, 청크는 텍스트 임베딩 +
+    투영 레이어로 정렬해 <strong>코사인 유사도로 기준마다 청크 하나</strong>를 고릅니다.</p>
+    <ul class="plain">
+      <li>학습은 <strong>InfoNCE 대조학습</strong> — 기준에 대응하는 정답 청크를 positive로</li>
+      <li>청크는 그래프로 만들지 않음 → 파라미터 <strong>174.7M (BGE-Reranker 567.8M의 30%)</strong></li>
+    </ul>
+    </div>
+    <figure class="figure" style="background:#fff">
+      <a href="../assets/img/dsrag-paper-fig3.png" target="_blank" rel="noopener"><img src="../assets/img/dsrag-paper-fig3.png" alt="논문 Figure 3 — GS 모델 구조: 선택 기준은 그래프 인코더로, 검색된 청크는 투영 레이어로 임베딩해 코사인 유사도로 입력 컨텍스트를 구성" loading="lazy"></a>
+      <figcaption class="figcap" style="color:#666">논문 Figure 3 — 기준 n개만큼 청크를 고른다 (top-K 고정이 아니다)</figcaption>
+    </figure>
+  </div>
+
+  <h3><span class="no">05</span>검증 조건을 데이터부터 만들었다</h3>
+  <ul class="plain">
+    <li>기존 셋(HotpotQA·Multi-hop RAG)은 정답 청크가 2개 이하이거나 <strong>다 없어도 답이 나와</strong> 프레임워크 차이가 지표에 드러나지 않음</li>
+    <li>그래서 <strong>정답 청크 2~4개가 모두 필요하고 정답이 문서에 명시되지 않은</strong> 멀티문서 QA <strong>4,000문항</strong>을 GPT-4o로 구축 (랭킹·비교형, <a href="https://github.com/Mulsanne2/DS-RAG" style="color:var(--ink)">공개</a>)</li>
+    <li>벤치마크 3종으로 반론을 차단 — <strong>분해 없음</strong> / <strong>분해만</strong> / <strong>고정 top-K 리랭킹</strong> vs DS-RAG</li>
+  </ul>
+
   <h2><span class="no">R</span>결과</h2>
   <figure class="figure">
   <svg viewBox="0 0 860 230" xmlns="http://www.w3.org/2000/svg" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" role="img" aria-label="입력 컨텍스트 F1 비교: 분해 없는 리랭킹 0.14, EPQD+리랭킹 0.596, DS-RAG 0.877">
@@ -123,10 +142,14 @@
   </svg>
   <figcaption class="figcap">분해가 없으면 검색이 무너지고(0.14), 고정 top-K 리랭킹은 절반을 버리며(0.596), 동적 선택이 둘을 잡는다(0.877)</figcaption>
   </figure>
+  <div class="facts">
+    <div><b>랭킹형</b><span>F1 <strong>0.832</strong> · 청크 3.95개 <span style="color:var(--dim)">(리랭킹 0.569 · 8.58개)</span></span></div>
+    <div><b>비교형</b><span>F1 <strong>0.923</strong> · 청크 3.01개 <span style="color:var(--dim)">(리랭킹 0.623 · 7.46개)</span></span></div>
+  </div>
   <ul class="plain">
-    <li>입력 컨텍스트 <strong>F1 0.877</strong> — EPQD+리랭킹(0.596) 대비 +28.1%p, 분해 없는 리랭킹(0.14)과는 비교 불가 수준</li>
-    <li>같은 정확도 구간에서 <strong>LLM 입력 청크 8.6 → 4.0개(절반 이하)</strong> — 상용 API 비용 제약을 직접 해소</li>
-    <li><strong><a href="https://www.mdpi.com/2079-9292/14/4/659" style="color:var(--ink)">Electronics (MDPI, SCIE) 14(4):659, 2025</a> 출판 — 공동 1저자</strong> (기여 명시: EPQD 방법론·데이터셋·실험·초고), 캡스톤 전시회 <strong>총장상</strong></li>
+    <li>입력 컨텍스트 <strong>F1 0.877</strong>(평균) — Recall은 유지하면서 <strong>Precision을 2배 가까이</strong> 올린 결과. 같은 구간에서 <strong>입력 청크 8.0 → 3.5개(−57%)</strong></li>
+    <li>단, <strong>답변 품질(ANLS)은 리랭킹이 약간 높습니다</strong> — 논문은 ANLS가 Recall에 지배되기 때문으로 봤습니다. DS-RAG의 이득은 <strong>같은 품질대를 절반 비용으로</strong> 달성한 것</li>
+    <li><strong><a href="https://www.mdpi.com/2079-9292/14/4/659" style="color:var(--ink)">Electronics (MDPI, SCIE) 14(4):659, 2025</a> 공동 1저자</strong> — 기여 명시: EPQD 방법론·구현·데이터셋·실험·초고, 캡스톤 <strong>총장상</strong></li>
   </ul>
 
   <h2><span class="no">W</span>설계 선택의 이유</h2>
