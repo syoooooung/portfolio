@@ -1,0 +1,226 @@
+<svg viewBox="0 0 880 950" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'Apple SD Gothic Neo',sans-serif">
+  <style>
+    .h1{fill:#141a33;font-size:22px;font-weight:800}
+    .h2{fill:#141a33;font-size:15px;font-weight:700}
+    .col{fill:#141a33;font-size:12.5px;font-weight:700}
+    .kw{fill:#3f4664;font-size:11px;font-weight:600}
+    .sub{fill:#7a819c;font-size:9.5px}
+    .lbl{fill:#fff;font-size:10.5px;font-weight:600}
+    .dk{fill:#141a33;font-size:10px;font-weight:600}
+    .tiny{font-size:8.5px;font-weight:600}
+    .mono{font-family:ui-monospace,Menlo,monospace;font-size:8.5px;font-weight:600}
+    .pill{font-size:10px;font-weight:700}
+    .before{fill:#fbf6f6;stroke:#ecd9d9}
+    .after{fill:#f2f9f6;stroke:#cde6da}
+    .box{fill:#fff;stroke:#c4cadd;stroke-width:1.1}
+    .page{fill:#fff;stroke:#b8bfd3;stroke-width:1.2}
+    .ear{fill:#e9ecf4;stroke:#b8bfd3;stroke-width:1.2}
+    .good{fill:#10a56b;stroke:#0d8f5c}
+    .keep{fill:#e9ecf4}
+    .arrow{stroke:#5a6483;stroke-width:1.2;fill:none;marker-end:url(#a)}
+    .ab{stroke:#3b6ef6;stroke-width:1.4;fill:none;marker-end:url(#ab)}
+    .ag{stroke:#10a56b;stroke-width:1.4;fill:none;marker-end:url(#ag)}
+    .ap{stroke:#e0117a;stroke-width:1.4;fill:none;marker-end:url(#ap)}
+    .own{stroke:#e74c3c;stroke-width:1.1;fill:none}
+    .idle{stroke:#dfe3ee;stroke-width:1.1;fill:none}
+    .chev{stroke:#c4cadd;stroke-width:2.2;fill:none}
+    .track{fill:#e9ecf4}
+    .ghost{fill:none;stroke:#c4cadd;stroke-dasharray:3 3}
+    .tool{fill:#dbe6ff;stroke:#9db4f5}
+    .doc{fill:#ead9ff;stroke:#c3a3f0}
+  </style>
+  <defs>
+    <marker id="a" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7Z" fill="#5a6483"/></marker>
+    <marker id="ab" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7Z" fill="#3b6ef6"/></marker>
+    <marker id="ag" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7Z" fill="#10a56b"/></marker>
+    <marker id="ap" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7Z" fill="#e0117a"/></marker>
+    <symbol id="bot" viewBox="0 0 24 24">
+      <rect x="11" y="1" width="2" height="4" fill="currentColor"/><circle cx="12" cy="1.6" r="1.6" fill="currentColor"/>
+      <rect x="3" y="5" width="18" height="15" rx="4.5" fill="currentColor"/>
+      <rect x="0.5" y="9.5" width="2.5" height="6" rx="1.2" fill="currentColor"/><rect x="21" y="9.5" width="2.5" height="6" rx="1.2" fill="currentColor"/>
+      <circle cx="8.5" cy="11.5" r="2.6" fill="#fff"/><circle cx="15.5" cy="11.5" r="2.6" fill="#fff"/>
+      <circle cx="8.9" cy="11.8" r="1.1" fill="#141a33"/><circle cx="15.9" cy="11.8" r="1.1" fill="#141a33"/>
+      <rect x="8.5" y="16" width="7" height="1.6" rx=".8" fill="#fff"/>
+    </symbol>
+  </defs>
+  <rect width="880" height="950" fill="#ffffff"/>
+
+  <text class="h1" x="440" y="38" text-anchor="middle">보고서 에이전트 구조 재설계 — 전 / 후</text>
+  <text class="sub" x="440" y="58" text-anchor="middle">같은 실보고서 · 같은 질문 하네스 · 전/후 실측</text>
+  <circle cx="30" cy="88" r="4.5" fill="#e74c3c"/><text class="col" x="42" y="92">기존 · 문서 단위 · LLM 하나</text>
+  <circle cx="480" cy="88" r="4.5" fill="#10a56b"/><text class="col" x="492" y="92">재설계 · 절 단위 · 절마다 담당 agent</text>
+
+  <!-- ① 생성 -->
+  <text class="h2" x="20" y="126">① 보고서 생성</text>
+  <rect x="650" y="112" width="210" height="22" rx="11" fill="#e6f6ee"/>
+  <text class="pill" x="755" y="127" text-anchor="middle" fill="#0d8f5c">437초 → 134초 (−69%)</text>
+
+  <rect class="before" x="20" y="138" width="390" height="196" rx="10"/>
+  <use href="#bot" x="60" y="192" width="40" height="40" color="#3b6ef6"/>
+  <text class="dk" x="80" y="246" text-anchor="middle">LLM ×1</text>
+  <text class="sub" x="80" y="258" text-anchor="middle">1회 호출</text>
+  <path class="arrow" d="M104 212 H136"/>
+  <path class="page" d="M140 150 H278 L290 162 V274 H140 Z"/><path class="ear" d="M278 150 V162 H290 Z"/>
+  <text class="tiny" x="150" y="176" fill="#c0392b">1장</text><rect x="176" y="167" width="96" height="2.5" rx="1" fill="#f6c3bf"/><rect x="176" y="173" width="80" height="2.5" rx="1" fill="#f6c3bf"/><rect x="176" y="179" width="60" height="2.5" rx="1" fill="#f6c3bf"/>
+  <text class="tiny" x="150" y="202" fill="#c0392b">2장</text><rect x="176" y="193" width="96" height="2.5" rx="1" fill="#f6c3bf"/><rect x="176" y="199" width="80" height="2.5" rx="1" fill="#f6c3bf"/><rect x="176" y="205" width="60" height="2.5" rx="1" fill="#f6c3bf"/>
+  <text class="tiny" x="150" y="228" fill="#c0392b">3장</text><rect x="176" y="219" width="96" height="2.5" rx="1" fill="#f6c3bf"/><rect x="176" y="225" width="80" height="2.5" rx="1" fill="#f6c3bf"/><rect x="176" y="231" width="60" height="2.5" rx="1" fill="#f6c3bf"/>
+  <text class="tiny" x="150" y="254" fill="#c0392b">N장</text><rect x="176" y="245" width="96" height="2.5" rx="1" fill="#f6c3bf"/><rect x="176" y="251" width="80" height="2.5" rx="1" fill="#f6c3bf"/><rect x="176" y="257" width="60" height="2.5" rx="1" fill="#f6c3bf"/>
+  <path d="M300 152 H306 V272 H300" stroke="#c4cadd" fill="none"/>
+  <text class="kw" x="314" y="208">한 응답 =</text>
+  <text class="kw" x="314" y="224">문서 전체</text>
+  <text class="sub" x="34" y="292">응답 시간</text>
+  <rect class="track" x="34" y="298" width="360" height="12" rx="3"/>
+  <rect x="34" y="298" width="360" height="12" rx="3" fill="#e74c3c"/>
+  <text x="388" y="307.5" text-anchor="end" fill="#fff" font-size="9.5" font-weight="700">437초</text>
+  <text class="kw" x="34" y="326">출력 길이 = 대기 시간 · 절 수에 선형</text>
+
+  <path class="chev" d="M432 226 L448 236 L432 246"/>
+
+  <rect class="after" x="470" y="138" width="390" height="196" rx="10"/>
+  <text class="tiny" x="536" y="152" text-anchor="middle" fill="#7a819c">목차 분할</text>
+  <text class="tiny" x="630" y="158" text-anchor="middle" fill="#7a819c">절 담당 agent</text>
+  <path class="page" d="M484 158 H576 L588 170 V274 H484 Z"/><path class="ear" d="M576 158 V170 H588 Z"/>
+  <rect class="own" x="490" y="166" width="92" height="22" rx="3"/><text class="tiny" x="496" y="181" fill="#141a33">1장</text><rect x="520" y="173" width="54" height="2.5" rx="1" fill="#c4cadd"/><rect x="520" y="179" width="40" height="2.5" rx="1" fill="#c4cadd"/>
+  <rect class="own" x="490" y="192" width="92" height="22" rx="3"/><text class="tiny" x="496" y="207" fill="#141a33">2장</text><rect x="520" y="199" width="54" height="2.5" rx="1" fill="#c4cadd"/><rect x="520" y="205" width="40" height="2.5" rx="1" fill="#c4cadd"/>
+  <rect class="own" x="490" y="218" width="92" height="22" rx="3"/><text class="tiny" x="496" y="233" fill="#141a33">3장</text><rect x="520" y="225" width="54" height="2.5" rx="1" fill="#c4cadd"/><rect x="520" y="231" width="40" height="2.5" rx="1" fill="#c4cadd"/>
+  <rect class="own" x="490" y="244" width="92" height="22" rx="3"/><text class="tiny" x="496" y="259" fill="#141a33">N장</text><rect x="520" y="251" width="54" height="2.5" rx="1" fill="#c4cadd"/><rect x="520" y="257" width="40" height="2.5" rx="1" fill="#c4cadd"/>
+  <path class="own" d="M582 177 H616"/><path class="own" d="M582 203 H616"/><path class="own" d="M582 229 H616"/><path class="own" d="M582 255 H616"/>
+  <use href="#bot" x="618" y="165" width="24" height="24" color="#3b6ef6"/>
+  <use href="#bot" x="618" y="191" width="24" height="24" color="#3b6ef6"/>
+  <use href="#bot" x="618" y="217" width="24" height="24" color="#3b6ef6"/>
+  <use href="#bot" x="618" y="243" width="24" height="24" color="#3b6ef6"/>
+  <path class="arrow" d="M644 177 L700 205"/><path class="arrow" d="M644 203 L700 208"/>
+  <path class="arrow" d="M644 229 L700 212"/><path class="arrow" d="M644 255 L700 215"/>
+  <rect class="good" x="704" y="192" width="56" height="36" rx="8"/>
+  <text class="lbl" x="732" y="214" text-anchor="middle">병합</text>
+  <path class="arrow" d="M760 210 H776"/>
+  <path class="page" d="M780 176 H834 L844 186 V244 H780 Z"/><path class="ear" d="M834 176 V186 H844 Z"/>
+  <rect x="790" y="186" width="44" height="7" rx="2" fill="#10a56b"/><rect x="790" y="200" width="44" height="7" rx="2" fill="#10a56b"/>
+  <rect x="790" y="214" width="44" height="7" rx="2" fill="#10a56b"/><rect x="790" y="228" width="44" height="7" rx="2" fill="#10a56b"/>
+  <text class="tiny" x="812" y="258" text-anchor="middle" fill="#7a819c">보고서</text>
+  <text class="sub" x="484" y="292">응답 시간 · 병렬</text>
+  <rect class="track" x="484" y="298" width="360" height="12" rx="3"/>
+  <rect x="484" y="298" width="110" height="12" rx="3" fill="#10a56b"/>
+  <rect class="ghost" x="484" y="298" width="360" height="12" rx="3"/>
+  <text x="600" y="307.5" fill="#0d8f5c" font-size="9.5" font-weight="700">134초</text>
+  <text class="kw" x="484" y="326">절마다 agent 동시 생성 · 절 수에 무관</text>
+
+  <!-- ② 수정 반영 · 전파 -->
+  <text class="h2" x="20" y="366">② 수정 반영 — 전파 구조</text>
+  <rect x="612" y="352" width="248" height="22" rx="11" fill="#e6f6ee"/>
+  <text class="pill" x="736" y="367" text-anchor="middle" fill="#0d8f5c">21,300 → 952 tok (−96%) · 응답 −74%</text>
+
+  <rect class="before" x="20" y="378" width="390" height="274" rx="10"/>
+  <rect class="box" x="34" y="447" width="56" height="36" rx="6"/>
+  <text class="dk" x="62" y="462" text-anchor="middle">변경</text>
+  <text class="sub" x="62" y="475" text-anchor="middle">값 하나</text>
+  <path class="arrow" d="M90 465 H100"/>
+  <use href="#bot" x="104" y="445" width="40" height="40" color="#3b6ef6"/>
+  <text class="dk" x="124" y="500" text-anchor="middle">문서 전체 재생성</text>
+  <path class="arrow" d="M148 465 H166"/>
+  <path class="page" d="M170 390 H268 L280 402 V540 H170 Z"/><path class="ear" d="M268 390 V402 H280 Z"/>
+  <text class="tiny" x="178" y="410" fill="#c0392b">1장</text><rect x="204" y="401" width="64" height="2.5" rx="1" fill="#e74c3c"/><rect x="204" y="407" width="52" height="2.5" rx="1" fill="#e74c3c"/><rect x="204" y="413" width="40" height="2.5" rx="1" fill="#e74c3c"/>
+  <text class="tiny" x="178" y="433" fill="#c0392b">2장</text><rect x="204" y="424" width="64" height="2.5" rx="1" fill="#e74c3c"/><rect x="204" y="430" width="52" height="2.5" rx="1" fill="#e74c3c"/><rect x="204" y="436" width="40" height="2.5" rx="1" fill="#e74c3c"/>
+  <text class="tiny" x="178" y="456" fill="#c0392b">3장</text><rect x="204" y="447" width="64" height="2.5" rx="1" fill="#e74c3c"/><rect x="204" y="453" width="52" height="2.5" rx="1" fill="#e74c3c"/><rect x="204" y="459" width="40" height="2.5" rx="1" fill="#e74c3c"/>
+  <text class="tiny" x="178" y="479" fill="#c0392b">4장</text><rect x="204" y="470" width="64" height="2.5" rx="1" fill="#e74c3c"/><rect x="204" y="476" width="52" height="2.5" rx="1" fill="#e74c3c"/><rect x="204" y="482" width="40" height="2.5" rx="1" fill="#e74c3c"/>
+  <text class="tiny" x="178" y="502" fill="#c0392b">5장</text><rect x="204" y="493" width="64" height="2.5" rx="1" fill="#e74c3c"/><rect x="204" y="499" width="52" height="2.5" rx="1" fill="#e74c3c"/><rect x="204" y="505" width="40" height="2.5" rx="1" fill="#e74c3c"/>
+  <text class="tiny" x="178" y="525" fill="#c0392b">N장</text><rect x="204" y="516" width="64" height="2.5" rx="1" fill="#e74c3c"/><rect x="204" y="522" width="52" height="2.5" rx="1" fill="#e74c3c"/><rect x="204" y="528" width="40" height="2.5" rx="1" fill="#e74c3c"/>
+  <text class="sub" x="225" y="556" text-anchor="middle">전부 다시 씀</text>
+  <text class="kw" x="296" y="458">값 하나 →</text>
+  <text class="kw" x="296" y="474">전체 재생성</text>
+  <text class="sub" x="34" y="606">입력 토큰</text>
+  <rect class="track" x="34" y="612" width="360" height="12" rx="3"/>
+  <rect x="34" y="612" width="360" height="12" rx="3" fill="#e74c3c"/>
+  <text x="388" y="621.5" text-anchor="end" fill="#fff" font-size="9.5" font-weight="700">21,300 tok</text>
+  <text class="kw" x="34" y="640">입력 · 시간 = 문서 길이</text>
+
+  <path class="chev" d="M432 505 L448 515 L432 525"/>
+
+  <rect class="after" x="470" y="378" width="390" height="274" rx="10"/>
+  <path class="page" d="M484 392 H576 L588 404 V592 H484 Z"/><path class="ear" d="M576 392 V404 H588 Z"/>
+  <rect class="idle" x="490" y="400" width="92" height="20" rx="3"/><text class="tiny" x="496" y="414" fill="#9aa1b8">1장</text><rect x="520" y="406" width="52" height="2.5" rx="1" fill="#dfe3ee"/><rect x="520" y="412" width="38" height="2.5" rx="1" fill="#dfe3ee"/>
+  <rect class="idle" x="490" y="424" width="92" height="20" rx="3"/><text class="tiny" x="496" y="438" fill="#9aa1b8">2장</text><rect x="520" y="430" width="52" height="2.5" rx="1" fill="#dfe3ee"/><rect x="520" y="436" width="38" height="2.5" rx="1" fill="#dfe3ee"/>
+  <rect x="490" y="448" width="92" height="20" rx="3" fill="#eef2ff" stroke="#3b6ef6" stroke-width="1.3"/><text class="tiny" x="496" y="462" fill="#2c5ae0">3장</text><rect x="520" y="454" width="52" height="2.5" rx="1" fill="#3b6ef6"/><rect x="520" y="460" width="38" height="2.5" rx="1" fill="#3b6ef6"/>
+  <rect class="idle" x="490" y="472" width="92" height="20" rx="3"/><text class="tiny" x="496" y="486" fill="#9aa1b8">4장</text><rect x="520" y="478" width="52" height="2.5" rx="1" fill="#dfe3ee"/><rect x="520" y="484" width="38" height="2.5" rx="1" fill="#dfe3ee"/>
+  <rect x="490" y="496" width="92" height="20" rx="3" fill="#e6f6ee" stroke="#10a56b" stroke-width="1.3"/><text class="tiny" x="496" y="510" fill="#0d8f5c">5장</text><rect x="520" y="502" width="52" height="2.5" rx="1" fill="#10a56b"/><rect x="520" y="508" width="38" height="2.5" rx="1" fill="#10a56b"/>
+  <rect class="idle" x="490" y="520" width="92" height="20" rx="3"/><text class="tiny" x="496" y="534" fill="#9aa1b8">6장</text><rect x="520" y="526" width="52" height="2.5" rx="1" fill="#dfe3ee"/><rect x="520" y="532" width="38" height="2.5" rx="1" fill="#dfe3ee"/>
+  <rect x="490" y="544" width="92" height="20" rx="3" fill="#e6f6ee" stroke="#10a56b" stroke-width="1.3"/><text class="tiny" x="496" y="558" fill="#0d8f5c">7장</text><rect x="520" y="550" width="52" height="2.5" rx="1" fill="#10a56b"/><rect x="520" y="556" width="38" height="2.5" rx="1" fill="#10a56b"/>
+  <rect class="idle" x="490" y="568" width="92" height="20" rx="3"/><text class="tiny" x="496" y="582" fill="#9aa1b8">N장</text><rect x="520" y="574" width="52" height="2.5" rx="1" fill="#dfe3ee"/><rect x="520" y="580" width="38" height="2.5" rx="1" fill="#dfe3ee"/>
+  <path class="idle" d="M582 410 H616"/><path class="idle" d="M582 434 H616"/><path class="idle" d="M582 482 H616"/><path class="idle" d="M582 530 H616"/><path class="idle" d="M582 578 H616"/>
+  <path class="ab" d="M616 458 H588"/><path class="ag" d="M616 506 H588"/><path class="ag" d="M616 554 H588"/>
+  <use href="#bot" x="618" y="400" width="20" height="20" color="#c4cadd"/>
+  <use href="#bot" x="618" y="424" width="20" height="20" color="#c4cadd"/>
+  <use href="#bot" x="618" y="448" width="20" height="20" color="#3b6ef6"/>
+  <use href="#bot" x="618" y="472" width="20" height="20" color="#c4cadd"/>
+  <use href="#bot" x="618" y="496" width="20" height="20" color="#10a56b"/>
+  <use href="#bot" x="618" y="520" width="20" height="20" color="#c4cadd"/>
+  <use href="#bot" x="618" y="544" width="20" height="20" color="#10a56b"/>
+  <use href="#bot" x="618" y="568" width="20" height="20" color="#c4cadd"/>
+  <rect class="box" x="662" y="388" width="44" height="20" rx="5"/>
+  <text class="tiny" x="684" y="402" text-anchor="middle" fill="#141a33">변경</text>
+  <path class="arrow" d="M684 408 Q684 446 644 455"/>
+  <path class="ap" d="M640 462 L686 470"/>
+  <rect x="690" y="452" width="104" height="54" rx="6" fill="#fff" stroke="#e0117a" stroke-width="1.3"/>
+  <rect x="691" y="453" width="102" height="13" rx="5" fill="#e0117a"/>
+  <text class="mono" x="697" y="463" fill="#fff">state</text>
+  <text class="mono" x="697" y="481" fill="#141a33">changed: 3장</text>
+  <text class="mono" x="697" y="496" fill="#141a33">affects: [5장, 7장]</text>
+  <path class="ag" d="M690 498 L644 505"/>
+  <path class="ag" d="M712 506 Q712 554 644 554"/>
+  <text class="tiny" x="724" y="532" fill="#e0117a">state 전달 → 해당 agent 수정</text>
+  <text class="tiny" x="700" y="566" fill="#3b6ef6">■ 실행 → 자기 절 수정 · 영향 판정</text>
+  <text class="tiny" x="700" y="580" fill="#0d8f5c">■ state 받아 자기 절 수정</text>
+  <text class="tiny" x="700" y="594" fill="#9aa1b8">■ 유지 · 호출 없음</text>
+  <text class="sub" x="484" y="606">입력 토큰</text>
+  <rect class="track" x="484" y="612" width="360" height="12" rx="3"/>
+  <rect x="484" y="612" width="16" height="12" rx="3" fill="#10a56b"/>
+  <rect class="ghost" x="484" y="612" width="360" height="12" rx="3"/>
+  <text x="506" y="621.5" fill="#0d8f5c" font-size="9.5" font-weight="700">952 tok</text>
+  <text class="kw" x="484" y="640">실행 → 영향 판정 → state 전달 → 해당 agent만 수정</text>
+
+  <!-- ③ 멀티턴 컨텍스트 -->
+  <text class="h2" x="20" y="684">③ 멀티턴 컨텍스트</text>
+
+  <rect class="before" x="20" y="696" width="390" height="124" rx="10"/>
+  <text class="dk" x="34" y="723">턴 1</text>
+  <rect class="tool" x="66" y="708" width="44" height="22" rx="4"/><text class="tiny" x="88" y="723" text-anchor="middle" fill="#2c5ae0">도구</text>
+  <rect class="doc" x="112" y="708" width="48" height="22" rx="4"/><text class="tiny" x="136" y="723" text-anchor="middle" fill="#7a2fe4">원문</text>
+  <text class="dk" x="34" y="755">턴 2</text>
+  <g opacity=".5"><rect class="tool" x="66" y="740" width="44" height="22" rx="4"/><rect class="doc" x="112" y="740" width="48" height="22" rx="4"/></g>
+  <rect class="tool" x="162" y="740" width="44" height="22" rx="4"/><text class="tiny" x="184" y="755" text-anchor="middle" fill="#2c5ae0">도구</text>
+  <rect class="doc" x="208" y="740" width="48" height="22" rx="4"/><text class="tiny" x="232" y="755" text-anchor="middle" fill="#7a2fe4">원문</text>
+  <text class="dk" x="34" y="787">턴 3</text>
+  <g opacity=".5"><rect class="tool" x="66" y="772" width="44" height="22" rx="4"/><rect class="doc" x="112" y="772" width="48" height="22" rx="4"/>
+  <rect class="tool" x="162" y="772" width="44" height="22" rx="4"/><rect class="doc" x="208" y="772" width="48" height="22" rx="4"/></g>
+  <rect class="tool" x="258" y="772" width="44" height="22" rx="4"/><text class="tiny" x="280" y="787" text-anchor="middle" fill="#2c5ae0">도구</text>
+  <rect class="doc" x="304" y="772" width="48" height="22" rx="4"/><text class="tiny" x="328" y="787" text-anchor="middle" fill="#7a2fe4">원문</text>
+  <text class="kw" x="34" y="811">전체 누적 · 턴 수에 비례</text>
+
+  <path class="chev" d="M432 748 L448 758 L432 768"/>
+
+  <rect class="after" x="470" y="696" width="390" height="124" rx="10"/>
+  <text class="dk" x="484" y="723">턴 1</text>
+  <rect class="tool" x="520" y="708" width="70" height="22" rx="4"/><text class="tiny" x="555" y="723" text-anchor="middle" fill="#2c5ae0">도구 요약</text>
+  <rect class="doc" x="594" y="708" width="70" height="22" rx="4"/><text class="tiny" x="629" y="723" text-anchor="middle" fill="#7a2fe4">원문 부분 조회</text>
+  <text class="dk" x="484" y="755">턴 2</text>
+  <rect class="tool" x="520" y="740" width="70" height="22" rx="4"/><text class="tiny" x="555" y="755" text-anchor="middle" fill="#2c5ae0">도구 요약</text>
+  <rect class="doc" x="594" y="740" width="70" height="22" rx="4"/><text class="tiny" x="629" y="755" text-anchor="middle" fill="#7a2fe4">원문 부분 조회</text>
+  <text class="dk" x="484" y="787">턴 3</text>
+  <rect class="tool" x="520" y="772" width="70" height="22" rx="4"/><text class="tiny" x="555" y="787" text-anchor="middle" fill="#2c5ae0">도구 요약</text>
+  <rect class="doc" x="594" y="772" width="70" height="22" rx="4"/><text class="tiny" x="629" y="787" text-anchor="middle" fill="#7a2fe4">원문 부분 조회</text>
+  <path class="ghost" d="M676 702 V798" stroke="#10a56b"/>
+  <text class="tiny" x="684" y="754" fill="#0d8f5c">상한</text>
+  <text class="kw" x="484" y="811">상한 압축 + 키워드 부분 조회 · 크기 일정</text>
+
+  <!-- 경계 -->
+  <rect x="20" y="838" width="840" height="96" rx="10" fill="#f7f8fc" stroke="#e9ecf4"/>
+  <text class="h2" x="36" y="862">경계 — 대화형 QA · 미적용 (±0)</text>
+  <rect x="36" y="878" width="300" height="16" rx="3" fill="#5a6483"/>
+  <text x="186" y="889.5" text-anchor="middle" fill="#fff" font-size="9.5" font-weight="600">고정비 · 시스템 프롬프트 + 도구 스키마 (라운드마다)</text>
+  <rect x="338" y="878" width="118" height="16" rx="3" fill="#c4cadd"/>
+  <text x="397" y="889.5" text-anchor="middle" fill="#3f4664" font-size="9.5" font-weight="600">가변</text>
+  <text class="sub" x="36" y="912">고정비 ≫ 가변 → 분할 이득 상쇄 · 비율은 개념도</text>
+  <rect x="600" y="874" width="240" height="24" rx="12" fill="#eef2ff"/>
+  <text class="pill" x="720" y="890" text-anchor="middle" fill="#2c5ae0">● 측정이 결정 — 이기지 못하면 미적용</text>
+  <text class="sub" x="600" y="916">라우터별 호출 고정비 구조에 따라 득실이 갈림</text>
+</svg>

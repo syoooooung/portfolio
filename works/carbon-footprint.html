@@ -158,12 +158,12 @@
         판정해야 합니다. 그리고 병렬화가 항상 이기는 게 아니라, 호출당 고정비 구조에 따라 라우터별로
         득실이 갈린다는 것을 배웠습니다.</p>
       </div>
-      <div class="nums">
-        <div><b>−69%</b><span>보고서 생성 응답<br>437초 → 134초 (목차 분할 병렬 sub-agent)</span></div>
-        <div><b>−96%</b><span>수정 반영 입력 토큰<br>21,300 → 952 (영향 섹션만 갱신하는 전파 구조)</span></div>
-        <div><b>−74%</b><span>수정 반영 응답 시간<br>전체 재생성 대비</span></div>
-        <div><b>±0</b><span>대화형 QA — 라운드 고정비가 상쇄함을 실측,<br>해당 라우터엔 미적용 (측정이 결정)</span></div>
-      </div>
+      <figure class="tsfig">
+        <a href="../assets/img/carbon-agent-redesign.svg" target="_blank" rel="noopener">
+        <img src="../assets/img/carbon-agent-redesign.svg" alt="보고서 에이전트 전/후 구조 — LLM 하나가 문서 전체를 1회 생성·전체 재생성 vs 절마다 담당 agent가 병렬 생성, 수정 시 3장 agent가 영향 판정 후 state를 전달해 5장·7장 agent만 수정, 실측 437초→134초·21,300→952 토큰, 대화형 QA 미적용" loading="lazy">
+        </a>
+        <figcaption class="figcap">전/후 구조 — 절마다 담당 agent · 수정 후 영향 판정 → state 전달 → 해당 agent만 수정</figcaption>
+      </figure>
     </div>
   </section>
 
