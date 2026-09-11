@@ -1,8 +1,9 @@
 // 케이스 스터디 공용: 히어로 셰이더 + 스크롤 리빌
 (() => {
   const cv = document.querySelector('.hero canvas');
-  if (cv && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    const gl = cv.getContext('webgl'), hue = parseFloat(cv.dataset.hue || '0.2');
+  const gl = cv && cv.getContext('webgl');   // WebGL 없으면 셰이더만 건너뛰고 리빌은 계속
+  if (gl && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const hue = parseFloat(cv.dataset.hue || '0.2');
     const sh = (t, s) => { const o = gl.createShader(t); gl.shaderSource(o, s); gl.compileShader(o); return o; };
     const p = gl.createProgram();
     gl.attachShader(p, sh(gl.VERTEX_SHADER, 'attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}'));

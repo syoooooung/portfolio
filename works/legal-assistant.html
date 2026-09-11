@@ -110,7 +110,7 @@
       <li>API 명세·타입·예외 처리를 여러 차례 리팩터링하며 <strong>후속 계산이 신뢰할 수 있는 계약(contract)으로 안정화</strong> — 할루시네이션 약 15% 절감</li>
     </ul>
     </div>
-    <figure class="shot">
+    <figure class="shot" style="max-width:82%">
       <span class="frame">
         <img src="../assets/shots/legal-fee.png" alt="수임료 특징 추출 화면 — 항목별 값과 판단 근거, 판단 불가 표시, 계산 API 입력 JSON" loading="lazy">
         <span class="mark" style="--x:3.5%;--y:38.8%;--w:93%;--h:6.4%"><b>근거 없으면 값을 비움</b></span>
@@ -127,9 +127,9 @@
     <li>Langfuse로 <strong>프롬프트 버전과 폴백을 관리</strong> — 프롬프트 서버 장애 시에도 서비스가 멈추지 않게</li>
   </ul>
 
-  <h2><span class="no">!</span>트러블 슈팅</h2>
+  <h2 id="troubleshooting"><span class="no">!</span>트러블 슈팅</h2>
 
-  <section class="ts">
+  <section class="ts" id="ts-01">
     <header><span class="no2">01</span><h3>LLM 출력을 "부탁"에서 "계약"으로 — 빈 입력 할루시네이션과 형식 요동</h3><span class="tag">신뢰성</span></header>
     <div class="cols">
       <div>
@@ -147,11 +147,12 @@
         <p>LLM 출력은 잘 부탁하는 게 아니라 <strong>계약으로 만들어야</strong> 합니다 — 판단 가능성 선평가,
         스키마 강제, 후처리 검증의 3중 장치. 이 구조는 이후 제가 만드는 모든 추출 기능의 기본 패턴이 됐습니다.</p>
       </div>
-      <div class="nums">
-        <div><b>−15%</b><span>할루시네이션<br>구조화 출력 + 검증 종합 효과</span></div>
-        <div><b>2단계</b><span>판단 가능 여부 선평가 → 추출<br>불가 판정 시 지어내지 않고 중단</span></div>
-        <div><b>0건</b><span>자유 텍스트 응답<br>function call 강제로 원천 차단</span></div>
-      </div>
+      <figure class="tsfig">
+        <a href="../assets/img/legal-contract.png" target="_blank" rel="noopener">
+        <img src="../assets/img/legal-contract.png" alt="정보 부족 의뢰에 대한 일반 프롬프트(할루시네이션) vs 판단 가능성 선평가 → 스키마 강제 → 검증(구조화 출력) 비교" loading="lazy">
+        </a>
+        <figcaption class="figcap">같은 정보 부족 입력 — 일반 프롬프트는 값을 지어내고, 선평가 · 스키마 강제 · 검증을 거치면 모르는 필드는 공란으로 남는다</figcaption>
+      </figure>
     </div>
   </section>
 

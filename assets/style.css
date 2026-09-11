@@ -145,4 +145,10 @@ h3 .no{font:var(--mono);color:var(--accent);margin-right:10px;letter-spacing:.1e
 .ts .nums b{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:clamp(30px,3.4vw,44px);line-height:1;
     background:linear-gradient(100deg,var(--ink) 40%,var(--accent2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;min-width:150px}
 .ts .nums span{font:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.1em;line-height:1.7}
+.ts .tsfig a{display:block;cursor:zoom-in}
+/* 섹션 리빌 시 글·그림 스태거 */
+.ts.rv .cols>*{opacity:0;transform:translateY(14px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+.ts.in .cols>*{opacity:1;transform:none}
+.ts.in .cols>*:nth-child(2){transition-delay:.14s}
+@media(prefers-reduced-motion:reduce){.ts.rv .cols>*{opacity:1;transform:none;transition:none}}
 @media(max-width:920px){.ts .cols{grid-template-columns:1fr}}
