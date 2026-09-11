@@ -75,6 +75,22 @@
   @media(prefers-reduced-motion:reduce){
     #thumb *{animation:none!important;transition:none!important}
     .draw{stroke-dashoffset:0}.pop{transform:none}.fade{opacity:1}}
+  /* ── Form study HUD: 궤도 링 + 슬라이드 카운터 ── */
+  .rings{position:fixed;left:66%;top:50%;width:min(78vh,60vw);aspect-ratio:1;transform:translate(-50%,-50%);z-index:1;
+         pointer-events:none;overflow:visible}
+  .rings ellipse,.rings circle{fill:none;stroke:rgba(255,255,255,.34);stroke-width:.6;transform-origin:50% 50%;transform-box:fill-box}
+  .rings .r1{animation:spin 38s linear infinite}
+  .rings .r2{animation:spin 54s linear infinite reverse;stroke-dasharray:2 5}
+  .rings .r3{animation:spin 72s linear infinite;stroke-width:.4}
+  .rings line{stroke:rgba(255,255,255,.22);stroke-width:.5;stroke-dasharray:1 4}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .ctr{position:fixed;right:28px;bottom:22px;z-index:3;font-family:Anton,Impact,sans-serif;font-size:clamp(44px,7vw,104px);
+       line-height:1;letter-spacing:-.02em;color:#fff;display:flex;overflow:hidden}
+  .ctr b{font-weight:400;display:inline-block}
+  .ctr b.flip{animation:roll .5s cubic-bezier(.2,.8,.2,1)}
+  @keyframes roll{from{transform:translateY(.55em);opacity:0}}
+  @media(max-width:700px){.rings{left:50%;width:90vw}.ctr{font-size:40px}}
+  @media(prefers-reduced-motion:reduce){.rings *,.ctr b{animation:none!important}}
   @media(hover:none){#thumb{display:none}}
 </style>
 <canvas id="c"></canvas>
@@ -83,6 +99,13 @@
   <a href="mailto:tpdudabc@naver.com">tpdudabc@naver.com</a>
   <a href="https://github.com/syoooooung">github.com/syoooooung</a>
 </div>
+<svg class="rings" viewBox="0 0 100 100" aria-hidden="true">
+  <ellipse class="r1" cx="50" cy="50" rx="48" ry="19" style="rotate:-28deg"/>
+  <ellipse class="r2" cx="50" cy="50" rx="44" ry="30" style="rotate:34deg"/>
+  <circle  class="r3" cx="50" cy="50" r="36"/>
+  <line x1="0" y1="50" x2="100" y2="50"/><line x1="50" y1="0" x2="50" y2="100"/>
+</svg>
+<div class="ctr" aria-hidden="true"><b id="ctrN">01</b><span>/05</span></div>
 <ul id="list"></ul>
 <div id="thumb"><div class="card"><div class="im"></div><div class="cap"><div class="line"></div><div class="chips"></div></div></div></div>
 <script>
@@ -136,16 +159,18 @@ const PIC = {
 // ── 랜딩 리스트: [제목, 링크, 픽토그램, 한 줄, 키워드] ─────────
 const WORKS = [
   ["About Me",                      "about.html",                  PIC.about,
-   "AI Platform Engineer", ["SCIE ×1","특허 ×2","총장상"]],
+   "AI Platform Engineer", ["SCIE ×1","특허 ×2","총장상"],                        [1.6,.1,0]],    // 매끈한 구
   ["Carbon Footprint AI Platform",  "works/carbon-footprint.html", PIC.carbon,
-   "LCA 보고서 → 감축 시나리오 자동 생성", ["LLM Agent","ISO 14067","FastAPI"]],
+   "LCA 보고서 → 감축 시나리오 자동 생성", ["LLM Agent","ISO 14067","FastAPI"],      [1.1,.3,0]],    // 느린 큰 굴곡
   ["AI Legal Research Assistant",   "works/legal-assistant.html",  PIC.legal,
-   "판례를 구조화해 유사 판례 검색·소장 생성", ["Hybrid Search","Airflow","Multi-LLM"]],
+   "판례를 구조화해 유사 판례 검색·소장 생성", ["Hybrid Search","Airflow","Multi-LLM"], [2.4,.2,1]],    // 각진 결정
   ["Active Metadata Relations",     "works/data-relation.html",    PIC.graph,
-   "데이터셋 사이 숨은 관계를 AI가 그래프로", ["Knowledge Graph","SPARQL","특허 출원"]],
+   "데이터셋 사이 숨은 관계를 AI가 그래프로", ["Knowledge Graph","SPARQL","특허 출원"], [4.2,.12,.6]],  // 촘촘한 입자
   ["DS-RAG — SCIE Paper",           "works/ds-rag.html",           PIC.dsrag,
-   "질문을 훼손하지 않는 분해로 멀티문서 검색", ["RAG","F1 0.877","SCIE"]],
+   "질문을 훼손하지 않는 분해로 멀티문서 검색", ["RAG","F1 0.877","SCIE"],           [1.9,.42,.3]],  // 갈라지는 덩이
 ];
+const form=[1.6,.1,0], formT=[1.6,.1,0];   // 현재/목표 형태 (lerp)
+const ctrN=document.getElementById('ctrN');
 // ─────────────────────────────────────────────────────────────
 const list = document.getElementById('list'), thumb = document.getElementById('thumb'), card = thumb.firstElementChild;
 list.innerHTML = WORKS.map(([t,h],i)=>`<li${i===0?' class="lead"':''}><a href="${h}" data-i="${i}">${t}</a></li>`).join('');
@@ -163,6 +188,9 @@ list.addEventListener('pointerover', e => {
   im.innerHTML = svg;                                       // 재삽입 → SVG 애니메이션 재시작
   line.textContent = l; chips.innerHTML = ks.map(k=>`<i>${k}</i>`).join('');
   card.classList.add('on');
+  formT.splice(0,3,...WORKS[cur][5]);
+  ctrN.textContent = String(cur+1).padStart(2,'0');
+  ctrN.classList.remove('flip'); void ctrN.offsetWidth; ctrN.classList.add('flip');
 });
 list.addEventListener('pointerout', e => { if(!list.contains(e.relatedTarget)){ card.classList.remove('on'); cur=-1; } });
 // 클릭한 링크만 히어로 제목으로 morph — 이름은 문서당 유일해야 하므로 클릭 시점에 부여
@@ -177,22 +205,52 @@ const p = gl.createProgram();
 gl.attachShader(p, sh(gl.VERTEX_SHADER, 'attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}'));
 gl.attachShader(p, sh(gl.FRAGMENT_SHADER, `
 precision highp float;
-uniform vec2 r, m; uniform float t;
+uniform vec2 r, m; uniform float t; uniform vec3 f;   // f: (noise freq, displacement amp, ridged 0~1)
 float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
 float n(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
   return mix(mix(h(i),h(i+vec2(1,0)),f.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),f.x),f.y);}
 float fbm(vec2 p){float v=0.,a=.5;for(int k=0;k<6;k++){v+=a*n(p);p*=2.03;a*=.5;}return v;}
+float h3(vec3 p){return fract(sin(dot(p,vec3(127.1,311.7,74.7)))*43758.5453);}
+float n3(vec3 p){vec3 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
+  return mix(mix(mix(h3(i),h3(i+vec3(1,0,0)),f.x),mix(h3(i+vec3(0,1,0)),h3(i+vec3(1,1,0)),f.x),f.y),
+             mix(mix(h3(i+vec3(0,0,1)),h3(i+vec3(1,0,1)),f.x),mix(h3(i+vec3(0,1,1)),h3(i+vec3(1,1,1)),f.x),f.y),f.z);}
+float fbm3(vec3 p){float v=0.,a=.5;for(int k=0;k<3;k++){v+=a*n3(p);p*=2.1;a*=.5;}return v;}
+vec3 bg(vec2 uv){
+  vec2 q=vec2(fbm(uv*1.8+t*.045), fbm(uv*1.8+vec2(5.2,1.3)-t*.035));
+  float g=pow(fbm(uv*2.6+q*1.9+vec2(t*.02,-t*.015)),1.35);
+  vec3 hot=mix(vec3(.99,.32,.03), vec3(.55,.12,.85), m.y);
+  vec3 c=mix(hot, vec3(.93,.06,.47), smoothstep(.22,.58,g));
+  c=mix(c, vec3(.42,.08,.72), smoothstep(.55,.88,g));
+  c=mix(c, vec3(.07,.01,.11), smoothstep(.82,1.15,g));
+  return c+.14*smoothstep(.55,.0,distance(uv, m*vec2(r.x/r.y,1.)));
+}
+float map(vec3 p){
+  float d=(fbm3(p*f.x+vec3(0.,t*.12,t*.08))-.5)*2.4;   // ≈ -1..1
+  d=mix(d, abs(d)*2.-1., f.z);            // ridged → 각진 결정 느낌
+  return length(p)-1.-d*f.y;
+}
+vec3 nrm(vec3 p){vec2 e=vec2(.005,0.);
+  return normalize(vec3(map(p+e.xyy)-map(p-e.xyy),map(p+e.yxy)-map(p-e.yxy),map(p+e.yyx)-map(p-e.yyx)));}
 void main(){
   vec2 uv=gl_FragCoord.xy/r.y;
-  vec2 q=vec2(fbm(uv*1.8+t*.045), fbm(uv*1.8+vec2(5.2,1.3)-t*.035));
-  float f=pow(fbm(uv*2.6+q*1.9+vec2(t*.02,-t*.015)),1.35);
-  vec3 hot=mix(vec3(.99,.32,.03), vec3(.55,.12,.85), m.y);
-  vec3 c=mix(hot, vec3(.93,.06,.47), smoothstep(.22,.58,f));
-  c=mix(c, vec3(.42,.08,.72), smoothstep(.55,.88,f));
-  c=mix(c, vec3(.07,.01,.11), smoothstep(.82,1.15,f));
-  c+=.14*smoothstep(.55,.0,distance(uv, m*vec2(r.x/r.y,1.)));
-  c+=(h(gl_FragCoord.xy+t)-.5)*.045;
-  gl_FragColor=vec4(c,1.);
+  vec3 col=bg(uv);
+  // 오브젝트: 화면 66%,50% 기준, 마우스 반대편으로 살짝 시차
+  vec2 sc=(gl_FragCoord.xy-r*vec2(.66,.5))/r.y*2.-(m-.5)*.14;
+  vec3 ro=vec3(0.,0.,5.), rd=normalize(vec3(sc,-2.6));
+  float a=t*.22, ca=cos(a), sa=sin(a); mat2 R=mat2(ca,-sa,sa,ca);
+  float d=2.6, ds=1.; vec3 p;
+  for(int i=0;i<56;i++){ p=ro+rd*d; p.xz=R*p.xz; ds=map(p); if(ds<.003||d>6.5)break; d+=ds*.75; }
+  if(ds<.003){
+    vec3 nn=nrm(p);
+    float fr=pow(1.-max(dot(nn,vec3(0.,0.,1.)),0.),3.);
+    vec2 off=nn.xy*.26;                     // 굴절: 노멀 방향으로 배경을 당겨오고 RGB를 살짝 어긋나게 (색수차)
+    vec3 refr=vec3(bg(uv+off*.8).r, bg(uv+off).g, bg(uv+off*1.22).b);
+    vec3 glass=mix(refr*(.55+.35*nn.z)+vec3(.03,.02,.05), vec3(1.), fr*.55);   // 중심은 배경 굴절, 가장자리 프레넬
+    float spec=pow(max(dot(reflect(vec3(0.,0.,-1.),nn),normalize(vec3(.6,.8,.5))),0.),48.);
+    col=glass+spec*.9;
+  }
+  col+=(h(gl_FragCoord.xy+t)-.5)*.045;
+  gl_FragColor=vec4(col,1.);
 }`));
 gl.linkProgram(p); gl.useProgram(p);
 gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
@@ -209,7 +267,8 @@ let mx=.5,my=.5;
   // 카드: 커서를 살짝 늦게 따라오고, 이동 속도만큼 기울어짐
   const dx = tx-cx; cx += dx*.16; cy += (ty-cy)*.16;
   thumb.style.transform = `translate(${cx}px,${cy}px) translate(-50%,-50%) rotate(${Math.max(-6,Math.min(6,dx*.05))}deg)`;
-  gl.uniform1f(U('t'), now/1000); gl.uniform2f(U('m'), mx, my);
+  for(let i=0;i<3;i++) form[i]+=(formT[i]-form[i])*.045;   // 형태 morph
+  gl.uniform1f(U('t'), now/1000); gl.uniform2f(U('m'), mx, my); gl.uniform3f(U('f'), form[0], form[1], form[2]);
   gl.drawArrays(gl.TRIANGLES,0,3); requestAnimationFrame(loop); })(0);
 </script>
 </html>
