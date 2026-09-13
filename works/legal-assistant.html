@@ -56,6 +56,7 @@
   </div>
 
   <h2><span class="no">A</span>설계와 구현</h2>
+  <figure class="figure" style="background:#fff"><a href="../assets/img/legal-arch.svg" target="_blank" rel="noopener"><img src="../assets/img/legal-arch.svg" alt="AI 법률 리서치 어시스턴트 시스템 아키텍처 — 사용자 → NGINX 엣지 → HAProxy → 온프레미스 Kubernetes Dev 클러스터의 NGINX Ingress → namespace ai-legal(Nuxt 3 chat-ui, FastAPI unified API: 하이브리드 검색·수임료 tool 강제·판례 해석·문서 생성, in-process ko-sroberta 768d) → LLM(LiteLLM 경유 Claude, vLLM Qwen, Gemini 2.0 Flash, Langfuse) · OpenSearch alias 인덱스(raw·analysis·search·detc/expc/decc·로그) · Airflow DAG 4단계(원문→6섹션 요약→청킹·임베딩→유사판례 kNN 사전 계산) · 플랫폼(Keycloak, EFK, Prometheus/Grafana, Vault+ESO, Argo CD) · Ceph·MinIO 스토리지 · GitLab CI → k8s-manifests → Argo CD GitOps" loading="lazy"></a><figcaption class="figcap" style="color:#666">System Architecture — 온프레미스 K8s Dev 클러스터 · namespace ai-legal (Nuxt UI + FastAPI) · LLM 게이트웨이/서빙 · OpenSearch alias 인덱스 · Airflow 색인 DAG · 플랫폼 공통 (GitOps · EFK · Prometheus · Vault · Ceph) — 녹색 = 담당</figcaption></figure>
   <p>아래 4개 축 모두 "무엇이 왜 실패했고 어떻게 고쳤나"의 과정이 있습니다 — 전체 서사는
   <a href="deep-dive.html" style="color:var(--ink)"><strong>딥다이브: 판례 5,000토큰을 500으로</strong></a>에 정리했습니다.</p>
   <figure class="figure"><img src="../assets/thumbs/ai-legal.png" alt="AI 법률 리서치 어시스턴트 데모 화면" loading="lazy"><figcaption class="figcap">Demo — 판례 검색·문서 생성 인터페이스</figcaption></figure>
