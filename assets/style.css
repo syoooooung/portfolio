@@ -8,8 +8,8 @@ html{background:var(--bg)}   /* 로딩 중 흰 화면 방지 */
   animation-duration:.55s;animation-timing-function:cubic-bezier(.65,0,.35,1)}
 
 :root{
-  --bg:#120211; --ink:#f4eef5; --dim:#b9a8bd; --line:rgba(244,238,245,.14);
-  --accent:#ff5a1f; --accent2:#e0117a;
+  --bg:#2c3038; --ink:#f2f3f5; --dim:#aab1bc; --line:rgba(242,243,245,.14);
+  --accent:#74aaf0; --accent2:#bcd0e8;
   --mono:11px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;
 }
 body{background:var(--bg);color:var(--ink);overflow-x:hidden;
@@ -93,7 +93,7 @@ nav.overlay{position:absolute;top:0;left:0;right:0;z-index:5}
 .hero-cta{position:relative;z-index:2;display:inline-flex;align-items:center;gap:8px;margin-top:24px;
   font:var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#fff;text-decoration:none;
   border:1px solid rgba(255,255,255,.55);padding:12px 18px;transition:background .2s,color .2s,border-color .2s}
-.hero-cta:hover{background:#fff;border-color:#fff;color:#120211}
+.hero-cta:hover{background:#fff;border-color:#fff;color:#2c3038}
 .marquee{overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:13px 0;white-space:nowrap}
 .marquee>div{display:inline-block;animation:mq 36s linear infinite;font-family:Anton,Impact,sans-serif;font-size:19px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
 @keyframes mq{to{transform:translateX(-50%)}}
@@ -141,7 +141,7 @@ h3 .no{font:var(--mono);color:var(--accent);margin-right:10px;letter-spacing:.1e
 .ts .tsfig img{width:100%;display:block}
 .ts .tsfig .figcap{color:#666}
 .ts .nums{display:grid;gap:1px;background:var(--line);border:1px solid var(--line)}
-.ts .nums>div{background:#170617;padding:20px 22px;display:flex;align-items:baseline;gap:16px}
+.ts .nums>div{background:#343941;padding:20px 22px;display:flex;align-items:baseline;gap:16px}
 .ts .nums b{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:clamp(30px,3.4vw,44px);line-height:1;
     background:linear-gradient(100deg,var(--ink) 40%,var(--accent2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;min-width:150px}
 .ts .nums span{font:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.1em;line-height:1.7}

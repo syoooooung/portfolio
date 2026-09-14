@@ -20,7 +20,7 @@
     .arrow{stroke:#5a6483;stroke-width:1.2;fill:none;marker-end:url(#a)}
     .ab{stroke:#3b6ef6;stroke-width:1.4;fill:none;marker-end:url(#ab)}
     .ag{stroke:#10a56b;stroke-width:1.4;fill:none;marker-end:url(#ag)}
-    .ap{stroke:#e0117a;stroke-width:1.4;fill:none;marker-end:url(#ap)}
+    .ap{stroke:#bcd0e8;stroke-width:1.4;fill:none;marker-end:url(#ap)}
     .own{stroke:#e74c3c;stroke-width:1.1;fill:none}
     .idle{stroke:#dfe3ee;stroke-width:1.1;fill:none}
     .chev{stroke:#c4cadd;stroke-width:2.2;fill:none}
@@ -33,7 +33,7 @@
     <marker id="a" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7Z" fill="#5a6483"/></marker>
     <marker id="ab" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7Z" fill="#3b6ef6"/></marker>
     <marker id="ag" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7Z" fill="#10a56b"/></marker>
-    <marker id="ap" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7Z" fill="#e0117a"/></marker>
+    <marker id="ap" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7Z" fill="#bcd0e8"/></marker>
     <symbol id="bot" viewBox="0 0 24 24">
       <rect x="11" y="1" width="2" height="4" fill="currentColor"/><circle cx="12" cy="1.6" r="1.6" fill="currentColor"/>
       <rect x="3" y="5" width="18" height="15" rx="4.5" fill="currentColor"/>
@@ -160,14 +160,14 @@
   <text class="tiny" x="684" y="402" text-anchor="middle" fill="#141a33">변경</text>
   <path class="arrow" d="M684 408 Q684 446 644 455"/>
   <path class="ap" d="M640 462 L686 470"/>
-  <rect x="690" y="452" width="104" height="54" rx="6" fill="#fff" stroke="#e0117a" stroke-width="1.3"/>
-  <rect x="691" y="453" width="102" height="13" rx="5" fill="#e0117a"/>
+  <rect x="690" y="452" width="104" height="54" rx="6" fill="#fff" stroke="#bcd0e8" stroke-width="1.3"/>
+  <rect x="691" y="453" width="102" height="13" rx="5" fill="#bcd0e8"/>
   <text class="mono" x="697" y="463" fill="#fff">state</text>
   <text class="mono" x="697" y="481" fill="#141a33">changed: 3절</text>
   <text class="mono" x="697" y="496" fill="#141a33">affects: [5절, 7절]</text>
   <path class="ag" d="M690 498 L644 505"/>
   <path class="ag" d="M712 506 Q712 554 644 554"/>
-  <text class="tiny" x="724" y="532" fill="#e0117a">state 전달 → 해당 agent 수정</text>
+  <text class="tiny" x="724" y="532" fill="#bcd0e8">state 전달 → 해당 agent 수정</text>
   <text class="tiny" x="700" y="566" fill="#3b6ef6">■ 실행 → 자기 절 수정 · 영향 판정</text>
   <text class="tiny" x="700" y="580" fill="#0d8f5c">■ state 받아 자기 절 수정</text>
   <text class="tiny" x="700" y="594" fill="#9aa1b8">■ 유지 · 호출 없음</text>

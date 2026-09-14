@@ -16,10 +16,10 @@ float fbm(vec2 p){float v=0.,a=.5;for(int k=0;k<6;k++){v+=a*n(p);p*=2.03;a*=.5;}
 void main(){vec2 uv=gl_FragCoord.xy/r.y;
 vec2 q=vec2(fbm(uv*1.7+t*.04),fbm(uv*1.7+vec2(5.2,1.3)-t*.03));
 float f=pow(fbm(uv*2.4+q*1.9+vec2(t*.018,-t*.013)),1.35);
-vec3 hot=mix(vec3(.99,.32,.03),vec3(.55,.12,.85),hu);
-vec3 c=mix(hot,vec3(.93,.06,.47),smoothstep(.22,.58,f));
-c=mix(c,vec3(.42,.08,.72),smoothstep(.55,.88,f));
-c=mix(c,vec3(.07,.01,.11),smoothstep(.78,1.12,f));
+vec3 hot=mix(vec3(.66,.73,.82),vec3(.80,.82,.86),hu);
+vec3 c=mix(hot,vec3(.42,.50,.60),smoothstep(.14,.38,f));
+c=mix(c,vec3(.19,.23,.30),smoothstep(.40,.64,f));
+c=mix(c,vec3(.17,.19,.22),smoothstep(.66,1.0,f));
 c*=.9; c+=(h(gl_FragCoord.xy+t)-.5)*.05;
 gl_FragColor=vec4(c,1.);}`));
     gl.linkProgram(p); gl.useProgram(p);

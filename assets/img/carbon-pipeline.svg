@@ -1,16 +1,16 @@
 <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" font-family="ui-monospace,SFMono-Regular,Menlo,monospace">
   <style>
-    .box{fill:#1c0a1b;stroke:rgba(244,238,245,.28);rx:3}
-    .llm{stroke:#ff5a1f}
-    .lbl{fill:#f4eef5;font-size:13px}
-    .sub{fill:#b9a8bd;font-size:10px}
-    .tag{fill:#ff5a1f;font-size:9px;letter-spacing:.12em}
-    .arrow{stroke:#b9a8bd;stroke-width:1.2;fill:none;marker-end:url(#a)}
-    .lane{fill:#b9a8bd;font-size:9px;letter-spacing:.18em}
+    .box{fill:#343941;stroke:rgba(242,243,245,.28);rx:3}
+    .llm{stroke:#74aaf0}
+    .lbl{fill:#f2f3f5;font-size:13px}
+    .sub{fill:#aab1bc;font-size:10px}
+    .tag{fill:#74aaf0;font-size:9px;letter-spacing:.12em}
+    .arrow{stroke:#aab1bc;stroke-width:1.2;fill:none;marker-end:url(#a)}
+    .lane{fill:#aab1bc;font-size:9px;letter-spacing:.18em}
   </style>
   <defs><marker id="a" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
-    <path d="M0 0L7 3.5L0 7Z" fill="#b9a8bd"/></marker></defs>
-  <rect width="880" height="300" fill="#120211"/>
+    <path d="M0 0L7 3.5L0 7Z" fill="#aab1bc"/></marker></defs>
+  <rect width="880" height="300" fill="#2c3038"/>
 
   <text class="lane" x="20" y="30">AI PIPELINE</text>
   <g>
@@ -38,9 +38,9 @@
     <rect class="box" x="280" y="205" width="180" height="60" rx="3"/>
     <text class="lbl" x="294" y="231">LiteLLM Proxy</text><text class="sub" x="294" y="249">OpenAI 호환 추상화</text>
     <rect class="box" x="560" y="196" width="140" height="34" rx="3"/>
-    <text class="sub" x="574" y="218" fill="#f4eef5">클라우드 LLM API</text>
+    <text class="sub" x="574" y="218" fill="#f2f3f5">클라우드 LLM API</text>
     <rect class="box" x="560" y="240" width="140" height="34" rx="3"/>
-    <text class="sub" x="574" y="262" fill="#f4eef5">온프레미스 vLLM</text>
+    <text class="sub" x="574" y="262" fill="#f2f3f5">온프레미스 vLLM</text>
     <path class="arrow" d="M200 235H274"/>
     <path class="arrow" d="M460 228 Q510 213 554 213"/>
     <path class="arrow" d="M460 242 Q510 257 554 257"/>

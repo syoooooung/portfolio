@@ -17,7 +17,7 @@
   *{margin:0;padding:0;box-sizing:border-box}
   @view-transition{navigation:auto}
   @media(prefers-reduced-motion:reduce){@view-transition{navigation:none}}
-  html,body{height:100%;overflow:hidden;background:#120211;color:#fff}
+  html,body{height:100%;overflow:hidden;background:#2c3038;color:#fff}
   canvas{position:fixed;inset:0;width:100%;height:100%;display:block;view-transition-name:hero-bg}
   ::view-transition-group(hero-bg),::view-transition-group(hero-title){
     animation-duration:.55s;animation-timing-function:cubic-bezier(.65,0,.35,1)}
@@ -41,25 +41,25 @@
 
   /* ── 호버 카드: 위치·기울기는 JS(rAF lerp), 등장 모션은 .card 클래스 ── */
   #thumb{position:fixed;left:0;top:0;width:290px;pointer-events:none;z-index:4;will-change:transform}
-  .card{--e:cubic-bezier(.2,.8,.2,1);background:#150314;border:1px solid rgba(244,238,245,.14);border-radius:6px;
+  .card{--e:cubic-bezier(.2,.8,.2,1);background:#343941;border:1px solid rgba(242,243,245,.14);border-radius:6px;
         overflow:hidden;box-shadow:0 30px 60px -20px rgba(0,0,0,.7);
         clip-path:inset(46% 0 46% 0 round 6px);opacity:0;transform:translateY(10px) scale(.96);
         transition:clip-path .5s var(--e),opacity .25s,transform .5s var(--e)}
   .card.on{clip-path:inset(0 0 0 0 round 6px);opacity:1;transform:none}
-  .im{aspect-ratio:260/160;background:radial-gradient(120% 100% at 50% 0,#2a0b2a,#150314)}
+  .im{aspect-ratio:260/160;background:radial-gradient(120% 100% at 50% 0,#414955,#343941)}
   .im svg{width:100%;height:100%;display:block}
-  .cap{padding:11px 13px 12px;border-top:1px solid rgba(244,238,245,.1)}
+  .cap{padding:11px 13px 12px;border-top:1px solid rgba(242,243,245,.1)}
   .line{font:12.5px/1.5 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Noto Sans KR",sans-serif;
-        color:#f4eef5;word-break:keep-all;opacity:0;transform:translateY(6px);transition:.4s var(--e) .08s}
+        color:#f2f3f5;word-break:keep-all;opacity:0;transform:translateY(6px);transition:.4s var(--e) .08s}
   .chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
   .chips i{font:9.5px/1 ui-monospace,SFMono-Regular,Menlo,monospace;font-style:normal;letter-spacing:.1em;
-           text-transform:uppercase;color:#b9a8bd;border:1px solid rgba(244,238,245,.16);border-radius:999px;padding:5px 8px;
+           text-transform:uppercase;color:#aab1bc;border:1px solid rgba(242,243,245,.16);border-radius:999px;padding:5px 8px;
            opacity:0;transform:translateY(6px);transition:.4s var(--e)}
   .chips i:nth-child(1){transition-delay:.14s}.chips i:nth-child(2){transition-delay:.2s}.chips i:nth-child(3){transition-delay:.26s}
   .card.on .line,.card.on .chips i{opacity:1;transform:none}
 
   /* SVG 픽토그램 모션 — pathLength=1 트릭으로 길이 계산 없이 그리기 */
-  #thumb svg{--ink:#f4eef5;--dim:#b9a8bd;--acc:#ff5a1f;--acc2:#e0117a;--vio:#7b2ff7}
+  #thumb svg{--ink:#f2f3f5;--dim:#aab1bc;--acc:#74aaf0;--acc2:#bcd0e8;--vio:#63b3d4}
   #thumb svg text{font:9px ui-monospace,SFMono-Regular,Menlo,monospace;fill:var(--dim);letter-spacing:.1em;text-anchor:middle}
   #thumb svg [class]{animation-fill-mode:forwards;animation-timing-function:cubic-bezier(.65,0,.35,1)}
   .draw{fill:none;stroke-dasharray:1;stroke-dashoffset:1;animation:draw .9s}
@@ -116,44 +116,44 @@ const SVG = s => `<svg viewBox="0 0 260 160" xmlns="http://www.w3.org/2000/svg">
 const PIC = {
   // About — 타임라인
   about: SVG(
-    D('M24 84H236','rgba(244,238,245,.28)',1.2) +
+    D('M24 84H236','rgba(242,243,245,.28)',1.2) +
     [['SCIE',56,'var(--acc)'],['총장상',112,'var(--ink)'],['특허 ×2',168,'var(--acc2)'],['국가 R&D',224,'var(--vio)']]
       .map(([t,x,c],i)=>P(`<circle cx="${x}" cy="84" r="5" fill="${c}"/><text x="${x}" y="${i%2?68:110}">${t}</text>`,.35+i*.14)).join('')),
   // Carbon — 배출량 하강 곡선 + ISO 검증 배지
   carbon: SVG(
     `<text x="40" y="30" style="text-anchor:start">tCO₂e</text>` +
-    D('M28 46H232','rgba(244,238,245,.12)',1) + D('M28 88H232','rgba(244,238,245,.12)',1) + D('M28 130H232','rgba(244,238,245,.12)',1) +
+    D('M28 46H232','rgba(242,243,245,.12)',1) + D('M28 88H232','rgba(242,243,245,.12)',1) + D('M28 130H232','rgba(242,243,245,.12)',1) +
     `<path class="fade" style="animation-delay:.6s" d="M28 46C70 50 92 76 122 84S182 112 232 126V130H28Z" fill="url(#g)"/>
      <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--acc)" stop-opacity=".35"/><stop offset="1" stop-color="var(--acc)" stop-opacity="0"/></linearGradient></defs>` +
     D('M28 46C70 50 92 76 122 84S182 112 232 126','var(--acc)',2.2,.15) +
-    P(`<rect x="152" y="26" width="84" height="22" rx="11" fill="#150314" stroke="var(--ink)" stroke-opacity=".5"/><text x="194" y="41" fill="var(--ink)" style="fill:var(--ink)">ISO 14067 ✓</text>`,1) +
+    P(`<rect x="152" y="26" width="84" height="22" rx="11" fill="#343941" stroke="var(--ink)" stroke-opacity=".5"/><text x="194" y="41" fill="var(--ink)" style="fill:var(--ink)">ISO 14067 ✓</text>`,1) +
     P(`<circle cx="232" cy="126" r="4" fill="var(--acc)"/>`,.95)),
   // Legal — 판례 스택에서 유사 판례 하나가 떠오름
   legal: SVG(
-    `<g transform="rotate(-8 75 90)"><rect x="40" y="42" width="70" height="94" rx="3" fill="#1c0a1b" stroke="rgba(244,238,245,.22)"/>
-       ${[62,74,86,98].map(y=>`<path d="M52 ${y}H98" stroke="rgba(244,238,245,.14)"/>`).join('')}</g>
-     <g transform="rotate(8 185 90)"><rect x="150" y="42" width="70" height="94" rx="3" fill="#1c0a1b" stroke="rgba(244,238,245,.22)"/>
-       ${[62,74,86,98].map(y=>`<path d="M162 ${y}H208" stroke="rgba(244,238,245,.14)"/>`).join('')}</g>
-     <g class="lift" style="animation-delay:.2s"><rect x="94" y="30" width="72" height="100" rx="3" fill="#1c0a1b" stroke="var(--acc)" stroke-width="1.4"/>
+    `<g transform="rotate(-8 75 90)"><rect x="40" y="42" width="70" height="94" rx="3" fill="#343941" stroke="rgba(242,243,245,.22)"/>
+       ${[62,74,86,98].map(y=>`<path d="M52 ${y}H98" stroke="rgba(242,243,245,.14)"/>`).join('')}</g>
+     <g transform="rotate(8 185 90)"><rect x="150" y="42" width="70" height="94" rx="3" fill="#343941" stroke="rgba(242,243,245,.22)"/>
+       ${[62,74,86,98].map(y=>`<path d="M162 ${y}H208" stroke="rgba(242,243,245,.14)"/>`).join('')}</g>
+     <g class="lift" style="animation-delay:.2s"><rect x="94" y="30" width="72" height="100" rx="3" fill="#343941" stroke="var(--acc)" stroke-width="1.4"/>
        <text x="106" y="48" style="text-anchor:start;fill:var(--acc);font-size:12px">§</text>
-       ${D('M106 62H154','rgba(244,238,245,.35)',1.2,.6)}${D('M106 74H150','var(--acc2)',2,.75)}${D('M106 86H154','rgba(244,238,245,.35)',1.2,.9)}${D('M106 98H140','rgba(244,238,245,.35)',1.2,1.05)}</g>` +
-    P(`<rect x="98" y="136" width="64" height="16" rx="8" fill="var(--acc)"/><text x="130" y="147" style="fill:#120211">유사 판례</text>`,1.2)),
+       ${D('M106 62H154','rgba(242,243,245,.35)',1.2,.6)}${D('M106 74H150','var(--acc2)',2,.75)}${D('M106 86H154','rgba(242,243,245,.35)',1.2,.9)}${D('M106 98H140','rgba(242,243,245,.35)',1.2,1.05)}</g>` +
+    P(`<rect x="98" y="136" width="64" height="16" rx="8" fill="var(--acc)"/><text x="130" y="147" style="fill:#2c3038">유사 판례</text>`,1.2)),
   // Metadata — 관계 그래프가 그려짐, sameAs 엣지는 마지막
   graph: (()=>{ const N=[[46,48],[46,118],[130,83],[214,48],[214,118]];
     return SVG(
-      D('M46 48L130 83','rgba(244,238,245,.32)',1.2,.3)+D('M46 118L130 83','rgba(244,238,245,.32)',1.2,.4)+
-      D('M130 83L214 48','rgba(244,238,245,.32)',1.2,.55)+D('M130 83L214 118','rgba(244,238,245,.32)',1.2,.65)+
+      D('M46 48L130 83','rgba(242,243,245,.32)',1.2,.3)+D('M46 118L130 83','rgba(242,243,245,.32)',1.2,.4)+
+      D('M130 83L214 48','rgba(242,243,245,.32)',1.2,.55)+D('M130 83L214 118','rgba(242,243,245,.32)',1.2,.65)+
       `<path class="draw" pathLength="1" d="M214 48V118" stroke="var(--vio)" stroke-width="1.6" stroke-dasharray="1" style="animation-delay:1s"/>` +
       `<text class="fade" x="232" y="87" style="fill:var(--vio);animation-delay:1.4s">sameAs</text>` +
-      N.map(([x,y],i)=>P(`<circle cx="${x}" cy="${y}" r="${i===2?10:7}" fill="${i===2?'var(--acc)':'#1c0a1b'}" stroke="${i===2?'var(--acc)':'var(--ink)'}" stroke-width="1.4"/>`,i*.12)).join('') +
+      N.map(([x,y],i)=>P(`<circle cx="${x}" cy="${y}" r="${i===2?10:7}" fill="${i===2?'var(--acc)':'#343941'}" stroke="${i===2?'var(--acc)':'var(--ink)'}" stroke-width="1.4"/>`,i*.12)).join('') +
       `<text x="46" y="36">Dataset A</text><text x="46" y="140">Dataset B</text><text x="130" y="110" style="fill:var(--ink)">AI</text>`)})(),
   // DS-RAG — 질문 분해 → 멀티문서 검색 → 병합
   dsrag: SVG(
-    P(`<circle cx="36" cy="80" r="15" fill="#1c0a1b" stroke="var(--ink)" stroke-width="1.4"/><text x="36" y="84" style="fill:var(--ink);font-size:11px">Q</text>`,0) +
+    P(`<circle cx="36" cy="80" r="15" fill="#343941" stroke="var(--ink)" stroke-width="1.4"/><text x="36" y="84" style="fill:var(--ink);font-size:11px">Q</text>`,0) +
     D('M52 78C80 78 92 42 122 42','var(--acc)',1.6,.25)+D('M52 80H122','var(--acc)',1.6,.3)+D('M52 82C80 82 92 118 122 118','var(--acc)',1.6,.35) +
-    [42,80,118].map((y,i)=>P(`<rect x="122" y="${y-11}" width="36" height="22" rx="3" fill="#1c0a1b" stroke="var(--acc)" stroke-width="1.2"/><text x="140" y="${y+4}" style="fill:var(--ink)">q${i+1}</text>`,.8+i*.1)).join('') +
+    [42,80,118].map((y,i)=>P(`<rect x="122" y="${y-11}" width="36" height="22" rx="3" fill="#343941" stroke="var(--acc)" stroke-width="1.2"/><text x="140" y="${y+4}" style="fill:var(--ink)">q${i+1}</text>`,.8+i*.1)).join('') +
     D('M158 42C190 42 200 78 210 78','var(--acc2)',1.6,1.1)+D('M158 80H210','var(--acc2)',1.6,1.15)+D('M158 118C190 118 200 82 210 82','var(--acc2)',1.6,1.2) +
-    P(`<circle cx="226" cy="80" r="15" fill="var(--acc2)"/><text x="226" y="84" style="fill:#120211;font-size:11px">A</text>`,1.6) +
+    P(`<circle cx="226" cy="80" r="15" fill="var(--acc2)"/><text x="226" y="84" style="fill:#2c3038;font-size:11px">A</text>`,1.6) +
     `<text class="fade" x="140" y="150" style="animation-delay:1.2s">의미 보존 분해 · 누락 7.4%</text>`),
 };
 // ── 랜딩 리스트: [제목, 링크, 픽토그램, 한 줄, 키워드] ─────────
@@ -218,10 +218,10 @@ float fbm3(vec3 p){float v=0.,a=.5;for(int k=0;k<3;k++){v+=a*n3(p);p*=2.1;a*=.5;
 vec3 bg(vec2 uv){
   vec2 q=vec2(fbm(uv*1.8+t*.045), fbm(uv*1.8+vec2(5.2,1.3)-t*.035));
   float g=pow(fbm(uv*2.6+q*1.9+vec2(t*.02,-t*.015)),1.35);
-  vec3 hot=mix(vec3(.99,.32,.03), vec3(.55,.12,.85), m.y);
-  vec3 c=mix(hot, vec3(.93,.06,.47), smoothstep(.22,.58,g));
-  c=mix(c, vec3(.42,.08,.72), smoothstep(.55,.88,g));
-  c=mix(c, vec3(.07,.01,.11), smoothstep(.82,1.15,g));
+  vec3 hot=mix(vec3(.66,.73,.82), vec3(.80,.82,.86), m.y);
+  vec3 c=mix(hot, vec3(.42,.50,.60), smoothstep(.14,.38,g));
+  c=mix(c, vec3(.19,.23,.30), smoothstep(.40,.64,g));
+  c=mix(c, vec3(.17,.19,.22), smoothstep(.66,1.0,g));
   return c+.14*smoothstep(.55,.0,distance(uv, m*vec2(r.x/r.y,1.)));
 }
 float map(vec3 p){

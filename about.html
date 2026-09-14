@@ -32,7 +32,7 @@
   .tl>li{position:relative;padding-bottom:24px}
   .tl>li:last-child{padding-bottom:0}
   .tl>li::before{content:"";position:absolute;left:-25px;top:6px;width:7px;height:7px;border-radius:50%;background:var(--bg);border:2px solid var(--accent)}
-  .tl>li:first-child::before{background:var(--accent);box-shadow:0 0 0 4px rgba(255,90,31,.18)}
+  .tl>li:first-child::before{background:var(--accent);box-shadow:0 0 0 4px rgba(116,170,240,.22)}
   .tl time{font:var(--mono);letter-spacing:.12em;color:var(--accent);margin-right:10px;white-space:nowrap}
   .tl h3{display:inline;font-size:15.5px;margin:0;color:var(--ink);letter-spacing:-.01em}
   .tl p{font-size:14px;margin:6px 0 0}
@@ -40,7 +40,7 @@
   /* 스택 분류 카드 — 카드마다 --c 색상, 아이콘 원 + 굵은 제목 */
   .grp{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .grp>div{display:grid;grid-template-columns:40px 1fr;column-gap:12px;align-items:center;padding:14px 16px;border-radius:16px;
-    border:1px solid color-mix(in srgb,var(--c) 38%,transparent);background:color-mix(in srgb,var(--c) 8%,rgba(18,2,17,.5))}
+    border:1px solid color-mix(in srgb,var(--c) 38%,transparent);background:color-mix(in srgb,var(--c) 8%,rgba(44,48,56,.5))}
   .grp svg{grid-row:1/3;width:40px;height:40px;padding:9px;border-radius:50%;color:var(--c);
     background:color-mix(in srgb,var(--c) 18%,transparent);fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
   .grp b{display:block;font-size:14px;font-weight:700;letter-spacing:-.01em;color:#fff;line-height:1.3}
@@ -48,13 +48,19 @@
   .grp .tags{grid-column:1/-1;margin:11px 0 0;gap:6px}
   .grp .tags i{font-weight:600;font-size:11.5px;letter-spacing:.04em;color:color-mix(in srgb,var(--c) 65%,#fff);
     border-color:color-mix(in srgb,var(--c) 40%,transparent);background:color-mix(in srgb,var(--c) 14%,transparent)}
+  /* 논문 제목: 한 줄로 자르고 링크 아이콘 · 특허 출원번호: 작게 */
+  .ref{display:flex;align-items:center;gap:6px;margin-top:4px;color:var(--ink);text-decoration:none;font-size:14px}
+  .ref span{min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+  .ref svg{flex:none;width:12px;height:12px;fill:none;stroke:var(--accent);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .ref:hover span{text-decoration:underline}
+  li .pno{display:block;font:var(--mono);letter-spacing:.08em;color:var(--dim);opacity:.75;margin-top:3px}
   /* 스킬 그리드 — 2열, 항목 = 굵은 제목 + 한 줄 설명 + 기술 키워드 칩 */
   .sk{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:0 26px;margin:0}
   .sk li{padding:11px 0 13px;border-bottom:1px solid var(--line);word-break:keep-all}
   .sk li:last-child{grid-column:1/-1;border:0}
   .sk b{display:block;color:#fff;font-size:14.5px;font-weight:700;letter-spacing:-.01em;line-height:1.35;margin-bottom:3px}
   .sk small{display:block;color:var(--dim);font-size:12.5px;line-height:1.5}
-  .sk .tags{margin:8px 0 0;gap:5px} .sk .tags i{padding:3px 9px;font-size:10.5px;color:var(--ink);border-color:rgba(244,238,245,.22)}
+  .sk .tags{margin:8px 0 0;gap:5px} .sk .tags i{padding:3px 9px;font-size:10.5px;color:var(--ink);border-color:rgba(242,243,245,.22)}
   @media(max-width:600px){.grp,.sk{grid-template-columns:1fr}}
   .big,.toc,.axis,.ctr,.bot{display:none}
 
@@ -71,7 +77,7 @@
     /* 거대 아웃라인 단어 — 로봇 뒤 */
     .big{display:block;position:fixed;left:50%;top:50%;transform:translate(-50%,-48%);z-index:1;pointer-events:none;
          font-family:Anton,Impact,sans-serif;font-size:min(26vw,44vh);line-height:1;letter-spacing:.02em;white-space:nowrap;
-         color:transparent;-webkit-text-stroke:1.5px rgba(244,238,245,.26);text-transform:uppercase}
+         color:transparent;-webkit-text-stroke:1.5px rgba(242,243,245,.26);text-transform:uppercase}
     .big.go{animation:bigin .7s cubic-bezier(.2,.8,.2,1) both}
     @keyframes bigin{from{opacity:0;transform:translate(calc(-50% + var(--dir)*7vw),-48%)}}
 
@@ -83,19 +89,21 @@
     .slide.on{display:block}
     .slide .head{position:absolute;left:clamp(20px,4vw,56px);top:15vh;max-width:min(38vw,560px)}
     .slide .body{position:absolute;right:clamp(20px,4vw,56px);top:max(22vh,200px);max-height:calc(85vh - max(22vh,200px));   /* 목차와 간격을 두고, 내용만큼만·넘치면 스크롤 */
-                 width:min(34vw,470px);overflow:auto;pointer-events:auto;padding:18px 20px;scrollbar-width:thin;scrollbar-color:rgba(244,238,245,.22) transparent;
-                 background:linear-gradient(90deg,rgba(18,2,17,0),rgba(18,2,17,.62) 16%)}   /* 기본: 박스 없음, 왼쪽에서 스며드는 스크림만 */
+                 width:min(34vw,470px);overflow:auto;pointer-events:auto;padding:18px 20px;scrollbar-width:thin;scrollbar-color:rgba(242,243,245,.22) transparent;
+                 background:linear-gradient(90deg,rgba(44,48,56,0),rgba(44,48,56,.62) 16%)}   /* 기본: 박스 없음, 왼쪽에서 스며드는 스크림만 */
     .slide[data-big="STACK"] .body{width:min(38vw,520px)}   /* 스택 카드 2열이 제목 줄바꿈 없이 들어가는 폭 */
-    .slide.boxed .body{width:min(44vw,660px);border:1px solid var(--line);background:rgba(18,2,17,.82);backdrop-filter:blur(10px)}   /* 내용 많은 장만 넓은 박스 — 텍스트가 배경·로봇보다 앞서도록 진하게 */
+    .slide[data-big="SEYOUNG"] .body{top:auto;bottom:max(14vh,126px);max-height:none}   /* 인트로: 제목(좌상)↔카드(우하) 대각선 */
+    .slide .cta{position:absolute;left:clamp(20px,4vw,56px);bottom:max(13vh,118px);margin:0;pointer-events:auto;font-size:clamp(28px,3.4vw,50px)}   /* 마지막 장 CTA: 카드 밖 */
+    .slide.boxed .body{width:min(44vw,660px);border:1px solid var(--line);background:rgba(44,48,56,.82);backdrop-filter:blur(10px)}   /* 내용 많은 장만 넓은 박스 — 텍스트가 배경·로봇보다 앞서도록 진하게 */
     .slide .head .lead{margin:20px 0 8px;color:var(--dim);font-size:14.5px;max-width:34ch}   /* 헤드 아래 한 줄 소개(왼쪽 무게) */
     .slide .body ul.plain li{padding:8px 0 8px 20px}
     .slide .next{font-size:clamp(32px,4vw,60px);margin:30px 0 4px;line-height:1} .slide .next small{margin-bottom:8px}
-    .axis button.end{background:var(--accent);border-color:var(--accent);color:#120211}
+    .axis button.end{background:var(--accent);border-color:var(--accent);color:#2c3038}
     .slide .body>:first-child{margin-top:0}
     .slide h2{margin:0}
-    .slide.on .head>*,.slide.on .body{animation:up .6s cubic-bezier(.2,.8,.2,1) both}
-    .slide.on .head>:nth-child(2){animation-delay:.06s} .slide.on .head>:nth-child(n+3){animation-delay:.1s} .slide.on .body{animation-delay:.14s}
-    .slide.out .head>*,.slide.out .body{animation:down .26s cubic-bezier(.4,0,.8,.4) both}
+    .slide.on .head>*,.slide.on .body,.slide.on .cta{animation:up .6s cubic-bezier(.2,.8,.2,1) both}
+    .slide.on .head>:nth-child(2){animation-delay:.06s} .slide.on .head>:nth-child(n+3){animation-delay:.1s} .slide.on .body{animation-delay:.14s} .slide.on .cta{animation-delay:.22s}
+    .slide.out .head>*,.slide.out .body,.slide.out .cta{animation:down .26s cubic-bezier(.4,0,.8,.4) both}
     @keyframes up{from{opacity:0;transform:translateY(calc(var(--dir)*44px))}}
     @keyframes down{to{opacity:0;transform:translateY(calc(var(--dir)*-34px))}}
 
@@ -138,17 +146,7 @@
     </div>
     <div class="body">
       <p class="lead">LLM 파이프라인과 검색 시스템을 만드는 <strong>AI 플랫폼 엔지니어</strong>입니다.</p>
-      <p>컴퓨터정보공학부 지능정보공학을 전공하고, <strong>비정형 데이터 처리와 LLM 기반 시스템 설계</strong>를
-      중심으로 실무 경험을 쌓아왔습니다. 데이터 추출 → 구조화 → 검색 → LLM 응답까지의 전 과정을 직접 설계하고
-      구현하며, 복잡한 정보를 사용자가 이해하기 쉬운 형태로 연결하는 일을 가장 잘합니다.</p>
-      <p>현재는 국내 AI 솔루션 기업에서 <strong>국가 R&amp;D 과제를 수행하며 AI 플랫폼의 백엔드와 AI 파이프라인</strong>을
-      개발하고 있습니다.</p>
-      <ul class="plain">
-        <li><strong>SCIE 논문 1편</strong> — 공동 주저자, Electronics 2025</li>
-        <li><strong>특허 출원 2건</strong> — 제1발명자</li>
-        <li><strong>캡스톤 졸업작품 전시회 총장상</strong> — DS-RAG</li>
-        <li><strong>AI 시스템 4개</strong> 설계·구현 — 탄소 · 법률 · 메타데이터 · RAG</li>
-      </ul>
+      <p>현재 국내 AI 솔루션 기업에서 <strong>국가 R&amp;D 과제</strong>를 수행하며 AI 플랫폼의 백엔드와 AI 파이프라인을 개발하고 있습니다.</p>
       <div class="contact"><a href="mailto:tpdudabc@naver.com">tpdudabc@naver.com</a><a href="https://github.com/syoooooung">github.com/syoooooung</a></div>
     </div>
   </section>
@@ -159,12 +157,12 @@
       <ol class="tl">
         <li>
           <time>2025.05 — 현재</time><h3>와이즈넛 · AI 연구소 플랫폼 개발팀</h3>
-          <p>연구개발 (백엔드 · AI 파이프라인). 국가 R&amp;D 과제를 수행하며 AI 플랫폼의 백엔드와 AI 파이프라인을 개발.</p>
+          <p>연구개발 — 백엔드 · AI 파이프라인. 국가 R&amp;D 과제 수행.</p>
           <ul class="plain">
-            <li>클라우드·온프레미스 환경의 <strong>AI 플랫폼 아키텍처 설계 및 구축</strong></li>
-            <li><strong>RAG 시스템 설계·개발</strong> — 청킹 전략, 벡터 인덱싱, 검색 품질 개선</li>
-            <li>LLM 기반 <strong>데이터 처리·분석 파이프라인</strong> — 그래프 DB 기반 데이터 관계 생성 엔진 설계·구현</li>
-            <li>국가 R&amp;D <strong>성능지표 시험·공인시험 대응, 표준화 검토 회신, 컨소시엄 연동 설계 문서</strong> 작성</li>
+            <li>클라우드·온프레미스 <strong>AI 플랫폼 아키텍처</strong> 설계·구축</li>
+            <li><strong>RAG 시스템</strong> 설계·개발</li>
+            <li>그래프 DB 기반 <strong>데이터 관계 생성 엔진</strong> 설계·구현</li>
+            <li>국가 R&amp;D <strong>성능지표·공인시험 대응</strong>, 표준화 검토 회신</li>
           </ul>
         </li>
         <li>
@@ -206,9 +204,10 @@
     <div class="head"><p class="kicker">03 — Papers · Patents</p><h2>논문 · 특허 · 수상</h2></div>
     <div class="body">
       <ul class="plain">
-        <li><strong>SCIE 논문 (공동 주저자)</strong> — <a href="https://www.mdpi.com/2079-9292/14/4/659" style="color:var(--ink)">A Dynamic-Selection-Based, Retrieval-Augmented Generation Framework</a>, Electronics 14(4):659, 2025</li>
-        <li><strong>특허 출원 (제1발명자)</strong> — 탄소감축 시나리오 간 상호작용 자동 판정 및 표준 동등성 검증을 이용한 전과정평가 보고서 자동 저작 장치 (10-2026-0139153)</li>
-        <li><strong>특허 출원 (제1발명자)</strong> — 액티브 메타데이터와 그래프 DB를 활용한 신규 데이터의 잠재적 연관성 자동 탐색·관계 확장 장치 (10-2026-0068848, 2026.04)</li>
+        <li><strong>SCIE 논문 (공동 주저자)</strong> — Electronics 14(4):659, 2025
+          <a class="ref" href="https://www.mdpi.com/2079-9292/14/4/659" title="A Dynamic-Selection-Based, Retrieval-Augmented Generation Framework"><span>A Dynamic-Selection-Based, Retrieval-Augmented Generation Framework</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></li>
+        <li><strong>특허 출원 (제1발명자)</strong> — 탄소감축 시나리오 간 상호작용 자동 판정 및 표준 동등성 검증을 이용한 전과정평가 보고서 자동 저작 장치<small class="pno">10-2026-0139153</small></li>
+        <li><strong>특허 출원 (제1발명자)</strong> — 액티브 메타데이터와 그래프 DB를 활용한 신규 데이터의 잠재적 연관성 자동 탐색·관계 확장 장치<small class="pno">10-2026-0068848 · 2026.04</small></li>
         <li><strong>캡스톤 졸업작품 전시회 총장상</strong> — DS-RAG (2025)</li>
       </ul>
     </div>
@@ -218,16 +217,16 @@
     <div class="head"><p class="kicker">04 — Stack</p><h2>기술 스택</h2></div>
     <div class="body">
       <div class="grp">
-        <div style="--c:#5aa2ff"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6m6.5-16-5 20"/></svg>
+        <div style="--c:#63b3d4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6m6.5-16-5 20"/></svg>
           <b>Backend</b><small>API와 데이터 처리의 뼈대</small>
           <div class="tags"><i>Python</i><i>FastAPI</i><i>PostgreSQL</i><i>pytest</i></div></div>
-        <div style="--c:#3fd6b5"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.7 4 3 9 3s9-1.3 9-3V5M3 12c0 1.7 4 3 9 3s9-1.3 9-3"/></svg>
+        <div style="--c:#74aaf0"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.7 4 3 9 3s9-1.3 9-3V5M3 12c0 1.7 4 3 9 3s9-1.3 9-3"/></svg>
           <b>Search · Store</b><small>검색과 관계 저장</small>
           <div class="tags"><i>OpenSearch</i><i>AWS Neptune</i><i>SPARQL</i><i>FAISS</i></div></div>
-        <div style="--c:#c98bff"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.94 15.5A2 2 0 0 0 8.5 14.06l-6.13-1.58a.5.5 0 0 1 0-.96L8.5 9.94A2 2 0 0 0 9.94 8.5l1.58-6.13a.5.5 0 0 1 .96 0L14.06 8.5a2 2 0 0 0 1.44 1.44l6.13 1.58a.5.5 0 0 1 0 .96l-6.13 1.58a2 2 0 0 0-1.44 1.44l-1.58 6.13a.5.5 0 0 1-.96 0zM20 3v4m2-2h-4"/></svg>
+        <div style="--c:#bcd0e8"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.94 15.5A2 2 0 0 0 8.5 14.06l-6.13-1.58a.5.5 0 0 1 0-.96L8.5 9.94A2 2 0 0 0 9.94 8.5l1.58-6.13a.5.5 0 0 1 .96 0L14.06 8.5a2 2 0 0 0 1.44 1.44l6.13 1.58a.5.5 0 0 1 0 .96l-6.13 1.58a2 2 0 0 0-1.44 1.44l-1.58 6.13a.5.5 0 0 1-.96 0zM20 3v4m2-2h-4"/></svg>
           <b>LLM Orchestration</b><small>LLM 호출·체인·관측</small>
           <div class="tags"><i>LangChain</i><i>LangGraph</i><i>LiteLLM</i><i>vLLM</i><i>Langfuse</i></div></div>
-        <div style="--c:#ffb14a"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Zm-17.7-1 8.7 5 8.7-5M12 22V12"/></svg>
+        <div style="--c:#d9c7a6"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Zm-17.7-1 8.7 5 8.7-5M12 22V12"/></svg>
           <b>Infra · Ops</b><small>파이프라인과 배포</small>
           <div class="tags"><i>Apache Airflow</i><i>Docker</i><i>GitLab CI</i></div></div>
       </div>
@@ -242,9 +241,10 @@
         <li><strong>정보처리기사</strong> — 한국산업인력공단</li>
         <li><strong>SQLD</strong> SQL 개발자 — 한국데이터산업진흥원</li>
         <li><strong>ADsP</strong> 데이터분석 준전문가 — 한국데이터산업진흥원</li>
+        <li><strong>OPIc IH</strong> Intermediate High — ACTFL</li>
       </ul>
-      <a class="next" href="index.html"><small>수행 프로젝트가 궁금하다면?</small>Projects →</a>
     </div>
+    <a class="next cta" href="index.html"><small>수행 프로젝트가 궁금하다면?</small>Projects →</a>
   </section>
 </main>
 <footer>
@@ -312,10 +312,10 @@ if (matchMedia('(min-width:820px)').matches) {
   R.setPixelRatio(Math.min(devicePixelRatio, 1.5)); R.outputColorSpace = THREE.SRGBColorSpace;
   const scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(30, 1, .1, 50);
   // 조명: 위쪽 흰 키 + 사이트 팔레트의 주황/핑크 림 + 은은한 하늘광
-  scene.add(new THREE.HemisphereLight(0xf4eef5, 0x3a0f3a, 1.1));
+  scene.add(new THREE.HemisphereLight(0xf2f3f5, 0x1f2630, 1.1));
   const key = new THREE.DirectionalLight(0xffffff, 2.2); key.position.set(2.5, 4, 3); scene.add(key);
-  const rim1 = new THREE.DirectionalLight(0xff5a1f, 1.6); rim1.position.set(-4, 2, -3); scene.add(rim1);
-  const rim2 = new THREE.DirectionalLight(0xe0117a, 1.4); rim2.position.set(4, 1, -4); scene.add(rim2);
+  const rim1 = new THREE.DirectionalLight(0x74aaf0, 1.6); rim1.position.set(-4, 2, -3); scene.add(rim1);
+  const rim2 = new THREE.DirectionalLight(0xf2e9dc, 1.4); rim2.position.set(4, 1, -4); scene.add(rim2);
   // 접지 그림자: 라디얼 그라데이션 원판
   const c2 = document.createElement('canvas'); c2.width = c2.height = 128; const g = c2.getContext('2d');
   const gr = g.createRadialGradient(64,64,4,64,64,64); gr.addColorStop(0,'rgba(0,0,0,.55)'); gr.addColorStop(1,'rgba(0,0,0,0)');
@@ -330,7 +330,7 @@ if (matchMedia('(min-width:820px)').matches) {
   const box = new THREE.Box3().setFromObject(model), size = box.getSize(new THREE.Vector3()), ctr = box.getCenter(new THREE.Vector3());
   const k = 3.3 / size.y; model.scale.setScalar(k); model.position.set(-ctr.x*k, -box.min.y*k, -ctr.z*k); rig.add(model);
   // 사이트 톤으로 재색: Main(원본 노랑) → 흰 세라믹, Grey → 다크 메탈, Black 유지
-  const TONE = { Main: [0xe9e2ea, .4, .2], Grey: [0x2a1a2c, .35, .7] };
+  const TONE = { Main: [0xeceef0, .4, .2], Grey: [0x2e333b, .35, .7] };
   model.traverse(o => { if (o.isMesh) { const t = TONE[o.material.name]; o.material = o.material.clone();
     if (t) o.material.color.setHex(t[0]); o.material.roughness = t ? t[1] : .45; o.material.metalness = t ? t[2] : .25; } });
 
@@ -346,8 +346,8 @@ if (matchMedia('(min-width:820px)').matches) {
   const mouse = [.5,.5]; addEventListener('pointermove', e => { mouse[0] = e.clientX/innerWidth; mouse[1] = e.clientY/innerHeight; });
   const rs = () => { R.setSize(innerWidth, innerHeight, false); cam.aspect = innerWidth/innerHeight; cam.updateProjectionMatrix(); };
   addEventListener('resize', rs); rs();
-  // 슬라이드별 구도 [x, y, z, lookAt.y, lookAt.x]: 정면 → 로우앵글(올려봄) → 와이드·왼쪽 아래(카드 자리 비움) → 헤드 클로즈업 → 와이드 → 정면 복귀
-  const CAM = [[0,1.75,7.4,1.62],[1.6,.5,6.4,2.0],[1.2,3.6,11.4,2.8,2.7],[0,2.35,4.2,2.5],[-1.3,1.1,8.8,1.5],[0,1.4,7.0,1.7]];
+  // 슬라이드별 구도 [x, y, z, lookAt.y, lookAt.x]: 정면(살짝 왼쪽, 우하단 카드 자리 비움) → 로우앵글(올려봄) → 와이드·왼쪽 아래(카드 자리 비움) → 헤드 클로즈업 → 와이드 → 정면 복귀
+  const CAM = [[0,1.75,8.1,1.62,1.5],[1.6,.5,6.4,2.0,.45],[1.2,3.6,11.4,2.8,2.7],[0,2.35,4.2,2.5],[-1.3,1.1,8.8,1.5],[0,1.4,7.0,1.7]];
   const cp = new THREE.Vector3(...CAM[0]); let ct = CAM[0][3], cl = 0;
   const clock = new THREE.Clock(); let spin = 0, mx = .5, my = .5;
   R.setAnimationLoop(BOT.frame = () => {          // BOT.frame: 디버그용 수동 프레임
