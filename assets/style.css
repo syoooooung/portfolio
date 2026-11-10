@@ -152,3 +152,10 @@ h3 .no{font:var(--mono);color:var(--accent);margin-right:10px;letter-spacing:.1e
 .ts.in .cols>*:nth-child(2){transition-delay:.14s}
 @media(prefers-reduced-motion:reduce){.ts.rv .cols>*{opacity:1;transform:none;transition:none}}
 @media(max-width:920px){.ts .cols{grid-template-columns:1fr}}
+/* 트러블 슈팅 카드 안의 진단·결정 표 */
+.ts table.tbl{width:100%;border-collapse:collapse;font:var(--mono);font-size:12px;line-height:1.6;color:var(--dim);letter-spacing:.04em;border:1px solid var(--line)}
+.ts table.tbl th,.ts table.tbl td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.ts table.tbl th{color:var(--ink);font-weight:400;background:#343941;letter-spacing:.1em;text-transform:uppercase;font-size:11px}
+.ts table.tbl td b{color:var(--ink);font-weight:600}
+.ts table.tbl td.hi{color:var(--accent)}
+.ts table.tbl caption{caption-side:bottom;text-align:left;padding:10px 2px 0;font:var(--mono);color:var(--dim);letter-spacing:.12em;text-transform:uppercase}
